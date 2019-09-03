@@ -162,6 +162,9 @@ export class MapMovie {
         )
         .map(title => new AlternativeTitle(title.iso_3166_1, title.title));
     }
+    if (r.lists) {
+      movie.list_count = r.lists.total_results;
+    }
     movie.id = r.id;
     movie.original_title = r.original_title;
     movie.date = r.release_date;

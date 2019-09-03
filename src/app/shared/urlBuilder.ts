@@ -97,6 +97,9 @@ export class UrlBuilder {
       if (external) {
         parametres.push(`${Url.APPEND_EXTERNAL_IDS}`);
       }
+      if (list) {
+        parametres.push(`${Url.GET_MOVIE_LISTS}`);
+      }
       url += parametres.join(',');
     }
     url = UrlBuilder.langUrlBuilder(url, language);
