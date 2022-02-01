@@ -12,8 +12,8 @@ IF /i "%answer%"=="1" (
 	call git pull --rebase --autostash
 	goto debut
 ) else IF /i "%answer%"=="4" (
-	call yarn
-	call yarn build
+	call npm i
+	call npm run build
 	goto debut
 ) else IF /i "%answer%"=="5" (
 	call cordova.ps1
