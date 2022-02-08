@@ -1,11 +1,10 @@
-import { Sort } from '@angular/material/sort';
+import {Sort} from '@angular/material/sort';
 
-import { GroupBy } from './../model/model';
-import { Tag } from './../model/tag';
-import { Data } from '../model/data';
+import {GroupBy} from './../model/model';
+import {Tag} from './../model/tag';
+import {Data} from '../model/data';
 
 export class Utils {
-
   static timeSliderFormatter = {
     to(minutes: any): any {
       return Utils.convertTimeNumberToString(minutes);
@@ -16,11 +15,15 @@ export class Utils {
         return time;
       }
       return res;
-    }
+    },
   };
 
   static isBlank(str: string): boolean {
-    return str === undefined || str === null || (typeof str === 'string' && str.trim() === '');
+    return (
+      str === undefined ||
+      str === null ||
+      (typeof str === 'string' && str.trim() === '')
+    );
   }
 
   static isNotBlank(str: string): boolean {
@@ -38,7 +41,12 @@ export class Utils {
       if (isNaN(h)) {
         h = 0;
       }
-      const m = parseInt(time.substring(time.lastIndexOf('h') + 1, time.lastIndexOf('min')).trim(), 10);
+      const m = parseInt(
+        time
+          .substring(time.lastIndexOf('h') + 1, time.lastIndexOf('min'))
+          .trim(),
+        10
+      );
       return h * 60 + m;
     } else {
       return 0;
@@ -106,8 +114,12 @@ export class Utils {
   }
 
   static compareMetaScore<T extends Data>(a: T, b: T, isAsc: boolean): number {
-    let c = a.score.ratings ? a.score.ratings.find(rating => rating.Source === 'Metacritic') : undefined;
-    let d = b.score.ratings ? b.score.ratings.find(rating => rating.Source === 'Metacritic') : undefined;
+    let c = a.score.ratings
+      ? a.score.ratings.find(rating => rating.Source === 'Metacritic')
+      : undefined;
+    let d = b.score.ratings
+      ? b.score.ratings.find(rating => rating.Source === 'Metacritic')
+      : undefined;
     c = c ? c.Value : '';
     d = d ? d.Value : '';
     let meta1 = 0;
@@ -140,7 +152,12 @@ export class Utils {
   }
 
   static stringifyJson(value: any): string {
-    if (!value || value === undefined || value === '' || value === 'undefined') {
+    if (
+      !value ||
+      value === undefined ||
+      value === '' ||
+      value === 'undefined'
+    ) {
       return '';
     } else {
       return JSON.stringify(value);
@@ -151,7 +168,11 @@ export class Utils {
     if (!list || list === undefined || list.length === 0) {
       return [];
     }
-    if (searchString === undefined || searchString.length === 0 || searchString.trim() === '') {
+    if (
+      searchString === undefined ||
+      searchString.length === 0 ||
+      searchString.trim() === ''
+    ) {
       return list;
     }
 
@@ -181,18 +202,27 @@ export class Utils {
     const fields: string[] = Object.keys(value);
     for (let i = 0; i < fields.length; i++) {
       if (value[fields[i]] !== undefined) {
-        if (true) {  // isObject(value[fields[i]])
+        if (true) {
+          // isObject(value[fields[i]])
           const childFields: string[] = Object.keys(value[fields[i]]);
 
           if (childFields.length > 0) {
             for (let j = 0; j < childFields.length; j++) {
-              if ((value[fields[i]][childFields[j]] + '').toLowerCase().indexOf(this.toString().toLowerCase()) !== -1) {
+              if (
+                (value[fields[i]][childFields[j]] + '')
+                  .toLowerCase()
+                  .indexOf(this.toString().toLowerCase()) !== -1
+              ) {
                 return true;
               }
             }
           }
         }
-        if ((value[fields[i]] + '').toLowerCase().indexOf(this.toString().toLowerCase()) !== -1) {
+        if (
+          (value[fields[i]] + '')
+            .toLowerCase()
+            .indexOf(this.toString().toLowerCase()) !== -1
+        ) {
           return true;
         }
       }
@@ -201,12 +231,24 @@ export class Utils {
   }
 
   /* tslint:disable cyclomatic-complexity */
-  static sortData<T extends Data>(list: T[], sort: Sort, lang: string = 'fr'): T[] {
+  static sortData<T extends Data>(
+    list: T[],
+    sort: Sort,
+    lang: string = 'fr'
+  ): T[] {
     if (sort && sort.active && sort.direction !== '') {
       return list.sort((a, b) => {
         const isAsc: boolean = sort.direction === 'asc';
         const field = sort.active;
-        if (['original_title', 'language', 'title', 'inProduction', 'originLang'].includes(field)) {
+        if (
+          [
+            'original_title',
+            'language',
+            'title',
+            'inProduction',
+            'originLang',
+          ].includes(field)
+        ) {
           return Utils.compare(a[field], b[field], isAsc);
         } else if (['date', 'firstAired'].includes(sort.active)) {
           return Utils.compareDate(a[field], b[field], isAsc);
@@ -214,12 +256,25 @@ export class Utils {
           return Utils.compare(new Date(a[field]), new Date(b[field]), isAsc);
         } else if (['meta'].includes(sort.active)) {
           return this.compareMetaScore(a, b, isAsc);
-        } else if (['id', 'vote', 'vote_count', 'popularity', 'time', 'seasonCount'].includes(sort.active)) {
+        } else if (
+          [
+            'id',
+            'vote',
+            'vote_count',
+            'popularity',
+            'time',
+            'seasonCount',
+          ].includes(sort.active)
+        ) {
           return Utils.compare(+a[field], +b[field], isAsc);
         } else if (['runtimes'].includes(sort.active)) {
           return Utils.compare(+a[field][0], +b[field][0], isAsc);
         } else if (['name'].includes(sort.active)) {
-          return Utils.compare(a.translation.get(lang).name, b.translation.get(lang).name, isAsc);
+          return Utils.compare(
+            a.translation.get(lang).name,
+            b.translation.get(lang).name,
+            isAsc
+          );
         } else {
           return 0;
         }
@@ -271,7 +326,7 @@ export class Utils {
       return [];
     } else if (!Object.keys(array[0]).includes(field)) {
       console.log('array[0]', array[0]);
-      throw new Error('Given array doesn\'t have the requested field: ' + field);
+      throw new Error("Given array doesn't have the requested field: " + field);
     }
     return array.map(obj => obj[field]).reduce((x, y) => x.concat(y), []);
   }
@@ -294,10 +349,10 @@ export class Utils {
         prev[cur[field]].push(cur);
       }
       return prev;
-    }, {
-
-    });
-    return Object.keys(groupedObj).map(key => new GroupBy(key, <T[]>groupedObj[key]));
+    }, {});
+    return Object.keys(groupedObj).map(
+      key => new GroupBy(key, <T[]>groupedObj[key])
+    );
   }
 
   static mapToJson(map: Map<any, any>): string {
@@ -311,8 +366,8 @@ export class Utils {
   static imageExists(id: number, url: string): Promise<any> {
     const img = new Image();
     return new Promise(resolve => {
-      img.onload = () => resolve({ id: id, result: true });
-      img.onerror = () => resolve({ id: id, result: false });
+      img.onload = () => resolve({id: id, result: true});
+      img.onerror = () => resolve({id: id, result: false});
       img.src = url;
     });
   }

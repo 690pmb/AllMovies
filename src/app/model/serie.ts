@@ -1,7 +1,7 @@
-import { Data } from './data';
-import { Network } from './model';
-import { Person } from './person';
-import { Season } from './season';
+import {Data} from './data';
+import {Network} from './model';
+import {Person} from './person';
+import {Season} from './season';
 
 export class Serie extends Data {
   originLang: string;
@@ -27,9 +27,27 @@ export class Serie extends Data {
 
   removeFields(key: string, value: string): string {
     if (
-      ['title', 'overview', 'actors', 'crew', 'recommendations', 'videos', 'images', 'checked', 'similars', 'affiche',
-        'alternativeTitles', 'character', 'keywords', 'originCountries', 'genres', 'networks', 'seasons', 'creators', 'isMovie']
-        .includes(key)
+      [
+        'title',
+        'overview',
+        'actors',
+        'crew',
+        'recommendations',
+        'videos',
+        'images',
+        'checked',
+        'similars',
+        'affiche',
+        'alternativeTitles',
+        'character',
+        'keywords',
+        'originCountries',
+        'genres',
+        'networks',
+        'seasons',
+        'creators',
+        'isMovie',
+      ].includes(key)
     ) {
       return undefined;
     }

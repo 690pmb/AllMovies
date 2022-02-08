@@ -1,18 +1,25 @@
-import { faSave } from '@fortawesome/free-regular-svg-icons';
-import { faTimes, faPen } from '@fortawesome/free-solid-svg-icons';
-import { Component, OnChanges, Input, SimpleChanges, OnDestroy, OnInit } from '@angular/core';
+import {faSave} from '@fortawesome/free-regular-svg-icons';
+import {faTimes, faPen} from '@fortawesome/free-solid-svg-icons';
+import {
+  Component,
+  OnChanges,
+  Input,
+  SimpleChanges,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 
-import { Data } from './../../../model/data';
-import { Tag, TagData } from './../../../model/tag';
-import { MyDatasService } from '../../service/my-datas.service';
-import { Level } from './../../../model/model';
-import { ToastService } from '../../service/toast.service';
-import { MyTagsService } from '../../service/my-tags.service';
+import {Data} from './../../../model/data';
+import {Tag, TagData} from './../../../model/tag';
+import {MyDatasService} from '../../service/my-datas.service';
+import {Level} from './../../../model/model';
+import {ToastService} from '../../service/toast.service';
+import {MyTagsService} from '../../service/my-tags.service';
 
 @Component({
   selector: 'app-list-tags',
   templateUrl: './list-tags.component.html',
-  styleUrls: ['./list-tags.component.scss']
+  styleUrls: ['./list-tags.component.scss'],
 })
 export class ListTagsComponent implements OnInit, OnChanges, OnDestroy {
   @Input()
@@ -37,26 +44,32 @@ export class ListTagsComponent implements OnInit, OnChanges, OnDestroy {
     private myDatasService: MyDatasService<Data>,
     private myTagsService: MyTagsService,
     private toast: ToastService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    this.subs.push(this.myDatasService.myMovies$.subscribe(movies => {
-      if (movies) {
-        this.allMovies = movies;
-      }
-    }));
-    this.subs.push(this.myDatasService.mySeries$.subscribe(series => {
-      if (series) {
-        this.allSeries = series;
-      }
-    }));
+    this.subs.push(
+      this.myDatasService.myMovies$.subscribe(movies => {
+        if (movies) {
+          this.allMovies = movies;
+        }
+      })
+    );
+    this.subs.push(
+      this.myDatasService.mySeries$.subscribe(series => {
+        if (series) {
+          this.allSeries = series;
+        }
+      })
+    );
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.dataId) {
       this.dataId = changes.dataId.currentValue;
       this.editing = false;
-      this.tags = changes.tags ? changes.tags.currentValue.map(tag => Tag.clone(<Tag>tag)) : this.tags;
+      this.tags = changes.tags
+        ? changes.tags.currentValue.map(tag => Tag.clone(<Tag>tag))
+        : this.tags;
       this.tagsDisplayed = this.getTags();
       this.tagsToSave = this.getTags();
     }
@@ -70,7 +83,9 @@ export class ListTagsComponent implements OnInit, OnChanges, OnDestroy {
     if (this.tagsDisplayed.map(t => t.id).includes(tag.id)) {
       this.toast.open(Level.warning, 'toast.already_added');
     } else {
-      const data = (this.isMovie ? this.allMovies : this.allSeries).find(m => m.id === this.dataId);
+      const data = (this.isMovie ? this.allMovies : this.allSeries).find(
+        m => m.id === this.dataId
+      );
       tag.datas.push(TagData.fromData(data, this.isMovie));
       this.tagsDisplayed.push(tag);
       this.tagsToSave.push(tag);
@@ -79,7 +94,9 @@ export class ListTagsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   remove(tag: Tag): void {
-    this.tagsToSave.find(t => t.id === tag.id).datas = tag.datas.filter(d => d.id !== this.dataId || d.movie !== this.isMovie);
+    this.tagsToSave.find(t => t.id === tag.id).datas = tag.datas.filter(
+      d => d.id !== this.dataId || d.movie !== this.isMovie
+    );
     this.tagsDisplayed = this.tagsDisplayed.filter(t => t.id !== tag.id);
     this.isTagsChanged();
   }
@@ -113,6 +130,6 @@ export class ListTagsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subs.forEach((subscription) => subscription.unsubscribe());
+    this.subs.forEach(subscription => subscription.unsubscribe());
   }
 }

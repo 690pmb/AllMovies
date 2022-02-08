@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable()
 export class MockService<T> {
-
-  constructor() { }
+  constructor() {}
 
   getAll(file: string): Promise<T[]> {
     return new Promise<T[]>((resolve, reject) => {
@@ -21,5 +20,4 @@ export class MockService<T> {
       };
     });
   }
-
 }

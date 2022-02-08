@@ -1,5 +1,5 @@
-import { Data } from './data';
-import { ReleaseDate, Lang } from './model';
+import {Data} from './data';
+import {ReleaseDate, Lang} from './model';
 
 export class Movie extends Data {
   date: string;
@@ -20,9 +20,26 @@ export class Movie extends Data {
 
   removeFields(key: string, value: string): string {
     if (
-      ['title', 'overview', 'actors', 'crew', 'recommendations', 'videos', 'images', 'checked', 'similars', 'affiche',
-        'alternativeTitles', 'character', 'keywords', 'production_countries', 'releaseDates', 'spokenLangs', 'genres', 'isMovie']
-        .includes(key)
+      [
+        'title',
+        'overview',
+        'actors',
+        'crew',
+        'recommendations',
+        'videos',
+        'images',
+        'checked',
+        'similars',
+        'affiche',
+        'alternativeTitles',
+        'character',
+        'keywords',
+        'production_countries',
+        'releaseDates',
+        'spokenLangs',
+        'genres',
+        'isMovie',
+      ].includes(key)
     ) {
       return undefined;
     }

@@ -3,8 +3,7 @@
     @media all and (max-width: $width) {
       @content;
     }
-  }
-  @else {
+  } @else {
     @media all and (min-width: $width) {
       @content;
     }

@@ -1,9 +1,12 @@
-import { Score } from './score';
-import { Genre, Keyword, AlternativeTitle } from './model';
+import {Score} from './score';
+import {Genre, Keyword, AlternativeTitle} from './model';
 
 export class DataI18N {
-  constructor(public name: string, public poster: string, public category: Genre[]) {
-  }
+  constructor(
+    public name: string,
+    public poster: string,
+    public category: Genre[]
+  ) {}
 }
 
 export class Data {
@@ -33,7 +36,7 @@ export class Data {
   checked: boolean;
   isBookmarked: boolean;
 
-  constructor() { }
+  constructor() {}
 
   removeFields(key: string, value: string): string {
     console.log('removeFields');

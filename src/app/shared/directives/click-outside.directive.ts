@@ -1,15 +1,15 @@
-import { Directive, HostListener, EventEmitter, Output } from '@angular/core';
+import {Directive, HostListener, EventEmitter, Output} from '@angular/core';
 
 @Directive({
-  selector: '[appClickOutside]'
+  selector: '[appClickOutside]',
 })
 export class ClickOutsideDirective {
   inside = false;
-  @HostListener("click")
+  @HostListener('click')
   clicked() {
     this.inside = true;
   }
-  @HostListener("document:click")
+  @HostListener('document:click')
   clickedOut() {
     if (!this.inside) {
       this.outside.emit(true);
@@ -20,6 +20,5 @@ export class ClickOutsideDirective {
   @Output()
   outside = new EventEmitter<boolean>();
 
-  constructor() { }
-
+  constructor() {}
 }

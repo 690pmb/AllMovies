@@ -1,5 +1,5 @@
-import { Data } from './data';
-import { Utils } from '../shared/utils';
+import {Data} from './data';
+import {Utils} from '../shared/utils';
 
 export class TagData {
   id: number;
@@ -34,7 +34,9 @@ export class TagData {
       }
       tagData.id = data.id;
       tagData.poster = data.translation.get('fr').poster;
-      data.translation.forEach((value, key) => tagData.titles.set(key, value.name));
+      data.translation.forEach((value, key) =>
+        tagData.titles.set(key, value.name)
+      );
     }
     return tagData;
   }
@@ -55,8 +57,8 @@ export class Tag {
   datas: TagData[];
 
   static clone(tag: Tag): Tag {
-    const cloneTag = { ...tag };
-    cloneTag.datas.forEach(m => m.titles = new Map(m.titles));
+    const cloneTag = {...tag};
+    cloneTag.datas.forEach(m => (m.titles = new Map(m.titles)));
     cloneTag.datas = Array.from(tag.datas);
     return cloneTag;
   }

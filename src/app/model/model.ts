@@ -1,21 +1,21 @@
-import { Movie } from './movie';
+import {Movie} from './movie';
 
 export enum Direction {
   Up = 'Up',
-  Down = 'Down'
+  Down = 'Down',
 }
 
 export enum Level {
   info = 'info',
   warning = 'warning',
   success = 'success',
-  error = 'error'
+  error = 'error',
 }
 
 export enum ImageSize {
   full = 'original',
   medium = 'medium',
-  small = 'small'
+  small = 'small',
 }
 
 export class DropDownChoice {
@@ -59,7 +59,12 @@ export class List {
 }
 
 export class Paginate<T> {
-  constructor(public page: number, public results: T[], public total_pages: number, public total_results: number) { }
+  constructor(
+    public page: number,
+    public results: T[],
+    public total_pages: number,
+    public total_results: number
+  ) {}
 }
 
 export class FullList {
@@ -116,17 +121,24 @@ export class Link {
 }
 
 export class ReleaseDate {
-  constructor(public date: Date, public type: string) {
-  }
+  constructor(public date: Date, public type: string) {}
 }
 
 export class AlternativeTitle {
-  constructor(public lang: string, public title: string) {
-  }
+  constructor(public lang: string, public title: string) {}
 }
 
 export class DetailConfig {
-  constructor(public img?: boolean, public credit?: boolean, public similar?: boolean, public keywords?: boolean, public video?: boolean,
-    public reco?: boolean, public release?: boolean, public titles?: boolean, public external?: boolean, public lang?: string) {
-  }
+  constructor(
+    public img?: boolean,
+    public credit?: boolean,
+    public similar?: boolean,
+    public keywords?: boolean,
+    public video?: boolean,
+    public reco?: boolean,
+    public release?: boolean,
+    public titles?: boolean,
+    public external?: boolean,
+    public lang?: string
+  ) {}
 }
