@@ -14,8 +14,12 @@
       "ignoreTypes": [
         "/^app-/",
         "/^ng-/",
-        "/^ng2-/"
+        "/^ng2-/", 
+        "/^ngb-/"
       ]
+    }],
+    "selector-pseudo-element-no-unknown": [true, {
+      "ignorePseudoElements": ["ng-deep"]
     }],
     "order/properties-order": [
       {
