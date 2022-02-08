@@ -38,7 +38,7 @@
     "@ngx-translate/core": "12.1.2",
     "@ngx-translate/http-loader": "5.0.0",
     "allorigins": "2.0.2",
-    "bootstrap": "4.6.0",
+    "bootstrap": "4.6.1",
     "core-js": "2.6.12",
     "crypto-js": "3.3.0",
     "dropbox": "4.0.30",
