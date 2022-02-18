@@ -59,7 +59,7 @@
     "popper.js": "1.16.1",
     "rxjs": "6.6.7",
     "swiper": "6.8.4",
-    "typescript": "3.8.3",
+    "typescript": "3.9.10",
     "zone.js": "0.10.3"
   },
   "devDependencies": {
