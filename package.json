@@ -58,6 +58,7 @@
     "popper.js": "1.16.1",
     "rxjs": "6.6.7",
     "swiper": "6.8.4",
+    "typescript": "3.8.3",
     "zone.js": "0.10.3"
   },
   "devDependencies": {
@@ -87,7 +88,6 @@
     "tslint": "5.20.1",
     "tslint-eslint-rules": "5.4.0",
     "tslint-origin-ordered-imports-rule": "1.2.2",
-    "typescript": "3.8.3",
     "webpack-bundle-analyzer": "3.9.0"
   }
 }
