@@ -174,7 +174,7 @@ import { BookmarkedComponent } from './components/bookmarked/bookmarked.componen
 export class SharedModule {
   constructor() { }
 
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<SharedModule> {
     return {
       ngModule: SharedModule,
       providers: [
@@ -212,7 +212,7 @@ export class SharedModule {
       ]
     };
   }
-  static forChild(): ModuleWithProviders {
+  static forChild(): ModuleWithProviders<SharedModule> {
     return { ngModule: SharedModule };
   }
 }
