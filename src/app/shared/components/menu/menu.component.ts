@@ -8,7 +8,7 @@ import {
   ViewChild,
   ElementRef,
 } from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Subscription} from 'rxjs';
 import {
   faUser,
   faBars,
@@ -35,10 +35,10 @@ import {MenuService} from '../../service/menu.service';
 })
 export class MenuComponent implements OnInit, OnDestroy {
   mobileQuery: MediaQueryList;
-  user: User;
+  user!: User;
   isLogged$ = new BehaviorSubject<boolean>(false);
-  visible: boolean;
-  subs = [];
+  visible!: boolean;
+  subs: Subscription[] = [];
 
   faUser = faUser;
   faBars = faBars;
@@ -50,8 +50,8 @@ export class MenuComponent implements OnInit, OnDestroy {
   faPowerOff = faPowerOff;
 
   private _mobileQueryListener: () => void;
-  @ViewChild('sidenav', {static: false}) sidenav: MatSidenav;
-  @ViewChild('content', {static: true}) content: MatSidenavContent;
+  @ViewChild('sidenav', {static: false}) sidenav!: MatSidenav;
+  @ViewChild('content', {static: true}) content!: MatSidenavContent;
   @HostListener('document:click', ['$event']) onClick(event: Event): void {
     this.handleClick(event);
   }

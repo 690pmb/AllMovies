@@ -30,6 +30,7 @@ import {
 import {Data} from './../../../../model/data';
 import {Level, ImageSize} from './../../../../model/model';
 import {Tag, TagData} from './../../../../model/tag';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-tag-datas',
@@ -37,30 +38,30 @@ import {Tag, TagData} from './../../../../model/tag';
   styleUrls: ['./tag-datas.component.scss'],
 })
 export class TagDatasComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() tag: Tag;
-  @Input() visible: boolean;
+  @Input() tag!: Tag;
+  @Input() visible!: boolean;
   displayedColumns = ['poster', 'title', 'select'];
-  length: number;
-  displayedData: TagData[];
-  allSeries: Data[];
-  allMovies: Data[];
-  isMovie: boolean;
+  length!: number;
+  displayedData: TagData[] = [];
+  allSeries: Data[] = [];
+  allMovies: Data[] = [];
+  isMovie!: boolean;
   search = '';
   pageSize = 25;
   pageIndex = 0;
   pageSizeOptions = [10, 25, 50, 100];
-  page: PageEvent;
-  sort: Sort;
+  page!: PageEvent;
+  sort!: Sort;
   nbChecked = 0;
-  tagForm: FormGroup;
+  tagForm!: FormGroup;
   edit = false;
   edited = false;
-  adult: boolean;
-  editedLabel: string;
-  editedColor: string;
+  adult!: boolean;
+  editedLabel!: string;
+  editedColor!: string;
   moviesToAdd: Data[] = [];
   seriesToAdd: Data[] = [];
-  subs = [];
+  subs: Subscription[] = [];
 
   imageSize = ImageSize;
   faTrash = faTrash;
@@ -134,7 +135,7 @@ export class TagDatasComponent implements OnInit, OnChanges, OnDestroy {
     this.edit = false;
   }
 
-  refreshData(): Tag {
+  refreshData(): Tag | undefined {
     if (this.tag && this.tag.datas && this.tag.datas.length > 0) {
       let data = {...this.tag};
       data.datas = Array.from(this.tag.datas);
@@ -163,7 +164,7 @@ export class TagDatasComponent implements OnInit, OnChanges, OnDestroy {
     this.paginate(this.refreshData());
   }
 
-  paginate(data: Tag): void {
+  paginate(data?: Tag): void {
     if (data) {
       this.displayedData = this.page
         ? data.datas.slice(
@@ -176,7 +177,7 @@ export class TagDatasComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  initPagination(data: Tag): void {
+  initPagination(data?: Tag): void {
     if (this.page) {
       this.page.pageIndex = 0;
       this.page.pageSize = this.page ? this.page.pageSize : this.pageSize;

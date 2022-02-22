@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
 import {PageEvent} from '@angular/material/paginator';
 import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {BehaviorSubject, combineLatest} from 'rxjs';
+import {BehaviorSubject, combineLatest, Subscription} from 'rxjs';
 
 import {
   FullList,
@@ -23,16 +23,16 @@ import {
 })
 export class ListDetailComponent implements OnInit, OnDestroy {
   @ViewChild('sortDir', {static: true}) sortDir: any;
-  id: number;
-  list: FullList;
-  sortChoices: DropDownChoice[];
-  sortChosen: DropDownChoice;
-  page: PageEvent;
-  allGenres: Genre[];
+  id!: number;
+  list!: FullList;
+  sortChoices: DropDownChoice[] = [];
+  sortChosen!: DropDownChoice;
+  page!: PageEvent;
+  allGenres: Genre[] = [];
   genresLoaded$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   nbChecked = 0;
   imageSize = ImageSize;
-  subs = [];
+  subs: Subscription[] = [];
 
   constructor(
     public translate: TranslateService,

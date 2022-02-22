@@ -29,12 +29,12 @@ import {Constants} from '../../../constant/constants';
 })
 export class SearchTagComponent implements OnInit {
   @Output() selected = new EventEmitter<Tag>();
-  @ViewChild('inputSearch', {static: true}) inputSearch: ElementRef;
-  filteredTags: Observable<Tag[]>;
-  tagCtrl: FormControl;
+  @ViewChild('inputSearch', {static: true}) inputSearch!: ElementRef;
+  filteredTags!: Observable<Tag[]>;
+  tagCtrl!: FormControl;
   sort: Sort = {active: 'count', direction: 'desc'};
   alreadyExist = false;
-  isMobile: boolean;
+  isMobile!: boolean;
 
   faRemove = faTimes;
   faPlus = faPlus;
@@ -53,7 +53,7 @@ export class SearchTagComponent implements OnInit {
     this.tagCtrl = new FormControl();
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
       startWith(''),
-      switchMap((term: any) =>
+      switchMap((term: string) =>
         this.myTagsService.myTags$.pipe(
           map((tags: Tag[]) => {
             if (term && typeof term === 'string' && term !== '') {
@@ -102,7 +102,7 @@ export class SearchTagComponent implements OnInit {
 
   resetAutoInput(trigger: MatAutocompleteTrigger, auto: MatAutocomplete): void {
     if (!this.isMobile) {
-      setTimeout(_ => {
+      setTimeout(() => {
         auto.options.forEach(item => {
           item.deselect();
         });

@@ -11,9 +11,11 @@ import {UtilsService} from './utils.service';
 import {ToastService} from './toast.service';
 import {Utils} from '../utils';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class MyTagsService {
-  myTags$: BehaviorSubject<Tag[]> = new BehaviorSubject([]);
+  myTags$: BehaviorSubject<Tag[]> = new BehaviorSubject<Tag[]>([]);
 
   constructor(
     private dropboxService: DropboxService,
@@ -54,9 +56,9 @@ export class MyTagsService {
       .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
   }
 
-  add(toAdd: Tag): Promise<Tag> {
-    let tempTagList = [];
-    let fileName;
+  add(toAdd: Tag): Promise<Tag | undefined> {
+    let tempTagList: Tag[] = [];
+    let fileName: string;
     return this.getFileName()
       .then((file: string) => {
         // download file
@@ -105,8 +107,8 @@ export class MyTagsService {
   }
 
   remove(idToRemove: number[]): void {
-    let tempTagList = [];
-    let fileName;
+    let tempTagList: Tag[] = [];
+    let fileName: string;
     this.getFileName()
       .then((file: string) => {
         // download file
@@ -146,8 +148,8 @@ export class MyTagsService {
   }
 
   updateTag(tag: Tag): Promise<boolean> {
-    let tempTagList = [];
-    let fileName;
+    let tempTagList: Tag[] = [];
+    let fileName: string;
     return this.getFileName()
       .then((file: string) => {
         // download file
@@ -184,8 +186,8 @@ export class MyTagsService {
   }
 
   replaceTags(tagsToReplace: Tag[]): Promise<boolean> {
-    let tempTagList = [];
-    let fileName;
+    let tempTagList: Tag[] = [];
+    let fileName: string;
     return this.getFileName()
       .then((file: string) => {
         // download file

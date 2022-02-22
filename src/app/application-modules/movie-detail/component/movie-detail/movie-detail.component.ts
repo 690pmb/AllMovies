@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import {ActivatedRoute, Router, ParamMap} from '@angular/router';
 import {filter} from 'rxjs/operators';
-import {combineLatest} from 'rxjs';
+import {combineLatest, Subscription} from 'rxjs';
 import {Location} from '@angular/common';
 import {
   faChevronCircleLeft,
@@ -40,18 +40,18 @@ import {Keyword, Genre, DetailConfig} from '../../../../model/model';
   templateUrl: './movie-detail.component.html',
 })
 export class MovieDetailComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() id: number;
-  @Input() config: DetailConfig;
+  @Input() id!: number;
+  @Input() config!: DetailConfig;
   @Output() loaded = new EventEmitter<boolean>();
-  movie: Movie;
-  tags: Tag[];
+  movie!: Movie;
+  tags: Tag[] = [];
   showTags = false;
   isImagesVisible = false;
-  isDetail: boolean;
+  isDetail!: boolean;
   showTitles = false;
-  sc: string;
+  sc!: string;
   Url = DuckDuckGo;
-  subs = [];
+  subs: Subscription[] = [];
 
   faChevronCircleLeft = faChevronCircleLeft;
   faChevronCircleRight = faChevronCircleRight;

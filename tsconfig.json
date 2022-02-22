@@ -2,10 +2,14 @@
   "extends": "./node_modules/gts/tsconfig-google.json",
   "compilerOptions": {
     "rootDir": ".",
+    "lib": ["dom"],
     "outDir": "build",
     "target": "es5",
     "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "strict": false
   },
-  "include": ["src/**/*.ts", "test/**/*.ts"]
+  "include": ["src/**/*.ts", "test/**/*.ts"],
+  "exclude": ["**/*.spec.ts"]
 }

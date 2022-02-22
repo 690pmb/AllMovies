@@ -16,6 +16,7 @@ import {
   UtilsService,
 } from './../../../shared/shared.module';
 import {User} from './../../../model/user';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-forgot',
@@ -23,19 +24,19 @@ import {User} from './../../../model/user';
   styleUrls: ['./forgot.component.scss'],
 })
 export class ForgotComponent implements OnInit, OnDestroy {
-  @ViewChild('nameNext', {static: true}) nameNext: ElementRef;
-  @ViewChild('answerNext', {static: true}) answerNext: ElementRef;
-  @ViewChild('passwordNext', {static: true}) passwordNext: ElementRef;
-  question: string;
-  answer: string;
-  name: string;
-  messageName: string;
-  messageAnswer: string;
-  messagePassword: string;
-  password1: string;
-  password2: string;
-  user: User;
-  subs = [];
+  @ViewChild('nameNext', {static: true}) nameNext!: ElementRef;
+  @ViewChild('answerNext', {static: true}) answerNext!: ElementRef;
+  @ViewChild('passwordNext', {static: true}) passwordNext!: ElementRef;
+  question?: string;
+  answer!: string;
+  name!: string;
+  messageName?: string;
+  messageAnswer?: string;
+  messagePassword!: string;
+  password1!: string;
+  password2!: string;
+  user?: User;
+  subs: Subscription[] = [];
   faCheck = faCheck;
 
   constructor(
@@ -90,7 +91,7 @@ export class ForgotComponent implements OnInit, OnDestroy {
   changePassword(): void {
     if (this.password1 !== this.password2) {
       this.messagePassword = 'login.error_password';
-    } else {
+    } else if (this.user) {
       this.user.password = crypto.SHA512(this.password1).toString();
       this.auth.updateUser(this.user);
       this.passwordNext.nativeElement.click();

@@ -9,7 +9,9 @@ import {
   SimpleChange,
 } from '@angular/core';
 import {faStar} from '@fortawesome/free-solid-svg-icons';
+import {Subscription} from 'rxjs';
 import {MyDatasService} from '../../service/my-datas.service';
+import {Data} from '../../../model/data';
 
 @Component({
   selector: 'app-bookmarked',
@@ -18,15 +20,15 @@ import {MyDatasService} from '../../service/my-datas.service';
 })
 export class BookmarkedComponent implements OnInit, OnChanges, OnDestroy {
   @Input()
-  isMovie: boolean;
+  isMovie!: boolean;
   @Input()
-  id: number;
+  id!: number;
 
-  subs = [];
+  subs: Subscription[] = [];
   faStar = faStar;
 
   constructor(
-    private myDatasService: MyDatasService<any>,
+    private myDatasService: MyDatasService<Data>,
     private el: ElementRef,
     private renderer: Renderer2
   ) {}

@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import {faTimes} from '@fortawesome/free-solid-svg-icons';
 import {delay, filter} from 'rxjs/operators';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Subscription} from 'rxjs';
 
 import {TabsService} from './../../service/tabs.service';
 import {TitleService} from '../../service/title.service';
@@ -19,10 +19,10 @@ import {AuthService} from '../../service/auth.service';
   styleUrls: ['./tabs.component.scss'],
 })
 export class TabsComponent implements OnInit, OnDestroy {
-  title: string;
+  title!: string;
   faClose = faTimes;
   isLogged$ = new BehaviorSubject<boolean>(false);
-  subs = [];
+  subs: Subscription[] = [];
 
   constructor(
     private titleService: TitleService,

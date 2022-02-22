@@ -15,13 +15,13 @@ import {ImageSize} from '../../../model/model';
   styleUrls: ['./image-viewer.component.scss'],
 })
 export class ImageViewerComponent implements OnChanges {
-  @Input() visible: boolean;
-  @Input() images: string[] | string;
-  @Input() thumbnails: string[] | string;
-  index: number;
+  @Input() visible!: boolean;
+  @Input() images!: string[] | string;
+  @Input() thumbnails!: string[] | string;
+  index!: number;
   imageSize = ImageSize;
-  nextBtn: HTMLButtonElement;
-  prevBtn: HTMLButtonElement;
+  nextBtn!: HTMLButtonElement;
+  prevBtn!: HTMLButtonElement;
   config: SwiperConfigInterface = {
     observer: true,
     direction: 'horizontal',
@@ -45,11 +45,11 @@ export class ImageViewerComponent implements OnChanges {
     slideToClickedSlide: true,
     mousewheel: true,
   };
-  isOnePicture: boolean;
+  isOnePicture!: boolean;
   faExpand = faExpand;
   isFullscreen = false;
-  fullScreenImg: string;
-  closeBtn: IconDefinition;
+  fullScreenImg!: string;
+  closeBtn!: IconDefinition;
 
   constructor(private menuService: MenuService) {}
 

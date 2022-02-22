@@ -10,35 +10,35 @@ export class DataI18N {
 }
 
 export class Data {
-  id: number;
-  title: string;
-  original_title: string;
-  affiche: string;
-  overview: string;
-  genres: Genre[];
-  translation: Map<string, DataI18N>; // key: lang
-  score: Score;
-  imdb_id: string;
-  popularity: number;
-  vote: number;
-  vote_count: number;
-  videos: string[];
-  actors: string[];
-  crew: string[];
-  images: string[];
-  keywords: Keyword[];
-  alternativeTitles: AlternativeTitle[];
-  character: string;
+  id!: number;
+  title!: string;
+  original_title!: string;
+  affiche!: string;
+  overview!: string;
+  genres: Genre[] = [];
+  translation!: Map<string, DataI18N>; // key!: lang
+  score!: Score;
+  imdb_id!: string;
+  popularity!: number;
+  vote!: number;
+  vote_count!: number;
+  videos: string[] = [];
+  actors: string[] = [];
+  crew: string[] = [];
+  images: string[] = [];
+  keywords: Keyword[] = [];
+  alternativeTitles: AlternativeTitle[] = [];
+  character!: string;
   updated: Date = new Date();
   added: Date = new Date();
   lang_version = 'fr';
-  isMovie: boolean;
-  checked: boolean;
-  isBookmarked: boolean;
+  isMovie!: boolean;
+  checked!: boolean;
+  isBookmarked!: boolean;
 
   constructor() {}
 
-  removeFields(key: string, value: string): string {
+  removeFields(key: string, value: string): string | undefined {
     console.log('removeFields');
     return value;
   }

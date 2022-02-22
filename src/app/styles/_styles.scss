@@ -226,8 +226,8 @@ input[type='checkbox'] {
   ::ng-deep.mat-checkbox-checked.mat-#{$theme} .mat-checkbox-background,
   ::ng-deep.mat-checkbox-indeterminate.mat-#{$theme} .mat-checkbox-background,
   ::ng-deep.mat-checkbox:not(.mat-checkbox-disabled).mat-#{$theme}
-    .mat-checkbox-ripple
-    .mat-ripple-element {
+  .mat-checkbox-ripple
+  .mat-ripple-element {
     background-color: $blue !important;
   }
 

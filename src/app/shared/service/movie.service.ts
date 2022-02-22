@@ -14,7 +14,9 @@ import {ToastService} from './toast.service';
 import {UrlBuilder} from '../../shared/urlBuilder';
 import {Utils} from '../utils';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class MovieService {
   constructor(
     private serviceUtils: UtilsService,
@@ -23,7 +25,7 @@ export class MovieService {
     private mockService: MockService<Flag>
   ) {}
 
-  getPopularMovies(language: string, page: number = 1): Promise<Movie[]> {
+  getPopularMovies(language: string, page = 1): Promise<Movie[]> {
     return this.serviceUtils
       .getPromise(
         `${Url.MOST_POPULAR_MOVIE_URL}${Url.LANGUE}${language}${Url.PAGE_URL}${page}`
@@ -74,7 +76,7 @@ export class MovieService {
       )
       .then(response => {
         const movie = MapMovie.mapForMovie(response, this.mockService);
-        movie.lang_version = config.lang;
+        movie.lang_version = config.lang ?? movie.lang_version;
         if (
           detail &&
           (!movie.overview ||
@@ -122,7 +124,7 @@ export class MovieService {
     if (movie.imdb_id) {
       return this.omdb.getScore(movie.imdb_id).then(score => {
         if (score) {
-          score.ratings.splice(
+          score.ratings?.splice(
             -1,
             0,
             ...[
@@ -136,7 +138,7 @@ export class MovieService {
         return movie;
       });
     } else {
-      return new Promise<Movie>((resolve, reject) => {
+      return new Promise<Movie>(resolve => {
         resolve(movie);
       });
     }

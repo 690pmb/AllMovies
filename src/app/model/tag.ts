@@ -2,11 +2,11 @@ import {Data} from './data';
 import {Utils} from '../shared/utils';
 
 export class TagData {
-  id: number;
-  poster: string;
-  titles: Map<string, string>; // key: lang, value: title
-  movie: boolean;
-  checked: boolean;
+  id!: number;
+  poster!: string;
+  titles!: Map<string, string>; // key: lang, value: title
+  movie!: boolean;
+  checked!: boolean;
 
   static toJson(data: TagData): string {
     const titles = Utils.mapToJson(<Map<any, any>>data.titles);
@@ -33,7 +33,7 @@ export class TagData {
         throw new Error('Incorrect data in TagData#fromData');
       }
       tagData.id = data.id;
-      tagData.poster = data.translation.get('fr').poster;
+      tagData.poster = data.translation.get('fr')?.poster ?? '';
       data.translation.forEach((value, key) =>
         tagData.titles.set(key, value.name)
       );
@@ -41,7 +41,7 @@ export class TagData {
     return tagData;
   }
 
-  static removeFields(key: string, value: string): string {
+  static removeFields(key: string, value: string): string | undefined {
     if (['checked'].includes(key)) {
       return undefined;
     }
@@ -50,11 +50,11 @@ export class TagData {
 }
 
 export class Tag {
-  id: number;
-  label: string;
-  color: string;
-  checked: boolean;
-  datas: TagData[];
+  id!: number;
+  label!: string;
+  color!: string;
+  checked!: boolean;
+  datas: TagData[] = [];
 
   static clone(tag: Tag): Tag {
     const cloneTag = {...tag};
@@ -66,7 +66,7 @@ export class Tag {
   static toJson(tag: Tag): string {
     const temp: any = Tag.clone(tag);
 
-    temp.datas = temp.datas.map(d => TagData.toJson(d));
+    temp.datas = temp.datas.map((d: TagData) => TagData.toJson(d));
     const datas = temp.datas;
     temp.datas = undefined;
 

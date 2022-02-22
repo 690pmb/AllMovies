@@ -5,7 +5,9 @@ import {BehaviorSubject} from 'rxjs';
 
 import {Utils} from '../utils';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class TitleService {
   header = new BehaviorSubject<string>('');
 

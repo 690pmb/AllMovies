@@ -5,7 +5,9 @@ import {HttpHeaders, HttpClient} from '@angular/common/http';
 import {ToastService} from './toast.service';
 import {Level} from './../../model/model';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class UtilsService {
   constructor(private http: HttpClient) {}
 
@@ -38,7 +40,7 @@ export class UtilsService {
     return headers;
   }
 
-  handleSuccess(messageKey: string): void {}
+  handleSuccess(): void {}
 
   handleError(error: any, toast: ToastService): void {
     console.log('handleError');
@@ -50,8 +52,8 @@ export class UtilsService {
     console.log('handlePromiseError');
     console.error('error', error);
     toast.open(Level.error, UtilsService.getErrorMessage(error));
-    return new Promise<any>((resolve, reject) => {
-      resolve();
+    return new Promise<any>(resolve => {
+      resolve('');
     });
   }
 

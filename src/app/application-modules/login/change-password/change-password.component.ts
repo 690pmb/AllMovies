@@ -5,6 +5,7 @@ import * as crypto from 'crypto-js';
 import {TitleService} from './../../../shared/shared.module';
 import {User} from './../../../model/user';
 import {AuthService} from '../../../shared/shared.module';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-change-password',
@@ -12,12 +13,12 @@ import {AuthService} from '../../../shared/shared.module';
   styleUrls: ['./change-password.component.scss'],
 })
 export class ChangePasswordComponent implements OnInit, OnDestroy {
-  oldPass: string;
-  pass1: string;
-  pass2: string;
-  message: string;
-  user: User;
-  subs = [];
+  oldPass!: string;
+  pass1!: string;
+  pass2!: string;
+  message!: string;
+  user!: User;
+  subs: Subscription[] = [];
 
   constructor(
     private auth: AuthService,

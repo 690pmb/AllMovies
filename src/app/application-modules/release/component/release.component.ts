@@ -20,10 +20,11 @@ import {MovieService, TitleService} from '../../../shared/shared.module';
 import {MyNgbDate} from '../../../shared/my-ngb-date';
 import {DuckDuckGo} from '../../../constant/duck-duck-go';
 import {DetailConfig} from '../../../model/model';
+import {Subscription} from 'rxjs';
 
 const now: Date = new Date();
 
-const I18N_VALUES = {
+const I18N_VALUES: {[key: string]: {weekdays: string[]; months: string[]}} = {
   fr: {
     weekdays: ['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di'],
     months: [
@@ -43,12 +44,12 @@ const I18N_VALUES = {
   },
 };
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class I18n {
   language = 'fr';
 }
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class CustomDatepickerI18n extends NgbDatepickerI18n {
   constructor(private _i18n: I18n) {
     super();
@@ -80,15 +81,15 @@ export class CustomDatepickerI18n extends NgbDatepickerI18n {
   ],
 })
 export class ReleaseComponent implements OnInit, OnDestroy {
-  @ViewChild('dp', {static: true}) dp: NgbDatepicker;
-  movies: Movie[];
-  selectedId: number;
-  model: NgbDateStruct;
-  monday: Date;
-  sunday: Date;
-  language: string;
-  config: DetailConfig;
-  subs = [];
+  @ViewChild('dp', {static: true}) dp!: NgbDatepicker;
+  movies: Movie[] = [];
+  selectedId?: number;
+  model!: NgbDateStruct;
+  monday!: Date;
+  sunday!: Date;
+  language!: string;
+  config!: DetailConfig;
+  subs: Subscription[] = [];
 
   Url = DuckDuckGo;
 
@@ -150,7 +151,7 @@ export class ReleaseComponent implements OnInit, OnDestroy {
     this.model = this.formatter.parse(day);
     this.dp.navigateTo(this.model);
     this.selectedId = undefined;
-    this.movies = undefined;
+    this.movies = [];
     this.router.navigate(['.'], {
       relativeTo: this.route,
       queryParams: {

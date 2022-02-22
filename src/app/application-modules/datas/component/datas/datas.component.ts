@@ -1,7 +1,7 @@
 /* tslint:disable:no-string-literal */
 import {ActivatedRoute, Router} from '@angular/router';
 import {Component, OnInit, OnDestroy, ElementRef} from '@angular/core';
-import {forkJoin, BehaviorSubject, Observable} from 'rxjs';
+import {forkJoin, BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {Sort} from '@angular/material/sort';
 import {TranslateService, LangChangeEvent} from '@ngx-translate/core';
@@ -90,7 +90,7 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
   displayedTags: BehaviorSubject<Tag[]> = new BehaviorSubject<Tag[]>([]);
   selectedTag: Tag;
   scrollTo: HTMLElement;
-  subs = [];
+  subs: Subscription[] = [];
 
   faTrash = faTrash;
   faHashtag = faHashtag;
@@ -119,8 +119,8 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
     private activeRoute: ActivatedRoute,
     library: FaIconLibrary
   ) {
-    library.addIcons(faClock);
     library.addIcons(faTimesCircle);
+    library.addIcons(faClock);
   }
 
   ngOnInit(): void {

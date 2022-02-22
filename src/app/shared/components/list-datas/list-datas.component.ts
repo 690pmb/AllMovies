@@ -15,20 +15,20 @@ import {DropDownChoice, ImageSize} from '../../../model/model';
 })
 export class ListDatasComponent<T extends Data> implements OnChanges {
   @Input()
-  datas: T[];
+  datas: T[] = [];
   @Input()
-  isMovie: boolean;
+  isMovie!: boolean;
   @Input()
-  label: string;
+  label!: string;
 
   imageSize = ImageSize;
-  page: number;
-  research: string;
-  resultLength: number;
-  datasToShow: T[];
-  sortChoices: DropDownChoice[];
-  sortChosen: DropDownChoice;
-  sortDir: SortDirection;
+  page!: number;
+  research!: string;
+  resultLength!: number;
+  datasToShow: T[] = [];
+  sortChoices: DropDownChoice[] = [];
+  sortChosen!: DropDownChoice;
+  sortDir!: SortDirection;
   pageSize = 5;
 
   constructor(public translate: TranslateService, library: FaIconLibrary) {

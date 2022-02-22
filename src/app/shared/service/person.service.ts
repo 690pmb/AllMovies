@@ -8,7 +8,9 @@ import {Person} from '../../model/person';
 import {ToastService} from './toast.service';
 import {UrlBuilder} from '../urlBuilder';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class PersonService {
   constructor(
     private serviceUtils: UtilsService,
@@ -34,7 +36,7 @@ export class PersonService {
       .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
   }
 
-  getPopularPersons(language: string, page: number = 1): Promise<Person[]> {
+  getPopularPersons(language: string, page = 1): Promise<Person[]> {
     return this.serviceUtils
       .getPromise(
         `${Url.GET_POPULAR_PERSON}${Url.LANGUE}${language}${Url.PAGE_URL}${page}`

@@ -2,7 +2,7 @@ import {faDatabase, faFilm} from '@fortawesome/free-solid-svg-icons';
 import {faImdb, faWikipediaW} from '@fortawesome/free-brands-svg-icons';
 
 export class Search {
-  site: string;
+  site!: string;
   icon: any;
   key?: string;
 }

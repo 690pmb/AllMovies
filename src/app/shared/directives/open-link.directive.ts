@@ -16,10 +16,10 @@ import {TabsService} from '../service/tabs.service';
   selector: '[appOpenLink]',
 })
 export class OpenLinkDirective {
-  dialogRef: MatDialogRef<OpenLinkDialogComponent>;
-  setTimeoutConst;
-  @Input() url: string;
-  @Input() label: string;
+  dialogRef!: MatDialogRef<OpenLinkDialogComponent>;
+  setTimeoutConst!: NodeJS.Timeout;
+  @Input() url!: string;
+  @Input() label!: string;
   @HostListener('mouseover', ['$event']) onMouseEnter(event: MouseEvent): void {
     this.setTimeoutConst = setTimeout(() => {
       this.openDialog(event);

@@ -6,11 +6,9 @@ import {MockService} from './../../shared/shared.module';
 import {SearchService} from './../../shared/service/search.service';
 import {Network} from './../../model/model';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({providedIn: 'root'})
 export class NetworkService implements SearchService<Network> {
-  networks: Network[];
+  networks: Network[] = [];
 
   constructor(private mockService: MockService<Network>) {}
 

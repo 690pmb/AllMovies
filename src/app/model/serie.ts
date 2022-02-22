@@ -4,28 +4,28 @@ import {Person} from './person';
 import {Season} from './season';
 
 export class Serie extends Data {
-  originLang: string;
-  originCountries: string[];
-  creators: Person[];
-  runtimes: number[];
-  firstAired: Date;
-  lastAired: Date;
-  inProduction: boolean;
-  languages: string[];
-  recommendations: Serie[];
-  networks: Network[];
-  episodeCount: number;
-  seasonCount: number;
-  seasons: Season[];
-  status: string;
-  type: string;
-  similars: Serie[];
+  originLang!: string;
+  originCountries: string[] = [];
+  creators: Person[] = [];
+  runtimes: number[] = [];
+  firstAired!: Date;
+  lastAired!: Date;
+  inProduction!: boolean;
+  languages: string[] = [];
+  recommendations: Serie[] = [];
+  networks: Network[] = [];
+  episodeCount!: number;
+  seasonCount!: number;
+  seasons: Season[] = [];
+  status!: string;
+  type!: string;
+  similars: Serie[] = [];
 
   constructor() {
     super();
   }
 
-  removeFields(key: string, value: string): string {
+  removeFields(key: string, value: string): string | undefined {
     if (
       [
         'title',

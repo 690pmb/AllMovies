@@ -7,10 +7,11 @@ import {
 import {Injectable, OnDestroy} from '@angular/core';
 
 import {AuthService} from './shared/shared.module';
+import {Subscription} from 'rxjs';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class AuthGard implements CanActivate, OnDestroy {
-  subs = [];
+  subs: Subscription[] = [];
   constructor(private auth: AuthService, private router: Router) {}
 
   ngOnDestroy(): void {
@@ -36,7 +37,7 @@ export class AuthGard implements CanActivate, OnDestroy {
       });
     } catch (err) {
       console.log(err);
-      return new Promise((resolve, reject) => {});
+      return new Promise(() => {});
     }
   }
 }

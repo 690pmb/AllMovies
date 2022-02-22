@@ -10,7 +10,7 @@ import {Dropbox} from '../constant/dropbox';
 import {Constants} from '../constant/constants';
 import {Utils} from './utils';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class MyMissingTranslationHandler implements MissingTranslationHandler {
   constructor(private injector: Injector) {}
 

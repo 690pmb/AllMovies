@@ -15,6 +15,7 @@ import {MyDatasService} from '../../service/my-datas.service';
 import {Level} from './../../../model/model';
 import {ToastService} from '../../service/toast.service';
 import {MyTagsService} from '../../service/my-tags.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-list-tags',
@@ -25,16 +26,16 @@ export class ListTagsComponent implements OnInit, OnChanges, OnDestroy {
   @Input()
   tags: Tag[] = [];
   @Input()
-  dataId: number;
+  dataId!: number;
   @Input()
-  isMovie: boolean;
+  isMovie!: boolean;
   isBtnSaveDisabled = true;
-  allSeries: Data[];
-  allMovies: Data[];
+  allSeries: Data[] = [];
+  allMovies: Data[] = [];
   tagsDisplayed: Tag[] = [];
   tagsToSave: Tag[] = [];
   editing = false;
-  subs = [];
+  subs: Subscription[] = [];
 
   faRemove = faTimes;
   faEdit = faPen;
@@ -68,7 +69,7 @@ export class ListTagsComponent implements OnInit, OnChanges, OnDestroy {
       this.dataId = changes.dataId.currentValue;
       this.editing = false;
       this.tags = changes.tags
-        ? changes.tags.currentValue.map(tag => Tag.clone(<Tag>tag))
+        ? changes.tags.currentValue.map((tag: Tag) => Tag.clone(<Tag>tag))
         : this.tags;
       this.tagsDisplayed = this.getTags();
       this.tagsToSave = this.getTags();
@@ -94,9 +95,12 @@ export class ListTagsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   remove(tag: Tag): void {
-    this.tagsToSave.find(t => t.id === tag.id).datas = tag.datas.filter(
-      d => d.id !== this.dataId || d.movie !== this.isMovie
-    );
+    const tagToRemove = this.tagsToSave.find(t => t.id === tag.id);
+    if (tagToRemove) {
+      tagToRemove.datas = tag.datas.filter(
+        d => d.id !== this.dataId || d.movie !== this.isMovie
+      );
+    }
     this.tagsDisplayed = this.tagsDisplayed.filter(t => t.id !== tag.id);
     this.isTagsChanged();
   }

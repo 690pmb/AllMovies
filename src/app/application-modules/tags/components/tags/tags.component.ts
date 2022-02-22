@@ -10,7 +10,6 @@ import {
   faPlus,
   faPaintBrush,
 } from '@fortawesome/free-solid-svg-icons';
-import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 import {faTimesCircle, faStar} from '@fortawesome/free-regular-svg-icons';
 import {
   FormGroup,
@@ -23,6 +22,8 @@ import {ActivatedRoute, Router, Params} from '@angular/router';
 import {MyTagsService, TitleService} from './../../../../shared/shared.module';
 import {Utils} from './../../../../shared/utils';
 import {Tag} from './../../../../model/tag';
+import {Subscription} from 'rxjs';
+import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-tags',
@@ -31,22 +32,22 @@ import {Tag} from './../../../../model/tag';
 })
 export class TagsComponent implements OnInit, OnDestroy {
   displayedColumns = ['id', 'label', 'count', 'color', 'select', 'details'];
-  tags: Tag[];
-  tableTags: Tag[];
-  length: number;
-  displayedTags: Tag[];
+  tags: Tag[] = [];
+  tableTags: Tag[] = [];
+  length!: number;
+  displayedTags: Tag[] = [];
   search = '';
   pageSize = 25;
   pageIndex = 0;
   pageSizeOptions = [10, 25, 50, 100];
-  page: PageEvent;
-  sort: Sort;
+  page!: PageEvent;
+  sort!: Sort;
   nbChecked = 0;
-  tagForm: FormGroup;
+  tagForm!: FormGroup;
   isMoviesVisible = false;
-  selectedTag: Tag;
-  color: string;
-  subs = [];
+  selectedTag?: Tag;
+  color!: string;
+  subs: Subscription[] = [];
 
   faTrash = faTrash;
   faHashtag = faHashtag;
@@ -171,7 +172,7 @@ export class TagsComponent implements OnInit, OnDestroy {
     this.color = Utils.randomColor();
   }
 
-  selectTag(selected: Tag): void {
+  selectTag(selected?: Tag): void {
     this.router.navigate(['.'], {
       relativeTo: this.route,
       queryParams: {

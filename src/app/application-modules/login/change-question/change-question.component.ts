@@ -4,6 +4,7 @@ import * as crypto from 'crypto-js';
 
 import {User} from './../../../model/user';
 import {AuthService, TitleService} from '../../../shared/shared.module';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-change-question',
@@ -11,13 +12,13 @@ import {AuthService, TitleService} from '../../../shared/shared.module';
   styleUrls: ['./change-question.component.scss'],
 })
 export class ChangeQuestionComponent implements OnInit, OnDestroy {
-  oldQuestion: string;
-  oldAnswer: string;
-  newQuestion: string;
-  newAnswer: string;
-  message: string;
-  user: User;
-  subs = [];
+  oldQuestion?: string;
+  oldAnswer!: string;
+  newQuestion!: string;
+  newAnswer!: string;
+  message!: string;
+  user!: User;
+  subs: Subscription[] = [];
 
   constructor(
     private auth: AuthService,

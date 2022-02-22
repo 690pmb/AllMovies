@@ -7,6 +7,12 @@ import {Utils} from './../../../utils';
 import {MetaService} from './../service/meta.service';
 import {DuckDuckGo, Search} from '../../../../constant/duck-duck-go';
 import {Score} from '../../../../model/score';
+import {Person} from '../../../../model/person';
+import {Movie} from '../../../../model/movie';
+import {Serie} from '../../../../model/serie';
+import {Data} from '../../../../model/data';
+
+type Datas = Movie | Serie | Person;
 
 @Component({
   selector: 'app-meta',
@@ -14,25 +20,25 @@ import {Score} from '../../../../model/score';
   styleUrls: ['./meta.component.scss'],
 })
 export class MetaComponent implements OnInit {
-  _entry = new BehaviorSubject<any>(undefined);
+  _entry = new BehaviorSubject<Datas>(undefined);
   @Input()
-  set entry(value: any) {
+  set entry(value: Datas) {
     this._entry.next(value);
   }
 
-  get entry(): any {
+  get entry(): Datas {
     return this._entry.getValue();
   }
 
   @Input()
-  sites: Search[];
+  sites: Search[] = [];
   @Input()
-  isMovie: boolean;
+  isMovie!: boolean;
   @Input()
-  isSerie: boolean;
+  isSerie!: boolean;
   @Output()
   sensCritique = new EventEmitter<Score>();
-  links: Search[];
+  links: Search[] = [];
 
   constructor(
     private metaService: MetaService,
@@ -40,20 +46,21 @@ export class MetaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this._entry.subscribe(x => {
-      let term;
-      let original;
-      let itemLang;
+    this._entry.subscribe(() => {
+      let term: string;
+      let original: string;
+      let itemLang: string;
       if (this.isMovie || this.isSerie) {
         // if serie or movie
-        term = this.entry.title;
-        original = this.entry.original_title;
+        const data = this.entry as Data;
+        term = data.title;
+        original = data.original_title;
         itemLang = this.isMovie
-          ? this.entry.spokenLangs[0].code.toLowerCase()
-          : this.entry.originLang.toLowerCase();
+          ? (this.entry as Movie).spokenLangs[0].code.toLowerCase()
+          : (this.entry as Serie).originLang.toLowerCase();
       } else {
         // if person
-        term = this.entry.name;
+        term = (this.entry as Person).name;
       }
       this.links = [];
       this.sites.forEach(site => {
@@ -126,7 +133,7 @@ export class MetaComponent implements OnInit {
     return data;
   }
 
-  handleResult(result: any, site: any): void {
+  handleResult(result: string, site: Search): void {
     this.links.push({site: result, icon: site.icon, key: site.site});
     this.links.sort((a, b) => Utils.compare(a.key, b.key, false));
     if (

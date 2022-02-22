@@ -1,4 +1,4 @@
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Subscription} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PageEvent} from '@angular/material/paginator';
 import {TranslateService} from '@ngx-translate/core';
@@ -65,7 +65,7 @@ export class DiscoverComponent implements OnInit, OnDestroy {
   clean = false;
   genresLoaded$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isMovie: boolean;
-  subs = [];
+  subs: Subscription[] = [];
 
   constructor(
     private movieService: MovieService,

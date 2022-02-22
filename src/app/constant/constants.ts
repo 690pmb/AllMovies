@@ -15,5 +15,5 @@ export class Constants {
   static readonly MEDIA_MAX_1400 = '(max-width: 1400px)';
 
   static readonly TRANSLATION_KEY_REGEX =
-    /^[a-z]+[a-z_-]*[a-z]+\.[a-z\._-]*[a-z]+$/;
+    /^[a-z]+[a-z_-]*[a-z]+\.[a-z._-]*[a-z]+$/;
 }

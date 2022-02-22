@@ -27,11 +27,11 @@ import {ImageSize} from './../../../model/model';
 })
 export class SeasonsComponent implements OnInit, OnChanges {
   @Input()
-  serie: string;
+  serie!: string;
   @Input()
   seasons: Season[] = [];
-  overviewId: number;
-  overview: string;
+  overviewId?: number;
+  overview?: string;
   swiperConfig: SwiperConfigInterface = {
     a11y: {enabled: true},
     keyboard: true,
@@ -83,10 +83,10 @@ export class SeasonsComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     this.serie = changes.serie ? changes.serie.currentValue : undefined;
     this.seasons = changes.seasons
-      ? changes.seasons.currentValue.sort((a, b) =>
+      ? (changes.seasons.currentValue as Season[]).sort((a, b) =>
           Utils.compare(a.seasonNumber, b.seasonNumber, true)
         )
-      : undefined;
+      : [];
   }
 
   goToSeasonDetail(season: number): void {

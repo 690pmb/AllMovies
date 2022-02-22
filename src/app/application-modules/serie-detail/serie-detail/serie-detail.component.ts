@@ -1,5 +1,5 @@
 import {filter} from 'rxjs/operators';
-import {combineLatest} from 'rxjs';
+import {combineLatest, Subscription} from 'rxjs';
 import {TranslateService, LangChangeEvent} from '@ngx-translate/core';
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router, ParamMap} from '@angular/router';
@@ -37,17 +37,17 @@ import {
   templateUrl: './serie-detail.component.html',
 })
 export class SerieDetailComponent implements OnInit, OnDestroy {
-  id: number;
-  config: DetailConfig;
-  serie: Serie;
-  tags: Tag[];
+  id!: number;
+  config!: DetailConfig;
+  serie!: Serie;
+  tags: Tag[] = [];
   showTags = false;
   isImagesVisible = false;
   showTitles = false;
   Url = DuckDuckGo;
   imageSize = ImageSize;
-  sc: string;
-  subs = [];
+  sc!: string;
+  subs: Subscription[] = [];
 
   faChevronCircleLeft = faChevronCircleLeft;
   faChevronCircleRight = faChevronCircleRight;
@@ -85,8 +85,9 @@ export class SerieDetailComponent implements OnInit, OnDestroy {
     );
     this.subs.push(
       this.route.paramMap.subscribe((params: ParamMap) => {
-        if (params) {
-          const idParam = +params.get('id');
+        const id = params.get('id');
+        if (id) {
+          const idParam = +id;
           if (idParam && idParam !== 0) {
             this.id = idParam;
             this.getSerie(this.id);

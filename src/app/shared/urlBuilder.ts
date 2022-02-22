@@ -65,7 +65,7 @@ export class UrlBuilder {
     image: boolean,
     titles: boolean,
     external: boolean,
-    language: string
+    language?: string
   ): string {
     let url = isMovie ? Url.MOVIE_URl : Url.SERIE_URl;
     url += `/${id}?${Url.API_KEY}`;
@@ -124,12 +124,12 @@ export class UrlBuilder {
   static discoverUrlBuilder(
     isMovie: boolean,
     criteria: DiscoverCriteria,
-    people: number[],
-    genre: number[],
-    keyword: number[],
+    people?: number[],
+    genre?: number[],
+    keyword?: number[],
     networks?: number[],
-    isWithoutGenre: boolean = false,
-    isWithoutKeyword: boolean = false
+    isWithoutGenre = false,
+    isWithoutKeyword = false
   ): string {
     let url = `${isMovie ? Url.DISCOVER_MOVIE_URL : Url.DISCOVER_SERIE_URL}`;
     const parametres = [];
@@ -228,8 +228,8 @@ export class UrlBuilder {
 
   private static genresUrlBuilder(
     parametres: string[],
-    genre: number[],
-    genresWithout: boolean
+    genre?: number[],
+    genresWithout?: boolean
   ): void {
     if (genre && genre.length > 0) {
       const genreUrl = genresWithout
@@ -241,8 +241,8 @@ export class UrlBuilder {
 
   private static keywordsUrlBuilder(
     parametres: string[],
-    keyword: number[],
-    keywordsWithout: boolean
+    keyword?: number[],
+    keywordsWithout?: boolean
   ): void {
     if (keyword && keyword.length > 0) {
       const keywordUrl = keywordsWithout
@@ -254,14 +254,17 @@ export class UrlBuilder {
 
   private static networksUrlBuilder(
     parametres: string[],
-    networks: number[]
+    networks?: number[]
   ): void {
     if (networks && networks.length > 0) {
       parametres.push(`${Url.WITH_NETWORKS_URL}${networks.join(Url.OR_URL)}`);
     }
   }
 
-  private static langUrlBuilder(url: string, language: string): string {
+  private static langUrlBuilder(
+    url: string,
+    language: string | undefined
+  ): string {
     let result = url;
     if (language) {
       result += `${Url.LANGUE}${language}`;

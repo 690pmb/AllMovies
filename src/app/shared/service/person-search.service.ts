@@ -9,7 +9,9 @@ import {UtilsService} from './utils.service';
 import {ToastService} from './toast.service';
 import {SearchService} from './search.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class PersonSearchService implements SearchService<Person> {
   constructor(
     private serviceUtils: UtilsService,

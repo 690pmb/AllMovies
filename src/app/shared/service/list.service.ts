@@ -8,7 +8,9 @@ import {ToastService} from './toast.service';
 import {UtilsService} from './utils.service';
 import {MapList} from '../mapList';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ListService {
   static readonly PAGES_BY = 19;
 
@@ -56,6 +58,8 @@ export class ListService {
               )
             )
             .toPromise();
+        } else {
+          return of([]);
         }
       });
   }
@@ -89,6 +93,7 @@ export class ListService {
       );
     } catch (err) {
       console.error(err);
+      return of([]);
     }
   }
 
@@ -96,7 +101,7 @@ export class ListService {
     id: number,
     language: string,
     sort: string,
-    page: number = 1
+    page = 1
   ): Promise<FullList> {
     return this.serviceUtils
       .getPromise(

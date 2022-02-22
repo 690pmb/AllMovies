@@ -5,7 +5,9 @@ import {UtilsService} from './utils.service';
 import {Constants} from './../../constant/constants';
 import {ToastService} from './toast.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class OmdbService {
   constructor(
     private serviceUtils: UtilsService,

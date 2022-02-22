@@ -10,9 +10,9 @@ import {Score} from './../../../model/score';
 })
 export class ScoreComponent implements OnChanges {
   @Input()
-  score: Score;
+  score!: Score;
   @Input()
-  scScore: Score;
+  scScore!: Score;
 
   constructor(public translate: TranslateService) {}
 
@@ -22,13 +22,16 @@ export class ScoreComponent implements OnChanges {
       ? changes.scScore.currentValue
       : this.scScore;
     if (this.scScore) {
-      this.score.ratings = this.score.ratings.filter(
+      this.score.ratings = this.score?.ratings?.filter(
         r => <string>r.Source !== 'SensCritique'
       );
-      this.score.ratings = [...this.scScore.ratings, ...this.score.ratings];
+      this.score.ratings = [
+        ...(this.scScore.ratings ?? []),
+        ...(this.score.ratings ?? []),
+      ];
       this.score.sc_votes = this.scScore.sc_votes;
     } else {
-      this.score.ratings = [...this.score.ratings];
+      this.score.ratings = [...(this.score.ratings ?? [])];
     }
   }
 }

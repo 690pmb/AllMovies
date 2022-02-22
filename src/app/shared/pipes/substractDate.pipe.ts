@@ -4,7 +4,7 @@ import * as moment from 'moment-mini-ts';
 @Pipe({name: 'substractDate'})
 export class SubstractDatePipe implements PipeTransform {
   transform(birthday: number, deathday: number): string {
-    let age;
+    let age = '';
     if (birthday !== undefined) {
       const birth = moment(birthday, 'YYYY-MM-DD');
       let tmp;

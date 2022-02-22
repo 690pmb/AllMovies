@@ -4,7 +4,9 @@ import {TranslateService} from '@ngx-translate/core';
 
 import {Level} from './../../model/model';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ToastService {
   constructor(
     public snackBar: MatSnackBar,

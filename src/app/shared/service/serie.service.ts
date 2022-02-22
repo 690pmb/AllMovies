@@ -16,7 +16,9 @@ import {ToastService} from './toast.service';
 import {UtilsService} from './utils.service';
 import {OmdbService} from './omdb.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class SerieService {
   constructor(
     private omdb: OmdbService,
@@ -24,7 +26,7 @@ export class SerieService {
     private toast: ToastService
   ) {}
 
-  getPopularSeries(language: string, page: number = 1): Promise<Serie[]> {
+  getPopularSeries(language: string, page = 1): Promise<Serie[]> {
     return this.serviceUtils
       .getPromise(
         `${Url.MOST_POPULAR_SERIE_URL}${Url.LANGUE}${language}${Url.PAGE_URL}${page}`
@@ -114,7 +116,7 @@ export class SerieService {
         return serie;
       });
     } else {
-      return new Promise<Serie>((resolve, reject) => {
+      return new Promise<Serie>(resolve => {
         resolve(serie);
       });
     }

@@ -8,7 +8,9 @@ import {Constants} from './../../../../constant/constants';
 import {UtilsService} from './../../../service/utils.service';
 import {ToastService} from '../../../service/toast.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class MetaService {
   constructor(
     private serviceUtils: UtilsService,

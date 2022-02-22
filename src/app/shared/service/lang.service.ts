@@ -8,9 +8,13 @@ import {LangDb} from '../../model/model';
 import {Url} from '../../constant/url';
 import {Utils} from '../utils';
 
-@Injectable()
+type Lang = {iso_639_1: string; english_name: string};
+
+@Injectable({
+  providedIn: 'root',
+})
 export class LangService implements SearchService<LangDb> {
-  langs: LangDb[];
+  langs: LangDb[] = [];
 
   constructor(
     private serviceUtils: UtilsService,
@@ -28,7 +32,7 @@ export class LangService implements SearchService<LangDb> {
       .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
   }
 
-  mapLang(response: any): LangDb[] {
+  mapLang(response: Lang[]): LangDb[] {
     const result = response.map(element => {
       const lang = new LangDb();
       lang.id = element.iso_639_1;

@@ -1,6 +1,6 @@
 import {TranslateService} from '@ngx-translate/core';
 import {faBookmark, faStar, faTrash} from '@fortawesome/free-solid-svg-icons';
-import {forkJoin} from 'rxjs';
+import {forkJoin, Subscription} from 'rxjs';
 import {
   Directive,
   Input,
@@ -32,20 +32,20 @@ export class AddCollectionDirective<T extends Data>
   implements OnInit, OnChanges, OnDestroy
 {
   @Input()
-  datas: T[];
+  datas: T[] = [];
   @Input()
-  label: string;
+  label!: string;
   @Input()
-  isSingleData: boolean;
+  isSingleData!: boolean;
   @Input()
-  isMovie: boolean;
+  isMovie!: boolean;
 
-  tags: Tag[];
-  mySeries: T[];
-  myMovies: T[];
-  isAlreadyAdded: boolean;
+  tags: Tag[] = [];
+  mySeries: T[] = [];
+  myMovies: T[] = [];
+  isAlreadyAdded!: boolean;
 
-  subs = [];
+  subs: Subscription[] = [];
   faBookmark = faBookmark;
   faStar = faStar;
   faTrash = faTrash;
@@ -180,7 +180,6 @@ export class AddCollectionDirective<T extends Data>
   }
 
   addDatas(datasToAdd: T[]): void {
-    const prom = [];
     const confFr = new DetailConfig(
       false,
       false,
@@ -205,6 +204,7 @@ export class AddCollectionDirective<T extends Data>
       !this.isMovie,
       'en'
     );
+    const prom: Promise<Data>[] = [];
     datasToAdd.forEach(data => {
       if (this.isMovie) {
         prom.push(this.movieService.getMovie(data.id, confFr, false));

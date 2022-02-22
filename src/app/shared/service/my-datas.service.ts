@@ -10,10 +10,12 @@ import {UtilsService} from './utils.service';
 import {ToastService} from './toast.service';
 import {Utils} from '../utils';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class MyDatasService<T extends Data> {
-  myMovies$: BehaviorSubject<T[]> = new BehaviorSubject([]);
-  mySeries$: BehaviorSubject<T[]> = new BehaviorSubject([]);
+  myMovies$: BehaviorSubject<T[]> = new BehaviorSubject<T[]>([]);
+  mySeries$: BehaviorSubject<T[]> = new BehaviorSubject<T[]>([]);
 
   constructor(
     private dropboxService: DropboxService,
@@ -101,9 +103,9 @@ export class MyDatasService<T extends Data> {
   }
 
   add(datasToAdd: T[], isMovie: boolean): Promise<boolean> {
-    let tempDataList = [];
+    let tempDataList: T[] = [];
     let tempDatasAdded = [];
-    let fileName;
+    let fileName: string;
     const mapped = this.format(datasToAdd);
     return this.getFileName(isMovie)
       .then((file: string) => {
@@ -112,7 +114,7 @@ export class MyDatasService<T extends Data> {
       })
       .then((datasFromFile: string) => {
         // parse datas
-        let dataList = [];
+        let dataList: T[] = [];
         if (datasFromFile && datasFromFile.trim().length > 0) {
           dataList = this.fromJson(datasFromFile);
         }
@@ -164,7 +166,7 @@ export class MyDatasService<T extends Data> {
 
   remove(idToRemove: number[], isMovie: boolean): Promise<boolean> {
     let tempDataList: T[] = [];
-    let fileName;
+    let fileName: string;
     return this.getFileName(isMovie)
       .then((file: string) => {
         fileName = file;
@@ -215,7 +217,7 @@ export class MyDatasService<T extends Data> {
    */
   update(datasToUpdate: T[], isMovie: boolean): Promise<T[]> {
     let tempDataList: T[] = [];
-    let fileName;
+    let fileName: string;
     let mapped = datasToUpdate;
     if (datasToUpdate.every(m => m.translation === undefined)) {
       mapped = this.format(datasToUpdate);

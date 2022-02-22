@@ -13,9 +13,13 @@ import {Utils} from '../utils';
 import {Dropbox} from '../../constant/dropbox';
 import {User} from '../../model/user';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class AuthService {
-  user$: BehaviorSubject<User> = new BehaviorSubject(undefined);
+  user$: BehaviorSubject<User | undefined> = new BehaviorSubject<
+    User | undefined
+  >(undefined);
 
   constructor(
     private dropbox: DropboxService,
@@ -25,11 +29,11 @@ export class AuthService {
     private translate: TranslateService
   ) {}
 
-  private static usersToBlob(user: User[]): any {
+  private static usersToBlob(user: User[]): Blob {
     return new Blob([JSON.stringify(user)], {type: 'text/json'});
   }
 
-  private static decodeToken(): User {
+  private static decodeToken(): User | undefined {
     const token = localStorage.getItem('token');
     if (token && token.trim() !== '') {
       return jwt_decode(token);
@@ -49,7 +53,7 @@ export class AuthService {
     return KJUR.jws.JWS.sign('HS256', sHeader, JSON.stringify(user), 'secret');
   }
 
-  private reject(loggout: boolean): Promise<User> {
+  private reject(loggout: boolean): Promise<User | undefined> {
     if (loggout) {
       this.logout();
     }
@@ -140,7 +144,7 @@ export class AuthService {
   }
 
   register(user: User): void {
-    let addedUser;
+    let addedUser: User;
     this.dropbox
       .downloadFile(Dropbox.DROPBOX_USER_FILE)
       .then(file => {

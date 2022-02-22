@@ -4,7 +4,9 @@ import {Router, NavigationStart} from '@angular/router';
 
 import {Link} from './../../model/model';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class TabsService {
   private liens = [new Link('AllMovies', '/')];
   links = new BehaviorSubject(this.liens);

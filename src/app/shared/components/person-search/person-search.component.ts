@@ -14,10 +14,10 @@ import {AuthService} from '../../service/auth.service';
   styleUrls: ['./person-search.component.scss'],
 })
 export class PersonSearchComponent implements OnInit {
-  persons: Observable<Person[]>;
+  persons!: Observable<Person[]>;
   private searchTerms = new Subject<string>();
   showPerson = false;
-  adult: boolean;
+  adult!: boolean;
   imageSize = ImageSize;
   faSearch = faSearch;
 

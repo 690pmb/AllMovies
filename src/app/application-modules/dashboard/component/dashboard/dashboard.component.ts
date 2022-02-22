@@ -15,6 +15,7 @@ import {Person} from '../../../../model/person';
 import {ImageSize} from '../../../../model/model';
 import {Url} from '../../../../constant/url';
 import {Constants} from './../../../../constant/constants';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -38,7 +39,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     zoom: false,
     touchEventsTarget: 'wrapper',
   };
-  subs = [];
+  subs: Subscription[] = [];
   Url = Url;
   pageMovies = 1;
   pageSeries = 1;

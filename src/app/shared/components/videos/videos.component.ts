@@ -1,5 +1,7 @@
 import {Component, OnInit, Input} from '@angular/core';
 
+type Video = {key: string; name: string};
+
 @Component({
   selector: 'app-videos',
   templateUrl: './videos.component.html',
@@ -7,7 +9,7 @@ import {Component, OnInit, Input} from '@angular/core';
 })
 export class VideosComponent implements OnInit {
   @Input()
-  videos: any[];
+  videos: Video[] = [];
 
   constructor() {}
 

@@ -32,8 +32,8 @@ export class SearchDataComponent<T extends Data> implements OnInit {
   @Input() adult!: boolean;
   @Output() selected = new EventEmitter<T[]>();
   @Output() movie = new EventEmitter<boolean>();
-  filteredDatas: Observable<T[]>;
-  dataCtrl: FormControl;
+  filteredDatas!: Observable<T[]>;
+  dataCtrl!: FormControl;
   imageSize = ImageSize;
   faRemove = faTimes;
   isMovie = true;
@@ -85,7 +85,7 @@ export class SearchDataComponent<T extends Data> implements OnInit {
     });
   }
 
-  fetchData(id: number, lang: string, isMovie: boolean): Promise<any> {
+  fetchData(id: number, lang: string, isMovie: boolean): Promise<T> {
     const config = new DetailConfig(
       false,
       false,
@@ -98,13 +98,13 @@ export class SearchDataComponent<T extends Data> implements OnInit {
       !isMovie,
       lang
     );
-    return new Promise(resolve => {
-      if (this.isMovie) {
-        this.movieService.getMovie(id, config, false).then(resolve);
-      } else {
-        this.serieService.getSerie(id, config, false).then(resolve);
-      }
-    }).then((d: Data) => {
+    let result: Promise<Data>;
+    if (this.isMovie) {
+      result = this.movieService.getMovie(id, config, false);
+    } else {
+      result = this.serieService.getSerie(id, config, false);
+    }
+    return result.then((d: T) => {
       d.lang_version = lang;
       return d;
     });

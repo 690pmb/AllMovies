@@ -8,7 +8,7 @@ import {ToastService} from './toast.service';
 import {Level} from './../../model/model';
 import {DropboxService} from './dropbox.service';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class GlobalErrorHandler implements ErrorHandler {
   // Error handling is important and needs to be loaded first.
   // Because of this we should manually inject the services with Injector.

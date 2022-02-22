@@ -5,7 +5,7 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import {DatePipe} from '@angular/common';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class MyNgbDate extends NgbDateParserFormatter {
   constructor(private datePipe: DatePipe) {
     super();
@@ -19,11 +19,11 @@ export class MyNgbDate extends NgbDateParserFormatter {
     }
   }
 
-  isNumber(value: any): boolean {
+  isNumber(value: unknown): boolean {
     return !isNaN(this.toInteger(value));
   }
 
-  toInteger(value: any): number {
+  toInteger(value: unknown): number {
     return parseInt(`${value}`, 10);
   }
 

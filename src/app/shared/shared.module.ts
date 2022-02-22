@@ -77,6 +77,7 @@ import {ListService} from './service/list.service';
 import {MyMissingTranslationHandler} from './my-missing-translation-handler';
 import {BookmarkedComponent} from './components/bookmarked/bookmarked.component';
 import {ClickOutsideDirective} from './directives/click-outside.directive';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [

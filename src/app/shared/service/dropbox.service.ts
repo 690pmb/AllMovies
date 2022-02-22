@@ -5,7 +5,9 @@ import {ToastService} from './toast.service';
 import {UtilsService} from './utils.service';
 import {Dropbox as DropboxConstante} from '../../constant/dropbox';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class DropboxService {
   constructor(
     private toast: ToastService,
@@ -36,7 +38,7 @@ export class DropboxService {
     const pathFile = this.getPath(fileName);
     return this.getDbx()
       .filesDeleteV2({path: pathFile})
-      .then((response: Dropbox.files.DeleteResult) => {
+      .then(() => {
         return this.getDbx().filesUpload({path: pathFile, contents: fichier});
       })
       .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
@@ -49,7 +51,7 @@ export class DropboxService {
     const pathFile = this.getPath(fileName);
     return this.getDbx()
       .filesUpload({path: pathFile, contents: fichier})
-      .then(() => new Promise<void>((resolve, reject) => resolve()))
+      .then(() => new Promise<void>(resolve => resolve()))
       .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
   }
 

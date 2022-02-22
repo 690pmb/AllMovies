@@ -7,7 +7,9 @@ import {Genre} from './../../model/model';
 import {ToastService} from './toast.service';
 import {UtilsService} from './utils.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class GenreService {
   constructor(
     private serviceUtils: UtilsService,

@@ -8,7 +8,9 @@ import {Certification} from '../../model/model';
 import {Url} from '../../constant/url';
 import {Utils} from '../utils';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class CertificationService {
   constructor(
     private serviceUtils: UtilsService,

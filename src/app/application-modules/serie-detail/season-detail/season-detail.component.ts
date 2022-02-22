@@ -10,6 +10,7 @@ import {TranslateService, LangChangeEvent} from '@ngx-translate/core';
 
 import {Season} from './../../../model/season';
 import {SerieService, TitleService} from './../../../shared/shared.module';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-season-detail',
@@ -17,17 +18,17 @@ import {SerieService, TitleService} from './../../../shared/shared.module';
   styleUrls: ['./season-detail.component.scss'],
 })
 export class SeasonDetailComponent implements OnInit, OnDestroy {
-  serieId: number;
-  season: Season;
-  maxSeason: number;
-  serie: string;
+  serieId!: number;
+  season!: Season;
+  maxSeason!: number;
+  serie!: string;
   isImagesVisible = false;
 
   faChevronCircleLeft = faChevronCircleLeft;
   faImage = faImage;
   faArrowCircleLeft = faArrowCircleLeft;
   faArrowCircleRight = faArrowCircleRight;
-  subs = [];
+  subs: Subscription[] = [];
 
   constructor(
     private serieService: SerieService,
@@ -38,16 +39,19 @@ export class SeasonDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.maxSeason = +sessionStorage.getItem('season_max');
-    this.serie = sessionStorage.getItem('serie');
+    this.maxSeason = +(sessionStorage.getItem('season_max') ?? 1);
+    this.serie = sessionStorage.getItem('serie') ?? '';
     this.title.setTitle(this.serie);
     this.route.paramMap.subscribe((params: ParamMap) => {
-      this.serieId = +params.get('id');
-      this.getSeason(
-        this.serieId,
-        +params.get('season'),
-        this.translate.currentLang
-      );
+      const id = params.get('id') ?? undefined;
+      if (id) {
+        this.serieId = +id;
+        this.getSeason(
+          this.serieId,
+          +(params.get('season') ?? 1),
+          this.translate.currentLang
+        );
+      }
     });
     this.subs.push(
       this.translate.onLangChange.subscribe((event: LangChangeEvent) => {

@@ -1,6 +1,6 @@
 import {TranslateService} from '@ngx-translate/core';
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {Observable, Subject, of} from 'rxjs';
+import {Observable, Subject, of, Subscription} from 'rxjs';
 import {faSearch} from '@fortawesome/free-solid-svg-icons';
 import {switchMap, debounceTime, catchError} from 'rxjs/operators';
 
@@ -14,10 +14,10 @@ import {SerieService} from '../../service/serie.service';
   styleUrls: ['./serie-search.component.scss'],
 })
 export class SerieSearchComponent implements OnInit, OnDestroy {
-  series: Observable<Serie[]>;
+  series!: Observable<Serie[]>;
   private searchTerms = new Subject<string>();
   showSerie = false;
-  subs = [];
+  subs: Subscription[] = [];
   imageSize = ImageSize;
   faSearch = faSearch;
 

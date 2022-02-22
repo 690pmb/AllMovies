@@ -8,7 +8,9 @@ import {Movie} from './../../model/movie';
 import {ToastService} from './toast.service';
 import {UtilsService} from './utils.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class MovieSearchService {
   constructor(
     private serviceUtils: UtilsService,

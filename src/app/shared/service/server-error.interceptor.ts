@@ -9,17 +9,18 @@ import {
 import {Observable, throwError} from 'rxjs';
 import {retry, catchError} from 'rxjs/operators';
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class ServerErrorInterceptor implements HttpInterceptor {
   intercept(
-    request: HttpRequest<any>,
+    request: HttpRequest<unknown>,
     next: HttpHandler
-  ): Observable<HttpEvent<any>> {
+  ): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       retry(1),
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
           // refresh token
+          return undefined;
         } else {
           return throwError(error);
         }

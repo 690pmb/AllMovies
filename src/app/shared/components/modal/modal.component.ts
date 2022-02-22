@@ -16,12 +16,11 @@ import {faTimes, IconDefinition} from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./modal.component.scss'],
 })
 export class ModalComponent implements OnInit, OnChanges {
-  @Input() visible: boolean;
-  @Input() closeBtn: IconDefinition;
+  @Input() visible!: boolean;
+  @Input() closeBtn!: IconDefinition;
   @Output() update = new EventEmitter<boolean>();
-  @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(
-    event: KeyboardEvent
-  ): void {
+  @HostListener('document:keydown.escape', ['$event'])
+  onKeydownHandler(): void {
     if (this.visible) {
       this.close();
     }

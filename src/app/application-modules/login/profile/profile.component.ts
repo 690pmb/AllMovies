@@ -2,6 +2,7 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 
 import {AuthService, TitleService} from './../../../shared/shared.module';
 import {User} from './../../../model/user';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -9,8 +10,8 @@ import {User} from './../../../model/user';
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit, OnDestroy {
-  user: User;
-  subs = [];
+  user!: User;
+  subs: Subscription[] = [];
 
   constructor(private auth: AuthService, private title: TitleService) {}
 

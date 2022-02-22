@@ -18,6 +18,7 @@ import {Url} from '../../../constant/url';
 import {DuckDuckGo} from '../../../constant/duck-duck-go';
 import {Utils} from '../../../shared/utils';
 import {Data} from '../../../model/data';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-person-detail',
@@ -25,13 +26,13 @@ import {Data} from '../../../model/data';
   templateUrl: './person-detail.component.html',
 })
 export class PersonDetailComponent implements OnInit, OnDestroy {
-  person: Person;
+  person!: Person;
   isImagesVisible = false;
-  scrollTo: HTMLElement;
-  listMoviesOrder: DropDownChoice[];
-  knownFor: Data[];
+  scrollTo!: HTMLElement;
+  listMoviesOrder: DropDownChoice[] = [];
+  knownFor: Data[] = [];
 
-  subs = [];
+  subs: Subscription[] = [];
   Url = Url;
   imageSize = ImageSize;
   DuckDuckGo = DuckDuckGo;
@@ -92,9 +93,9 @@ export class PersonDetailComponent implements OnInit, OnDestroy {
         Job.other,
         this.groupByType(person.asOther)
       );
+      const clonedActor = {...actor};
       switch (person.knownFor) {
-        case 'Acting':
-          const clonedActor = {...actor};
+        case 'Acting': {
           clonedActor.value.set('show', ['both']);
           this.listMoviesOrder = [
             clonedActor,
@@ -107,7 +108,8 @@ export class PersonDetailComponent implements OnInit, OnDestroy {
           ];
           this.getKnownFor(person.asActor, true);
           break;
-        case 'Directing':
+        }
+        case 'Directing': {
           const clonedDirector = {...director};
           clonedDirector.value.set('show', ['both']);
           this.listMoviesOrder = [
@@ -121,7 +123,8 @@ export class PersonDetailComponent implements OnInit, OnDestroy {
           ];
           this.getKnownFor(person.asDirector, false);
           break;
-        case 'Sound':
+        }
+        case 'Sound': {
           const clonedCompositor = {...compositor};
           clonedCompositor.value.set('show', ['both']);
           this.listMoviesOrder = [
@@ -135,7 +138,8 @@ export class PersonDetailComponent implements OnInit, OnDestroy {
           ];
           this.getKnownFor(person.asCompositors, false);
           break;
-        case 'Writing':
+        }
+        case 'Writing': {
           const clonedScreenplay = {...screenplay};
           clonedScreenplay.value.set('show', ['both']);
           this.listMoviesOrder = [
@@ -149,7 +153,8 @@ export class PersonDetailComponent implements OnInit, OnDestroy {
           ];
           this.getKnownFor([...person.asScreenplay, ...person.asNovel], false);
           break;
-        case 'Production':
+        }
+        case 'Production': {
           const clonedProducer = {...producer};
           clonedProducer.value.set('show', ['both']);
           this.listMoviesOrder = [
@@ -163,7 +168,8 @@ export class PersonDetailComponent implements OnInit, OnDestroy {
           ];
           this.getKnownFor(person.asProducer, false);
           break;
-        default:
+        }
+        default: {
           console.log('default');
           this.listMoviesOrder = [
             clonedActor,
@@ -176,6 +182,7 @@ export class PersonDetailComponent implements OnInit, OnDestroy {
           ];
           this.getKnownFor(person.asOther, false);
           break;
+        }
       }
       console.log('listMoviesOrder', this.listMoviesOrder);
       this.title.setTitle(person.name);
