@@ -41,6 +41,7 @@ import {MyTagsService} from '../../../../service/my-tags.service';
 import {ToastService} from '../../../../service/toast.service';
 import {TitleService} from '../../../../service/title.service';
 import {MyPaginator} from '../../../../shared/my-paginator';
+import {IconDefinition} from '@fortawesome/fontawesome-svg-core';
 
 @Component({
   selector: 'app-my-datas',
@@ -133,8 +134,8 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
     private activeRoute: ActivatedRoute,
     library: FaIconLibrary
   ) {
-    library.addIcons(faTimesCircle);
-    library.addIcons(faClock);
+    library.addIcons(faTimesCircle as IconDefinition);
+    library.addIcons(faClock as IconDefinition);
   }
 
   ngOnInit(): void {

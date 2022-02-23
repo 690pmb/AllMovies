@@ -3,8 +3,8 @@ import {
   CanDeactivate,
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
-  UrlTree,
   Router,
+  UrlTree,
 } from '@angular/router';
 
 @Injectable({
@@ -29,7 +29,6 @@ export class BackButtonGuard implements CanDeactivate<unknown> {
         currentState.url.split('?')[0].split('/'),
         {
           queryParams: null,
-          replaceUrl: true,
         }
       );
     }

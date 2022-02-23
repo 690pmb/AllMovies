@@ -25,6 +25,7 @@ import {MyTagsService} from '../../service/my-tags.service';
 import {SerieService} from '../../service/serie.service';
 import {MovieService} from '../../service/movie.service';
 import {AuthService} from '../../service/auth.service';
+import {IconProp} from '@fortawesome/fontawesome-svg-core';
 
 @Directive({
   selector: '[appAddCollection]',
@@ -137,21 +138,21 @@ export class AddCollectionDirective<T extends Data>
     if (this.isAlreadyAdded) {
       if (!this.isSingleData) {
         // Datas list -> already added
-        component.instance.icon = faStar;
+        component.instance.icon = faStar as IconProp;
         this.el.nativeElement.innerText = this.translate.instant(
           'global.already_added'
         );
         this.el.nativeElement.style.pointerEvents = 'none';
       } else {
         // Single data -> remove
-        component.instance.icon = faTrash;
+        component.instance.icon = faTrash as IconProp;
         this.el.nativeElement.innerText =
           this.translate.instant('global.delete');
         this.el.nativeElement.style.pointerEvents = 'all';
       }
     } else {
       // Add datas
-      component.instance.icon = faBookmark;
+      component.instance.icon = faBookmark as IconProp;
       this.el.nativeElement.innerText = this.translate.instant(this.label);
       this.el.nativeElement.style.pointerEvents = 'all';
     }
