@@ -18,7 +18,7 @@ describe('SearchChipComponent', () => {
   let component: SearchChipComponent<any>;
   let fixture: ComponentFixture<SearchChipComponent<any>>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [SearchChipComponent],
       providers: [TranslateService],
