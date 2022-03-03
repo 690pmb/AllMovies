@@ -6,11 +6,11 @@ import {Directive, HostListener, EventEmitter, Output} from '@angular/core';
 export class ClickOutsideDirective {
   inside = false;
   @HostListener('click')
-  clicked() {
+  clicked(): void {
     this.inside = true;
   }
   @HostListener('document:click')
-  clickedOut() {
+  clickedOut(): void {
     if (!this.inside) {
       this.outside.emit(true);
     }

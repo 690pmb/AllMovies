@@ -10,7 +10,7 @@
     "cordova": "ng build --prod --base-href file:///android_asset/www/ --progress false",
     "test": "ng test",
     "lint": "run-p lint:**",
-    "lint:ts": "gts lint src",
+    "lint:ts": "gts lint .",
     "lint:stylelint": "stylelint --syntax scss \"src/**/*.scss\" verbose",
     "analyze": "ng build --prod --stats-json && webpack-bundle-analyzer dist/stats.json",
     "e2e": "ng e2e",
@@ -19,7 +19,7 @@
     "fix": "run-s fix:*",
     "fix:format": "prettier --ignore-unknown --write src",
     "fix:stylelint": "stylelint --fix --syntax scss \"src/**/*.scss\" verbose",
-    "fix:fix": "gts fix src",
+    "fix:fix": "gts fix .",
     "prepare": "npm run compile",
     "pretest": "npm run compile",
     "posttest": "npm run lint"
@@ -91,6 +91,8 @@
     "stylelint-order": "5.0.0",
     "ts-node": "10.5.0",
     "typescript": "4.0.8",
-    "webpack-bundle-analyzer": "4.5.0"
+    "webpack-bundle-analyzer": "4.5.0",
+    "eslint": "8.7.0",
+    "@typescript-eslint/eslint-plugin": "5.13.0"
   }
 }
