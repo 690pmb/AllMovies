@@ -9,6 +9,7 @@ import {
   HostListener,
 } from '@angular/core';
 import {faTimes, IconDefinition} from '@fortawesome/free-solid-svg-icons';
+import {LocationStrategy} from '@angular/common';
 
 @Component({
   selector: 'app-modal',
@@ -26,12 +27,19 @@ export class ModalComponent implements OnInit, OnChanges {
     }
   }
 
-  constructor() {}
+  constructor(private locationStrategy: LocationStrategy) {}
 
   ngOnInit(): void {
     if (!this.closeBtn) {
       this.closeBtn = faTimes;
     }
+    history.pushState(null, null, location.href);
+    this.locationStrategy.onPopState(() => {
+      if (this.visible) {
+        history.pushState(null, null, location.href);
+        this.close();
+      }
+    });
   }
 
   ngOnChanges(changes: {[propKey: string]: SimpleChange}): void {
