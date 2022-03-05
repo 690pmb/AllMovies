@@ -99,7 +99,7 @@ export class MetaComponent implements OnInit {
     });
   }
 
-  scSeach(url: string): void {
+  scSearch(url: string): void {
     fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`)
       .then(response => {
         if (response.ok) {
@@ -140,7 +140,7 @@ export class MetaComponent implements OnInit {
       site.site === DuckDuckGo.SEARCH_BANG_SENSCRITIQUE.site &&
       (this.isMovie || this.isSerie)
     ) {
-      this.scSeach(result);
+      this.scSearch(result);
     }
   }
 
