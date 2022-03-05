@@ -9,6 +9,8 @@ import {
   HostListener,
 } from '@angular/core';
 import {faTimes, IconDefinition} from '@fortawesome/free-solid-svg-icons';
+import {Location} from '@angular/common';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-modal',
@@ -25,13 +27,21 @@ export class ModalComponent implements OnInit, OnChanges {
       this.close();
     }
   }
+  @HostListener('window:popstate', ['$event'])
+  onBackButtonHandler(): void {
+    if (this.visible) {
+      this.close();
+    }
+  }
+  current: Location;
 
-  constructor() {}
+  constructor(private location: Location, private router: Router) {}
 
   ngOnInit(): void {
     if (!this.closeBtn) {
       this.closeBtn = faTimes;
     }
+    this.current = this.location;
   }
 
   ngOnChanges(changes: {[propKey: string]: SimpleChange}): void {
@@ -39,6 +49,19 @@ export class ModalComponent implements OnInit, OnChanges {
       if (field === 'visible') {
         const changedProp = changes[field];
         this.visible = changedProp.currentValue;
+      }
+      if (this.current) {
+        if (this.visible) {
+          this.router.navigate([this.current.path().split('?')[0]], {
+            queryParams: {modal: true},
+            replaceUrl: true,
+          });
+        } else {
+          this.router.navigate([this.current.path().split('?')[0]], {
+            queryParams: null,
+            replaceUrl: true,
+          });
+        }
       }
     }
   }
