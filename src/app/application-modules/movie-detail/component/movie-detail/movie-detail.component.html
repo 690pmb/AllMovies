@@ -236,7 +236,7 @@
         type="button"
         class="btn btn-outline-primary"
         (click)="isImagesVisible = !isImagesVisible"
-        *ngIf="movie.images"
+        *ngIf="movie.images && movie.images.length > 0"
       >
         <fa-icon [icon]="faImage"></fa-icon>{{ 'global.show' | translate }}
         {{ 'movie.image' | translate }} ({{ movie.images.length }})
