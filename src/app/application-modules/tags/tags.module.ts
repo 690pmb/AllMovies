@@ -24,11 +24,14 @@ import {TagsComponent} from './components/tags/tags.component';
 import {SharedModule} from './../../shared/shared.module';
 import {MyPaginator} from '../../shared/my-paginator';
 import {TagDatasComponent} from './components/tag-datas/tag-datas.component';
+import {BackButtonGuard} from '../../back-button.guard';
 
 const childRoutes: Routes = [
   {
     path: '',
     component: TagsComponent,
+    canDeactivate: [BackButtonGuard],
+    runGuardsAndResolvers: 'pathParamsChange',
   },
 ];
 

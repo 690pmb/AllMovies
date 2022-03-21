@@ -18,9 +18,15 @@ import {SharedModule} from '../../shared/shared.module';
 import {ListsComponent} from './component/lists/lists.component';
 import {ListDetailComponent} from './component/list-detail/list-detail.component';
 import {MyPaginator} from '../../shared/my-paginator';
+import {BackButtonGuard} from '../../back-button.guard';
 
 const childRoutes: Routes = [
-  {path: ':id', component: MovieDetailComponent},
+  {
+    path: ':id',
+    component: MovieDetailComponent,
+    canDeactivate: [BackButtonGuard],
+    runGuardsAndResolvers: 'pathParamsChange',
+  },
   {path: 'list/:id', component: ListDetailComponent},
 ];
 

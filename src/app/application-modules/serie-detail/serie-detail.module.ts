@@ -10,15 +10,20 @@ import {SerieDetailComponent} from './serie-detail/serie-detail.component';
 import {SeasonDetailComponent} from './season-detail/season-detail.component';
 import {SharedModule} from '../../shared/shared.module';
 import {SeasonsComponent} from './seasons/seasons.component';
+import {BackButtonGuard} from '../../back-button.guard';
 
 const childRoutes: Routes = [
   {
     path: ':id',
     component: SerieDetailComponent,
+    canDeactivate: [BackButtonGuard],
+    runGuardsAndResolvers: 'pathParamsChange',
   },
   {
     path: ':id/:season',
     component: SeasonDetailComponent,
+    canDeactivate: [BackButtonGuard],
+    runGuardsAndResolvers: 'pathParamsChange',
   },
 ];
 

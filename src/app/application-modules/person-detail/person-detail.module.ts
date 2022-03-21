@@ -7,11 +7,14 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 import {PersonDetailComponent} from './component/person-detail.component';
 import {SharedModule} from '../../shared/shared.module';
+import {BackButtonGuard} from '../../back-button.guard';
 
 const childRoutes: Routes = [
   {
     path: ':id',
     component: PersonDetailComponent,
+    canDeactivate: [BackButtonGuard],
+    runGuardsAndResolvers: 'pathParamsChange',
   },
 ];
 
