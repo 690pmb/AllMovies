@@ -1,0 +1,7 @@
+build
+dist
+node_modules
+cordova
+e2e
+*.spec.ts
+*.conf.js
