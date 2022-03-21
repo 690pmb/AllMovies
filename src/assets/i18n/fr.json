@@ -176,7 +176,9 @@
       "production": "Producteur",
       "editing": "Monteur",
       "art": "Décorateur",
-      "crew": "Technicien"
+      "crew": "Technicien",
+      "creator": "Créateur",
+      "camera": "Cadreur"
     }
   },
   "search": {

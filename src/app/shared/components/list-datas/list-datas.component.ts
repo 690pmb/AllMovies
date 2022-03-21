@@ -82,7 +82,7 @@ export class ListDatasComponent<T extends Data> implements OnChanges {
         this.sortChoices.splice(
           1,
           1,
-          new DropDownChoice('discover.sort_field.first_air_date', 'firstAired')
+          new DropDownChoice('discover.sort_field.first_aired', 'firstAired')
         );
       }
     }
