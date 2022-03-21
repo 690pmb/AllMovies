@@ -8,17 +8,18 @@
     "color-hex-length": "short",
     "at-rule-empty-line-before": null,
     "at-rule-no-unknown": null,
-    "selector-type-no-unknown": [true, {
-      "ignoreTypes": [
-        "/^app-/",
-        "/^ng-/",
-        "/^ng2-/", 
-        "/^ngb-/"
-      ]
-    }],
-    "selector-pseudo-element-no-unknown": [true, {
-      "ignorePseudoElements": ["ng-deep"]
-    }],
+    "selector-type-no-unknown": [
+      true,
+      {
+        "ignoreTypes": ["/^app-/", "/^ng-/", "/^ng2-/", "/^ngb-/"]
+      }
+    ],
+    "selector-pseudo-element-no-unknown": [
+      true,
+      {
+        "ignorePseudoElements": ["ng-deep"]
+      }
+    ],
     "order/properties-order": [
       {
         "order": "flexible",
