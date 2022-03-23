@@ -56,9 +56,11 @@ export class PersonDetailComponent implements OnInit, OnDestroy {
       this.getPerson(+params.get('id'), this.translate.currentLang)
     );
     this.subs.push(
-      this.translate.onLangChange.subscribe((event: LangChangeEvent) =>
-        this.getPerson(this.person.id, event.lang)
-      )
+      this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
+        if (this.person) {
+          this.getPerson(this.person.id, event.lang);
+        }
+      })
     );
   }
 
@@ -170,7 +172,7 @@ export class PersonDetailComponent implements OnInit, OnDestroy {
           break;
         }
         default: {
-          console.log('default');
+          console.log('default', person.knownFor);
           this.listMoviesOrder = [
             clonedActor,
             director,
@@ -184,7 +186,6 @@ export class PersonDetailComponent implements OnInit, OnDestroy {
           break;
         }
       }
-      console.log('listMoviesOrder', this.listMoviesOrder);
       this.title.setTitle(person.name);
     });
   }
