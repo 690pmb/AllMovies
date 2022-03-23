@@ -119,6 +119,10 @@
       >
       <div class="known-for">
         <div *ngFor="let known of knownFor" class="known-for-detail center">
+          <app-bookmarked
+            [id]="known.id"
+            [isMovie]="known.isMovie"
+          ></app-bookmarked>
           <img
             class="frame pointer mr-auto"
             src="{{ known.affiche | image: imageSize.small }}"
