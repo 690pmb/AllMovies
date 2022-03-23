@@ -6,9 +6,14 @@
   overflow-y: auto;
 }
 
+app-bookmarked {
+  margin: auto;
+}
+
 .thumbnail-result {
   height: 50px;
   width: auto;
+  margin: 0 0.5rem !important;
 }
 
 .title-result {

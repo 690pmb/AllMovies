@@ -32,6 +32,7 @@
       [ngClass]="{adult: movie.adult}"
     >
       <div class="media">
+        <app-bookmarked [id]="movie.id" [isMovie]="true"></app-bookmarked>
         <img
           class="mr-2 thumbnail-result"
           *ngIf="movie.affiche"

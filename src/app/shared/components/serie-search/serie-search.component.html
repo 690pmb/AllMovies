@@ -31,6 +31,7 @@
       class="search-result"
     >
       <div class="media">
+        <app-bookmarked [id]="serie.id" [isMovie]="false"></app-bookmarked>
         <img
           class="mr-2 thumbnail-result"
           *ngIf="serie.affiche"
