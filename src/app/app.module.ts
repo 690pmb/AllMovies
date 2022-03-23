@@ -1,7 +1,7 @@
 import {CommonModule, registerLocaleData} from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import localeEn from '@angular/common/locales/en';
-import {NgModule, ErrorHandler} from '@angular/core';
+import {NgModule, ErrorHandler, APP_INITIALIZER} from '@angular/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {
   HttpClientModule,
@@ -26,6 +26,7 @@ import {AuthGard} from './app.gards';
 import {GlobalErrorHandler} from './shared/service/global-error-handler';
 import {ServerErrorInterceptor} from './shared/service/server-error.interceptor';
 import {MyMissingTranslationHandler} from './shared/my-missing-translation-handler';
+import {TranslateService} from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -58,6 +59,15 @@ import {MyMissingTranslationHandler} from './shared/my-missing-translation-handl
     AuthGard,
     {provide: ErrorHandler, useClass: GlobalErrorHandler},
     {provide: HTTP_INTERCEPTORS, useClass: ServerErrorInterceptor, multi: true},
+    {
+      provide: APP_INITIALIZER,
+      useFactory:
+        (service: TranslateService): (() => Promise<any>) =>
+        () =>
+          service.use('en').toPromise(),
+      deps: [TranslateService],
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })
