@@ -7,6 +7,7 @@ import {ErrorService} from './error.service';
 import {ToastService} from './toast.service';
 import {Level} from './../../model/model';
 import {DropboxService} from './dropbox.service';
+import {environment} from '../../../environments/environment';
 
 @Injectable({providedIn: 'root'})
 export class GlobalErrorHandler implements ErrorHandler {
@@ -44,11 +45,13 @@ export class GlobalErrorHandler implements ErrorHandler {
 
     console.error('url', router.url);
 
-    dropbox.uploadNewFile(
-      [router.url, message, stackTrace, error],
-      'logs/error-' +
-        datePipe.transform(new Date(), 'yyyy.MM.dd-HH.mm.ss.SSS') +
-        '.txt'
-    );
+    if (environment.production) {
+      dropbox.uploadNewFile(
+        [router.url, message, stackTrace, error],
+        'logs/error-' +
+          datePipe.transform(new Date(), 'yyyy.MM.dd-HH.mm.ss.SSS') +
+          '.txt'
+      );
+    }
   }
 }

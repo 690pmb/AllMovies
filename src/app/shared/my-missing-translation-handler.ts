@@ -9,6 +9,7 @@ import {DropboxService} from './service/dropbox.service';
 import {Dropbox} from '../constant/dropbox';
 import {Constants} from '../constant/constants';
 import {Utils} from './utils';
+import {environment} from '../../environments/environment';
 
 @Injectable({providedIn: 'root'})
 export class MyMissingTranslationHandler implements MissingTranslationHandler {
@@ -39,28 +40,30 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
         params.key,
         params.translateService
       );
-      const dropbox = this.injector.get(DropboxService);
-      dropbox
-        .downloadFile(Dropbox.DROPBOX_TRANSLATION_FILE)
-        .then((file: string) => {
-          if (file.split('\r\n').every(line => !line.endsWith(params.key))) {
-            dropbox.uploadFile(
-              new Blob(
-                [
-                  file.concat(
-                    '\r\n' +
-                      (defaultTrad
-                        ? params.translateService.currentLang + ': '
-                        : '') +
-                      params.key
-                  ),
-                ],
-                {type: 'text/plain;charset=utf-8'}
-              ),
-              Dropbox.DROPBOX_TRANSLATION_FILE
-            );
-          }
-        });
+      if (environment.production) {
+        const dropbox = this.injector.get(DropboxService);
+        dropbox
+          .downloadFile(Dropbox.DROPBOX_TRANSLATION_FILE)
+          .then((file: string) => {
+            if (file.split('\r\n').every(line => !line.endsWith(params.key))) {
+              dropbox.uploadFile(
+                new Blob(
+                  [
+                    file.concat(
+                      '\r\n' +
+                        (defaultTrad
+                          ? params.translateService.currentLang + ': '
+                          : '') +
+                        params.key
+                    ),
+                  ],
+                  {type: 'text/plain;charset=utf-8'}
+                ),
+                Dropbox.DROPBOX_TRANSLATION_FILE
+              );
+            }
+          });
+      }
     }
     return defaultTrad ? defaultTrad : params.key;
   }
