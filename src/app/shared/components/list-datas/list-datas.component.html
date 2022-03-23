@@ -62,22 +62,10 @@
     </div>
     <div class="mobile">
       <div class="d-flex justify-content-center mobile">
-        <ngb-pagination
-          (pageChange)="getDatasToShow(datas, $event)"
-          [collectionSize]="resultLength"
-          [(page)]="page"
-          [maxSize]="3"
-          [rotate]="true"
-          [boundaryLinks]="true"
-          [pageSize]="pageSize"
-        ></ngb-pagination>
-        <span
-          ><span class="total"
-            >{{ 'data-list.total' | translate }}: {{ resultLength }}</span
-          ></span
-        >
+        <ng-container [ngTemplateOutlet]="pagination"></ng-container>
       </div>
     </div>
+
     <div class="card-body">
       <div class="data">
         <div *ngFor="let data of datasToShow" class="data-item">
@@ -115,20 +103,24 @@
       </div>
     </div>
     <div class="d-flex justify-content-center bottom-page">
-      <ngb-pagination
-        (pageChange)="getDatasToShow(datas, $event)"
-        [collectionSize]="resultLength"
-        [(page)]="page"
-        [maxSize]="3"
-        [rotate]="true"
-        [boundaryLinks]="true"
-        [pageSize]="pageSize"
-      ></ngb-pagination>
-      <span
-        ><span class="total"
-          >{{ 'data-list.total' | translate }}: {{ resultLength }}</span
-        ></span
-      >
+      <ng-container [ngTemplateOutlet]="pagination"></ng-container>
     </div>
   </div>
 </div>
+
+<ng-template #pagination>
+  <ngb-pagination
+    (pageChange)="getDatasToShow(datas, $event)"
+    [collectionSize]="resultLength"
+    [(page)]="page"
+    [maxSize]="3"
+    [rotate]="true"
+    [boundaryLinks]="true"
+    [pageSize]="pageSize"
+  ></ngb-pagination>
+  <span
+    ><span class="total"
+      >{{ 'data-list.total' | translate }}: {{ resultLength }}</span
+    ></span
+  >
+</ng-template>
