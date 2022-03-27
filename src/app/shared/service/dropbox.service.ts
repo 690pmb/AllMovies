@@ -4,30 +4,22 @@ import * as Dropbox from 'dropbox';
 import {ToastService} from './toast.service';
 import {UtilsService} from './utils.service';
 import {Dropbox as DropboxConstante} from '../../constant/dropbox';
+import {Utils} from '../utils';
 
 @Injectable({
   providedIn: 'root',
 })
-export class DropboxService {
+export class DropboxService<T> {
   constructor(
     private toast: ToastService,
     private serviceUtils: UtilsService
   ) {}
 
-  getDbx(): Dropbox.Dropbox {
+  static getDbx(): Dropbox.Dropbox {
     return new Dropbox.Dropbox({accessToken: DropboxConstante.DROPBOX_TOKEN});
   }
 
-  listFiles(): void {
-    this.getDbx()
-      .filesListFolder({path: ''})
-      .then((response: Dropbox.files.ListFolderResult) =>
-        console.log(response.entries)
-      )
-      .catch(err => this.serviceUtils.handleError(err, this.toast));
-  }
-
-  getPath(fileName: string): string {
+  static getPath(fileName: string): string {
     return DropboxConstante.DROPBOX_FOLDER + fileName;
   }
 
@@ -35,11 +27,14 @@ export class DropboxService {
     fichier: Blob,
     fileName: string
   ): Promise<Dropbox.files.FileMetadata> {
-    const pathFile = this.getPath(fileName);
-    return this.getDbx()
+    const pathFile = DropboxService.getPath(fileName);
+    return DropboxService.getDbx()
       .filesDeleteV2({path: pathFile})
       .then(() => {
-        return this.getDbx().filesUpload({path: pathFile, contents: fichier});
+        return DropboxService.getDbx().filesUpload({
+          path: pathFile,
+          contents: fichier,
+        });
       })
       .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
   }
@@ -48,17 +43,23 @@ export class DropboxService {
     fichier: any,
     fileName: string
   ): Promise<Dropbox.files.FileMetadata> {
-    const pathFile = this.getPath(fileName);
-    return this.getDbx()
+    const pathFile = DropboxService.getPath(fileName);
+    return DropboxService.getDbx()
       .filesUpload({path: pathFile, contents: fichier})
       .then(() => new Promise<void>(resolve => resolve()))
       .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
   }
 
-  downloadFile(fileName: string): Promise<any> {
-    console.log('downloadFile', fileName);
-    return this.getDbx()
-      .filesDownload({path: this.getPath(fileName)})
+  downloadFile(filename: string): Promise<T[]> {
+    console.log('downloadFile', filename);
+    return this.downloadRaw(filename).then(
+      content => <T[]>Utils.parseJson(content, [])
+    );
+  }
+
+  downloadRaw(fileName: string): Promise<any> {
+    return DropboxService.getDbx()
+      .filesDownload({path: DropboxService.getPath(fileName)})
       .then((response: any) => {
         const fileReader = new FileReader();
         return new Promise((resolve, reject) => {
@@ -66,9 +67,7 @@ export class DropboxService {
             fileReader.abort();
             reject(new DOMException('Problem parsing input file.'));
           };
-          fileReader.onload = () => {
-            return resolve(fileReader.result.toString());
-          };
+          fileReader.onload = () => resolve(fileReader.result.toString());
           fileReader.readAsText(response.fileBlob);
         });
       })

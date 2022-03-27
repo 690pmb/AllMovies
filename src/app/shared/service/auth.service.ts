@@ -22,7 +22,7 @@ export class AuthService {
   >(undefined);
 
   constructor(
-    private dropbox: DropboxService,
+    private dropbox: DropboxService<User>,
     private router: Router,
     private serviceUtils: UtilsService,
     private toast: ToastService,
@@ -139,7 +139,6 @@ export class AuthService {
   private getUserFile(): Promise<User[]> {
     return this.dropbox
       .downloadFile(Dropbox.DROPBOX_USER_FILE)
-      .then(file => <User[]>JSON.parse(file))
       .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
   }
 
@@ -147,8 +146,7 @@ export class AuthService {
     let addedUser: User;
     this.dropbox
       .downloadFile(Dropbox.DROPBOX_USER_FILE)
-      .then(file => {
-        const users = <User[]>JSON.parse(file);
+      .then((users: User[]) => {
         const idMax = Math.max(...users.map(item => item.id));
         user.id = idMax + 1;
         addedUser = user;
@@ -195,8 +193,7 @@ export class AuthService {
   updateUser(user: User): Promise<User> {
     return this.dropbox
       .downloadFile(Dropbox.DROPBOX_USER_FILE)
-      .then(file => {
-        let users = <User[]>JSON.parse(file);
+      .then((users: User[]) => {
         users = users.filter(item => item.name !== user.name);
         users.push(user);
         users.sort(Utils.compareObject);

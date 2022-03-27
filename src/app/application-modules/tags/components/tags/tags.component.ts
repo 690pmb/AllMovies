@@ -113,7 +113,8 @@ export class TagsComponent implements OnInit, OnDestroy {
       this.subs.push(
         this.route.queryParams.subscribe((params: Params) => {
           this.selectedTag = tags.find(
-            tag => tag.id === Utils.parseJson(params.selected)
+            tag =>
+              tag.id === Utils.parseJson<number>(params.selected, undefined)
           );
           this.isMoviesVisible = this.selectedTag !== undefined;
         })

@@ -43,7 +43,7 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
       if (environment.production) {
         const dropbox = this.injector.get(DropboxService);
         dropbox
-          .downloadFile(Dropbox.DROPBOX_TRANSLATION_FILE)
+          .downloadRaw(Dropbox.DROPBOX_TRANSLATION_FILE)
           .then((file: string) => {
             if (file.split('\r\n').every(line => !line.endsWith(params.key))) {
               dropbox.uploadFile(
