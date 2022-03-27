@@ -149,18 +149,18 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
         this.subs.push(
           this.activeRoute.queryParams.subscribe(params => {
             this.sort = params.sort
-              ? Utils.parseJson(params.sort)
+              ? Utils.parseJson<Sort>(params.sort, undefined)
               : {
                   active: this.isMovie ? 'added' : 'firstAired',
                   direction: 'desc',
                 };
-            this.filteredTags = Utils.parseJson(params.tags);
+            this.filteredTags = Utils.parseJson(params.tags, []);
             this.pageIndex = params.pageIndex ? params.pageIndex : 0;
             this.pageSize = params.pageSize ? params.pageSize : 25;
             this.filter = params.search;
-            this.filteredGenres = Utils.parseJson(params.genres);
+            this.filteredGenres = Utils.parseJson(params.genres, []);
             this.runtimeRange = params.runtime
-              ? Utils.parseJson(params.runtime)
+              ? Utils.parseJson(params.runtime, [])
               : [0, this.maxRuntime];
             this.paginate(this.refreshData());
           })

@@ -132,22 +132,24 @@ export class DiscoverComponent implements OnInit, OnDestroy {
     // Stored research
     this.subs.push(
       this.route.queryParams.subscribe(params => {
-        this.isMovie = params.isMovie ? Utils.parseJson(params.isMovie) : true;
-        this.people = Utils.parseJson(params.people);
-        this.selectedGenres = Utils.parseJson(params.genre);
-        this.keyword = Utils.parseJson(params.keyword);
-        this.networks = Utils.parseJson(params.networks);
-        this.isWithoutGenre = Utils.parseJson(params.isWithoutGenre);
-        this.isWithoutKeyword = Utils.parseJson(params.isWithoutKeyword);
+        this.isMovie = params.isMovie
+          ? Utils.parseJson(params.isMovie, true)
+          : true;
+        this.people = Utils.parseJson(params.people, []);
+        this.selectedGenres = Utils.parseJson(params.genre, []);
+        this.keyword = Utils.parseJson(params.keyword, []);
+        this.networks = Utils.parseJson(params.networks, []);
+        this.isWithoutGenre = Utils.parseJson(params.isWithoutGenre, false);
+        this.isWithoutKeyword = Utils.parseJson(params.isWithoutKeyword, false);
       })
     );
     const criteria = <DiscoverCriteria>(
-      Utils.parseJson(sessionStorage.getItem('criteria'))
+      Utils.parseJson(sessionStorage.getItem('criteria'), undefined)
     );
     const certif = <DropDownChoice>(
-      Utils.parseJson(sessionStorage.getItem('certif'))
+      Utils.parseJson(sessionStorage.getItem('certif'), undefined)
     );
-    const langs = <string[]>Utils.parseJson(sessionStorage.getItem('lang'));
+    const langs = <string[]>Utils.parseJson(sessionStorage.getItem('lang'), []);
     this.initParams(this.isMovie);
     this.initFromCriteria(criteria, certif, langs);
     this.search(false);

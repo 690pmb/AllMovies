@@ -18,7 +18,7 @@ export class MyTagsService {
   myTags$: BehaviorSubject<Tag[]> = new BehaviorSubject<Tag[]>([]);
 
   constructor(
-    private dropboxService: DropboxService,
+    private dropboxService: DropboxService<Tag>,
     private auth: AuthService,
     private serviceUtils: UtilsService,
     private toast: ToastService,
@@ -43,16 +43,7 @@ export class MyTagsService {
   getAll(): void {
     this.getFileName()
       .then((fileName: string) => this.dropboxService.downloadFile(fileName))
-      .then((tagsFromFile: string) => {
-        if (tagsFromFile && tagsFromFile.trim().length > 0) {
-          return <Tag[]>JSON.parse(tagsFromFile);
-        } else {
-          return [];
-        }
-      })
-      .then((tags: Tag[]) => {
-        this.myTags$.next(tags);
-      })
+      .then((tags: Tag[]) => this.myTags$.next(tags))
       .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
   }
 
@@ -63,7 +54,7 @@ export class MyTagsService {
       .then((file: string) => {
         // download file
         fileName = file;
-        return this.dropboxService.downloadFile(fileName);
+        return this.dropboxService.downloadRaw(fileName);
       })
       .then((tagsFromFile: string) => {
         // parse tags
@@ -115,9 +106,8 @@ export class MyTagsService {
         fileName = file;
         return this.dropboxService.downloadFile(fileName);
       })
-      .then((tagsFromFile: string) => {
+      .then((tagList: Tag[]) => {
         // parse them
-        let tagList = <Tag[]>JSON.parse(tagsFromFile);
         if (idToRemove.length > 0) {
           // remove given tags
           idToRemove.forEach(
@@ -154,7 +144,7 @@ export class MyTagsService {
       .then((file: string) => {
         // download file
         fileName = file;
-        return this.dropboxService.downloadFile(fileName);
+        return this.dropboxService.downloadRaw(fileName);
       })
       .then((tagsFromFile: string) => {
         // parse tags
@@ -194,8 +184,7 @@ export class MyTagsService {
         fileName = file;
         return this.dropboxService.downloadFile(fileName);
       })
-      .then((tagsFromFile: string) => {
-        let tagList = <Tag[]>JSON.parse(tagsFromFile);
+      .then((tagList: Tag[]) => {
         // Removes from saved list the tags to replace
         tagList = tagList.filter(
           (m: Tag) => !tagsToReplace.map((tag: Tag) => tag.id).includes(m.id)

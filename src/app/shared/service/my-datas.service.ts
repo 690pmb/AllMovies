@@ -18,7 +18,7 @@ export class MyDatasService<T extends Data> {
   mySeries$: BehaviorSubject<T[]> = new BehaviorSubject<T[]>([]);
 
   constructor(
-    private dropboxService: DropboxService,
+    private dropboxService: DropboxService<T>,
     private auth: AuthService,
     private serviceUtils: UtilsService,
     private toast: ToastService
@@ -93,7 +93,7 @@ export class MyDatasService<T extends Data> {
   getAll(isMovie: boolean): void {
     console.log('getAll');
     this.getFileName(isMovie)
-      .then((fileName: string) => this.dropboxService.downloadFile(fileName))
+      .then((fileName: string) => this.dropboxService.downloadRaw(fileName))
       .then((datasFromFile: string) => this.fromJson(datasFromFile))
       .then((datas: T[]) => {
         console.log(isMovie ? 'movies' : 'series', datas);
@@ -110,7 +110,7 @@ export class MyDatasService<T extends Data> {
     return this.getFileName(isMovie)
       .then((file: string) => {
         fileName = file;
-        return this.dropboxService.downloadFile(fileName);
+        return this.dropboxService.downloadRaw(fileName);
       })
       .then((datasFromFile: string) => {
         // parse datas
@@ -170,7 +170,7 @@ export class MyDatasService<T extends Data> {
     return this.getFileName(isMovie)
       .then((file: string) => {
         fileName = file;
-        return this.dropboxService.downloadFile(fileName);
+        return this.dropboxService.downloadRaw(fileName);
       })
       .then(datasFromFile => {
         // parse them
@@ -225,7 +225,7 @@ export class MyDatasService<T extends Data> {
     return this.getFileName(isMovie)
       .then((file: string) => {
         fileName = file;
-        return this.dropboxService.downloadFile(fileName);
+        return this.dropboxService.downloadRaw(fileName);
       })
       .then(file => {
         let dataList = this.fromJson(file);

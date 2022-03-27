@@ -144,9 +144,9 @@ export class Utils {
     return 0;
   }
 
-  static parseJson(json: string): any {
+  static parseJson<T>(json: string, defaultValue: T): T {
     if (!json || json === undefined || json === '' || json === 'undefined') {
-      return json;
+      return defaultValue;
     } else {
       return JSON.parse(json);
     }
