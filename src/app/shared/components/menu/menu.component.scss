@@ -58,6 +58,7 @@ app-dropdown-language {
 
 .sidenav-content {
   width: 101vw;
+  overflow: hidden auto !important;
 }
 
 @include media(#{$smallscreen}) {
