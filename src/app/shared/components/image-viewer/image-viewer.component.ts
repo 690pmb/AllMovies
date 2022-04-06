@@ -1,4 +1,3 @@
-import {SwiperConfigInterface} from 'ngx-swiper-wrapper';
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {
   faExpand,
@@ -22,6 +21,7 @@ export class ImageViewerComponent implements OnChanges {
   imageSize = ImageSize;
   nextBtn!: HTMLButtonElement;
   prevBtn!: HTMLButtonElement;
+  /*
   config: SwiperConfigInterface = {
     observer: true,
     direction: 'horizontal',
@@ -45,6 +45,7 @@ export class ImageViewerComponent implements OnChanges {
     slideToClickedSlide: true,
     mousewheel: true,
   };
+  */
   isOnePicture!: boolean;
   faExpand = faExpand;
   isFullscreen = false;

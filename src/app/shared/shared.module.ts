@@ -8,7 +8,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {RouterModule} from '@angular/router';
-import {SwiperModule, SWIPER_CONFIG} from 'ngx-swiper-wrapper';
 import {PinchZoomModule} from 'ngx-pinch-zoom';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
@@ -128,7 +127,6 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
     MatFormFieldModule,
     MatChipsModule,
     MatIconModule,
-    SwiperModule,
     MatDialogModule,
     PinchZoomModule,
     MatTabsModule,
@@ -166,7 +164,6 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
     PersonSearchComponent,
     ImageViewerComponent,
     MenuComponent,
-    SwiperModule,
     BookmarkedComponent,
   ],
 })
@@ -207,10 +204,6 @@ export class SharedModule {
         CapitalizeWordPipe,
         DatePipe,
         ImagePipe,
-        {
-          provide: SWIPER_CONFIG,
-          useValue: {},
-        },
       ],
     };
   }

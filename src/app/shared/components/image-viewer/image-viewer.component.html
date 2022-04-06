@@ -16,25 +16,12 @@
   <ng-container *ngIf="!isOnePicture">
     <!-- Full size gallery -->
     <div class="gallery-top">
-      <swiper [config]="config" [(index)]="index">
-        <div *ngFor="let img of images">
-          <pinch-zoom [disableZoomControl]="'disable'">
-            <img src="{{ img | image: imageSize.full }}" />
-          </pinch-zoom>
-        </div>
-      </swiper>
       <span (click)="fullscreen()" class="expand" *ngIf="!isFullscreen">
         <fa-icon [icon]="faExpand"></fa-icon>
       </span>
     </div>
     <!-- Thumbnails gallery -->
-    <div class="gallery-thumbs">
-      <swiper [config]="thumbs" [(index)]="index">
-        <div *ngFor="let thumb of thumbnails">
-          <img src="{{ thumb | image: imageSize.medium }}" />
-        </div>
-      </swiper>
-    </div>
+    <div class="gallery-thumbs"></div>
   </ng-container>
   <!-- One picture display -->
   <ng-container *ngIf="isOnePicture">

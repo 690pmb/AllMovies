@@ -13,7 +13,6 @@ import {
   SimpleChanges,
   OnChanges,
 } from '@angular/core';
-import {SwiperConfigInterface} from 'ngx-swiper-wrapper';
 
 import {Constants} from './../../../constant/constants';
 import {Utils} from './../../../shared/utils';
@@ -32,6 +31,7 @@ export class SeasonsComponent implements OnInit, OnChanges {
   seasons: Season[] = [];
   overviewId?: number;
   overview?: string;
+  /*
   swiperConfig: SwiperConfigInterface = {
     a11y: {enabled: true},
     keyboard: true,
@@ -42,7 +42,7 @@ export class SeasonsComponent implements OnInit, OnChanges {
     centeredSlides: false,
     zoom: false,
     touchEventsTarget: 'wrapper',
-  };
+  };*/
   imageSize = ImageSize;
   faChevronCircleRight = faChevronCircleRight;
   faPlus = faPlus;
@@ -56,6 +56,7 @@ export class SeasonsComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
+    /*
     this.breakpointObserver
       .observe([Constants.MEDIA_MAX_700, Constants.MEDIA_MAX_1400])
       .subscribe(result => {
@@ -78,6 +79,7 @@ export class SeasonsComponent implements OnInit, OnChanges {
           this.swiperConfig.slidesPerView = 8;
         }
       });
+      */
   }
 
   ngOnChanges(changes: SimpleChanges): void {

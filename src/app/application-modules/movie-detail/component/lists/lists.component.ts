@@ -12,7 +12,6 @@ import {
   SimpleChanges,
   OnChanges,
 } from '@angular/core';
-import {SwiperConfigInterface} from 'ngx-swiper-wrapper';
 
 import {Constants} from './../../../../constant/constants';
 import {Utils} from './../../../../shared/utils';
@@ -30,6 +29,7 @@ export class ListsComponent implements OnInit, OnChanges {
   overview: string;
   showLists = false;
   lists: List[] = [];
+  /*
   swiperConfig: SwiperConfigInterface = {
     a11y: {enabled: true},
     keyboard: true,
@@ -40,7 +40,7 @@ export class ListsComponent implements OnInit, OnChanges {
     centeredSlides: false,
     zoom: false,
     touchEventsTarget: 'wrapper',
-  };
+  };*/
   imageSize = ImageSize;
   faChevronCircleRight = faChevronCircleRight;
   faPlus = faPlus;
@@ -53,6 +53,7 @@ export class ListsComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
+    /*
     this.breakpointObserver
       .observe([Constants.MEDIA_MAX_700, Constants.MEDIA_MAX_1400])
       .subscribe(result => {
@@ -75,6 +76,7 @@ export class ListsComponent implements OnInit, OnChanges {
           this.swiperConfig.slidesPerView = 8;
         }
       });
+      */
   }
 
   getLists(): void {

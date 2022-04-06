@@ -1,4 +1,5 @@
 @import '../../../../styles/styles';
+@import '~swiper/swiper-bundle';
 
 /* stylelint-disable selector-type-no-unknown */
 /* stylelint-disable selector-pseudo-element-no-unknown */
@@ -7,27 +8,31 @@ a {
   text-decoration: none;
 }
 
-swiper {
-  width: 100vw;
+.swiper {
+  width: 100%;
+  height: 100%;
 }
+// swiper {
+//   width: 100vw;
+// }
 
-#swiper-top {
-  z-index: map-get($depth, tooltip);
-}
+// #swiper-top {
+//   z-index: map-get($depth, tooltip);
+// }
 
-#swiper-middle {
-  z-index: 49;
-}
+// #swiper-middle {
+//   z-index: 49;
+// }
 
-#swiper-bottom {
-  z-index: 1;
-}
+// #swiper-bottom {
+//   z-index: 1;
+// }
 
-*,
-*::after,
-*::before {
-  @include box-sizing;
-}
+// *,
+// *::after,
+// *::before {
+//   @include box-sizing;
+// }
 
 .module {
   margin: 5px 5px 10px 5px;
@@ -71,30 +76,30 @@ swiper {
     margin: 20px 0;
   }
 
-  swiper {
-    position: fixed;
-    margin: auto !important;
-  }
+  // swiper {
+  //   position: fixed;
+  //   margin: auto !important;
+  // }
 
-  #swiper-middle {
-    top: 385px;
-  }
+  // #swiper-middle {
+  //   top: 385px;
+  // }
 
-  #swiper-bottom {
-    top: 580px;
-  }
+  // #swiper-bottom {
+  //   top: 580px;
+  // }
 
-  ::ng-deep.swiper-button-next,
-  ::ng-deep.swiper-button-prev {
-    #swiper-top &,
-    #swiper-middle & {
-      top: 54px !important;
-    }
+  // ::ng-deep.swiper-button-next,
+  // ::ng-deep.swiper-button-prev {
+  //   #swiper-top &,
+  //   #swiper-middle & {
+  //     top: 54px !important;
+  //   }
 
-    #swiper-bottom & {
-      top: 40px !important;
-    }
-  }
+  //   #swiper-bottom & {
+  //     top: 40px !important;
+  //   }
+  // }
 
   .title:not(#movie_title) {
     position: fixed;

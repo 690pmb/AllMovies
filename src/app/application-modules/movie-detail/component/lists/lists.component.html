@@ -17,28 +17,5 @@
   <fa-icon [icon]="faMinus" size="xs"></fa-icon>
 </button>
 <ng-container *ngIf="showLists && lists">
-  <div class="wrapper">
-    <swiper [config]="swiperConfig">
-      <div *ngFor="let list of lists">
-        <div class="list-slide">
-          <img
-            class="list-poster"
-            [src]="list.poster_path | image: imageSize.small"
-          />
-          <p [matTooltip]="list.description">
-            {{ list.name }} ({{ list.item_count }}) -
-            {{ list.description | truncate: 30 }}
-          </p>
-          <button
-            class="btn btn-outline-primary small-btn"
-            appOpenLink
-            [label]="list.name"
-            url="/movie/list/{{ list.id }}"
-          >
-            <fa-icon [icon]="faChevronCircleRight" size="xs"></fa-icon>
-          </button>
-        </div>
-      </div>
-    </swiper>
-  </div>
+  <div class="wrapper"></div>
 </ng-container>
