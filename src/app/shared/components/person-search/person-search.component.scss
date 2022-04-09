@@ -1,2 +1,12 @@
 @use '/src/app/styles/imports' as *;
-@import '/src/app/styles/search-box';
+
+.result-thumbnail {
+  height: 55px;
+  margin: 0 0.5em;
+  @include box-shadow;
+}
+
+.result-title {
+  margin: auto 0;
+  padding-left: 15px;
+}

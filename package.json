@@ -99,7 +99,7 @@
     "webpack-bundle-analyzer": "4.5.0"
   },
   "lint-staged": {
-    "*.ts": "eslint --max-warnings 0 --fix",
+    "*.ts": "eslint --no-ignore --max-warnings 0 --fix",
     "*": "prettier --ignore-unknown --write",
     "*.scss": "stylelint --fix"
   }

@@ -27,8 +27,10 @@
   flex-direction: row;
 
   & .search-boxes {
-    display: inline-flex;
-    padding-left: 5vw;
+    display: flex;
+    justify-content: space-around;
+    padding-left: 2vw;
+    gap: 20px;
 
     &,
     & > * {
@@ -53,7 +55,7 @@ app-dropdown-language {
 }
 
 .mat-sidenav {
-  top: 50px !important;
+  top: $toolbar-height !important;
 }
 
 .sidenav-content {
@@ -70,12 +72,17 @@ app-dropdown-language {
 
   .toolbar {
     & .search-boxes {
-      display: initial;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    ::ng-deep app-movie-search .mat-form-field-infix {
+      margin-top: 0.5em;
     }
   }
 
   .mat-sidenav {
-    top: 103px !important;
+    top: $toolbar-height-mobile !important;
   }
 
   .header-buttons {

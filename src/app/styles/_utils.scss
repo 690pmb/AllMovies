@@ -5,7 +5,8 @@
     @media all and (max-width: $width) {
       @content;
     }
-  } @else {
+  }
+  @else {
     @media all and (min-width: $width) {
       @content;
     }
@@ -13,9 +14,7 @@
 }
 
 @mixin box-shadow {
-  -webkit-box-shadow: 1px 1px 20px $black;
-  -moz-box-shadow: 1px 1px 20px $black;
-  box-shadow: 1px 1px 20px $black;
+  box-shadow: 3px 3px 8px $black;
 }
 
 @mixin box-sizing {

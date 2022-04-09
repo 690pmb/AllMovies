@@ -2,7 +2,7 @@
 
 :host {
   position: absolute;
-  top: 62px;
+  top: $toolbar-height;
   overflow-x: hidden;
 }
 
@@ -62,6 +62,6 @@
 
 @include media(#{$smallscreen}) {
   :host {
-    top: 110px;
+    top: $toolbar-height-mobile;
   }
 }
