@@ -1,5 +1,5 @@
-@import '../../../../styles/styles';
-@import '../../../../styles/detail';
+@use '/src/app/styles/imports' as *;
+@use '/src/app/styles/detail' as *;
 
 label {
   display: inline !important;

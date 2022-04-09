@@ -1,4 +1,4 @@
-@import '../../../styles/styles';
+@use '/src/app/styles/imports' as *;
 
 .wrapper {
   width: 83vw;

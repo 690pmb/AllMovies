@@ -1,2 +1,2 @@
-@import '../../../styles/styles';
-@import '../../../styles/search-box';
+@use '/src/app/styles/imports' as *;
+@import '/src/app/styles/search-box';
