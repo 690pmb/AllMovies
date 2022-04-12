@@ -1,6 +1,4 @@
-@import './imports';
-
-/* stylelint-disable selector-type-no-unknown */
+@use 'imports' as *;
 
 body {
   margin-bottom: 50vh;
@@ -38,10 +36,6 @@ label {
   height: 30px;
   padding-bottom: 4px;
   background-color: $white;
-}
-
-@mixin background-color($color) {
-  background-color: $color;
 }
 
 $levels: (
@@ -272,14 +266,6 @@ input[type='checkbox'] {
   & .mat-slide-toggle-bar {
     background-color: $light_blue !important;
   }
-}
-
-@mixin full_width {
-  width: 100vw !important;
-}
-
-@mixin width_100percent {
-  width: 100% !important;
 }
 
 .disable_selection {

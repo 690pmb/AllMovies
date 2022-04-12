@@ -1,2 +1,21 @@
-@import '../../../styles/styles';
-@import '../../../styles/search-box';
+@use '/src/app/styles/imports' as *;
+
+app-bookmarked {
+  margin: auto 0;
+  padding: 0 0.2em;
+}
+
+.result-thumbnail {
+  height: 55px;
+  @include box-shadow;
+}
+
+.result-title {
+  margin: auto 0;
+  padding-left: 0.5em;
+}
+
+.result-original {
+  font-size: 12px;
+  color: $light_gray;
+}

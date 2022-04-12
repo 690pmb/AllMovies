@@ -1,4 +1,4 @@
-@import '../../../styles/styles';
+@use '/src/app/styles/imports' as *;
 
 .connect-content {
   position: relative;

@@ -1,0 +1,21 @@
+<mat-form-field>
+  <fa-icon [icon]="faSearch" matPrefix></fa-icon>
+  <input
+    #inputSearch
+    matInput
+    placeholder="{{ placeholder | translate }}"
+    [matAutocomplete]="auto"
+    [formControl]="dataCtrl"
+  />
+  <fa-icon [icon]="faRemove" matSuffix (click)="reset()"></fa-icon>
+</mat-form-field>
+<mat-autocomplete #auto="matAutocomplete" class="result-panel">
+  <mat-option
+    *ngFor="let data of filteredDatas | async"
+    (onSelectionChange)="select(data); inputSearch.value = ''"
+  >
+    <ng-container
+      *ngTemplateOutlet="template; context: {$implicit: data}"
+    ></ng-container>
+  </mat-option>
+</mat-autocomplete>

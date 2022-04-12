@@ -14,7 +14,10 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatChipsModule} from '@angular/material/chips';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import {
+  MatFormFieldModule,
+  MAT_FORM_FIELD_DEFAULT_OPTIONS,
+} from '@angular/material/form-field';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSidenavModule} from '@angular/material/sidenav';
@@ -78,6 +81,7 @@ import {MyMissingTranslationHandler} from './my-missing-translation-handler';
 import {BookmarkedComponent} from './components/bookmarked/bookmarked.component';
 import {ClickOutsideDirective} from './directives/click-outside.directive';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {SearchBoxComponent} from './components/search-box/search-box.component';
 
 @NgModule({
   declarations: [
@@ -98,6 +102,7 @@ import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
     AddCollectionDirective,
     ListTagsComponent,
     ModalComponent,
+    SearchBoxComponent,
     SerieSearchComponent,
     MovieSearchComponent,
     OpenLinkDirective,
@@ -180,6 +185,10 @@ export class SharedModule {
         {
           provide: MAT_DIALOG_DEFAULT_OPTIONS,
           useValue: {hasBackdrop: false, closeOnNavigation: true},
+        },
+        {
+          provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+          useValue: {floatLabel: 'never'},
         },
         MetaService,
         UtilsService,

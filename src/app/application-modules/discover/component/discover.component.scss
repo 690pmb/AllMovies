@@ -1,4 +1,4 @@
-@import '../../../styles/styles';
+@use '/src/app/styles/imports' as *;
 
 .mat-line {
   margin-left: 85px !important;

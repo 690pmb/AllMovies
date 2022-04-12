@@ -1,3 +1,4 @@
-@import './variables';
-@import './utils';
-@import '~@angular/material/theming';
+@forward './variables';
+@forward './mediaqueries';
+@forward './utils';
+@forward '~@angular/material/theming';

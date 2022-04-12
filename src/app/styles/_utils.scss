@@ -1,3 +1,5 @@
+@use './variables' as *;
+
 @mixin media($width, $max: true) {
   @if ($max) {
     @media all and (max-width: $width) {
@@ -12,9 +14,7 @@
 }
 
 @mixin box-shadow {
-  -webkit-box-shadow: 1px 1px 20px $black;
-  -moz-box-shadow: 1px 1px 20px $black;
-  box-shadow: 1px 1px 20px $black;
+  box-shadow: 3px 3px 8px $black;
 }
 
 @mixin box-sizing {
@@ -41,4 +41,16 @@
   100% {
     opacity: 0;
   }
+}
+
+@mixin full_width {
+  width: 100vw !important;
+}
+
+@mixin width_100percent {
+  width: 100% !important;
+}
+
+@mixin background-color($color) {
+  background-color: $color;
 }

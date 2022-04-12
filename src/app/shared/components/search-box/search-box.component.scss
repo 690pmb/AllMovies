@@ -1,0 +1,80 @@
+@use '/src/app/styles/imports' as *;
+
+$top-gap: 5px;
+$option-height: 60px;
+$result-panel: 6 * $option-height + $top-gap;
+
+::ng-deep .mat-form-field {
+  width: 100%;
+
+  &-infix,
+  &-wrapper {
+    padding-bottom: 0.4em !important;
+  }
+
+  &-label-wrapper {
+    top: -1.9em;
+  }
+
+  input {
+    top: -0.6em;
+    position: relative;
+  }
+}
+
+::ng-deep .mat-form-field-prefix {
+  position: relative;
+  bottom: 0.6em;
+  padding-right: 5px;
+}
+
+::ng-deep .mat-form-field-suffix {
+  position: relative;
+  bottom: 0.6em;
+  cursor: pointer;
+}
+
+::ng-deep .mat-autocomplete-visible {
+  min-height: $result-panel !important;
+  height: $result-panel !important;
+  max-height: $result-panel !important;
+}
+
+::ng-deep .mat-option,
+::ng-deep .mat-option-text {
+  height: $option-height !important;
+  padding: 0 !important;
+  line-height: inherit !important;
+
+  &:first-child {
+    margin-top: $top-gap;
+  }
+
+  & > div {
+    display: flex;
+    height: $option-height !important;
+    font-size: 18px;
+  }
+}
+
+@include media(#{$desktop}) {
+  ::ng-deep .mat-form-field {
+    max-width: 250px;
+    font-size: 16px !important;
+  }
+
+  ::ng-deep .mat-option-text > div {
+    font-size: 14px !important;
+  }
+}
+
+@include media(#{$smallscreen}) {
+  ::ng-deep .mat-form-field {
+    display: inline !important;
+    font-size: 14px !important;
+
+    &-infix {
+      border-top: 0 !important;
+    }
+  }
+}
