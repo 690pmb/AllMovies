@@ -1,8 +1,5 @@
-import {TranslateService} from '@ngx-translate/core';
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {Observable, Subject, of, Subscription} from 'rxjs';
-import {faSearch} from '@fortawesome/free-solid-svg-icons';
-import {switchMap, debounceTime, catchError} from 'rxjs/operators';
+import {Observable, Subscription} from 'rxjs';
 
 import {Movie} from '../../../model/movie';
 import {ImageSize} from '../../../model/model';
@@ -17,50 +14,26 @@ import {AuthService} from '../../service/auth.service';
 })
 export class MovieSearchComponent implements OnInit, OnDestroy {
   movies!: Observable<Movie[]>;
-  private searchTerms = new Subject<string>();
-  showMovie = false;
   adult!: boolean;
   subs: Subscription[] = [];
   imageSize = ImageSize;
-  faSearch = faSearch;
+  getMovie: (term: string, lang: string) => Observable<Movie[]>;
 
   constructor(
     private movieSearchService: MovieSearchService,
-    private translate: TranslateService,
     private auth: AuthService
   ) {}
 
-  // Push a search term into the observable stream.
-  search(term: string): void {
-    this.searchTerms.next(term);
-  }
-
   ngOnInit(): void {
-    this.auth.user$.subscribe(user => {
-      if (user) {
-        this.adult = user.adult;
-      }
-    });
-    this.movies = this.searchTerms.pipe(
-      debounceTime(300), // wait 300ms after each keystroke before considering the term
-      // .distinctUntilChanged()   // ignore if next search term is same as previous
-      switchMap(term =>
-        term // switch to new observable each time the term changes
-          ? // return the http search observable
-            this.movieSearchService.search(
-              term,
-              this.adult,
-              this.translate.currentLang
-            )
-          : // or the observable of empty movies if there was no search term
-            of<Movie[]>([])
-      ),
-      catchError(error => {
-        // TODO: add real error handling
-        console.log(error);
-        return of<Movie[]>([]);
+    this.subs.push(
+      this.auth.user$.subscribe(user => {
+        if (user) {
+          this.adult = user.adult;
+        }
       })
     );
+    this.getMovie = (term: string, lang: string): Observable<Movie[]> =>
+      this.movieSearchService.search(term, this.adult, lang);
   }
 
   ngOnDestroy(): void {

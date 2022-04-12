@@ -11,7 +11,7 @@
     "selector-type-no-unknown": [
       true,
       {
-        "ignoreTypes": ["/^app-/", "/^ng-/", "/^ng2-/", "/^ngb-/"]
+        "ignoreTypes": ["/^app-/", "/^ng-/", "/^ng2-/", "/^ngb-/", "/^fa-icon/"]
       }
     ],
     "selector-pseudo-element-no-unknown": [
@@ -20,6 +20,7 @@
         "ignorePseudoElements": ["ng-deep"]
       }
     ],
+    "no-empty-source": null,
     "order/properties-order": [
       {
         "order": "flexible",
