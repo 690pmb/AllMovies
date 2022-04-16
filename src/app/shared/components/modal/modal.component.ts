@@ -55,6 +55,7 @@ export class ModalComponent implements OnInit, OnChanges {
           this.router.navigate([this.current.path().split('?')[0]], {
             queryParams: {modal: true},
             replaceUrl: true,
+            queryParamsHandling: 'merge',
           });
         } else {
           this.router.navigate([this.current.path().split('?')[0]], {

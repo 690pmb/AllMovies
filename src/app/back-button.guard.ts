@@ -18,7 +18,10 @@ export class BackButtonGuard implements CanDeactivate<unknown> {
     currentRoute: ActivatedRouteSnapshot,
     currentState: RouterStateSnapshot
   ): boolean | UrlTree {
-    if (!currentRoute?.queryParams.modal) {
+    if (
+      !currentRoute?.queryParams.modal ||
+      Object.keys(currentRoute?.queryParams).length > 1
+    ) {
       return true;
     } else {
       return this.router.createUrlTree(
