@@ -20,7 +20,7 @@
     [mode]="mobileQuery.matches ? 'over' : 'push'"
     *ngIf="isLogged$ | async"
   >
-    <mat-nav-list class="nav-list">
+    <mat-nav-list class="nav-list" (click)="sidenav.close()">
       <a mat-list-item appOpenLink url="/dashboard" label="nav_bar.dashboard">
         <fa-icon [icon]="faHome"></fa-icon>
         {{ 'nav_bar.dashboard' | translate }}
