@@ -3,6 +3,8 @@
 /* stylelint-disable selector-type-no-unknown */
 
 .card-deck {
+  display: inline-flex !important;
+  flex-wrap: wrap !important;
   margin-right: 0 !important;
   margin-left: 0 !important;
 }
@@ -133,5 +135,8 @@
   .card-deck,
   .card {
     @include full_width;
+
+    display: inherit !important;
+    flex-wrap: inherit !important;
   }
 }

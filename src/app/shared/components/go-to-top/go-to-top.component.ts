@@ -55,7 +55,6 @@ export class GoToTopComponent implements OnInit, AfterViewInit {
 
     scroll$.pipe(filter(direction => direction)).subscribe(() => {
       this.goToTop._elementRef.nativeElement.classList.remove('hidden');
-      this.goToTop._elementRef.nativeElement.classList.remove('transparent');
       this.goToTop._elementRef.nativeElement.classList.remove('fadeOut');
       this.goToTop._elementRef.nativeElement.classList.add('fadeIn');
     });

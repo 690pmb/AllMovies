@@ -79,7 +79,6 @@ import {CreditListComponent} from './components/credit-list/credit-list.componen
 import {ListService} from './service/list.service';
 import {MyMissingTranslationHandler} from './my-missing-translation-handler';
 import {BookmarkedComponent} from './components/bookmarked/bookmarked.component';
-import {ClickOutsideDirective} from './directives/click-outside.directive';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {SearchBoxComponent} from './components/search-box/search-box.component';
 
@@ -89,7 +88,6 @@ import {SearchBoxComponent} from './components/search-box/search-box.component';
     SubstractDatePipe,
     CapitalizeWordPipe,
     FilterCrewPipe,
-    ClickOutsideDirective,
     TruncatePipe,
     ImagePipe,
     VideosComponent,
