@@ -13,6 +13,10 @@
   }
 }
 
+@mixin border($size: 1px, $color) {
+  border: $size solid $color;
+}
+
 @mixin box-shadow {
   box-shadow: 3px 3px 8px $black;
 }
@@ -21,6 +25,14 @@
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+@mixin thumbnail($height) {
+  height: $height;
+  margin-left: 5px;
+  @include border(1px, $black);
+
+  box-shadow: -3px 1px 6px $black;
 }
 
 @keyframes fadeIn {

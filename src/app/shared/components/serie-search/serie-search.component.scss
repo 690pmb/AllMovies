@@ -6,8 +6,7 @@ app-bookmarked {
 }
 
 .result-thumbnail {
-  height: 55px;
-  @include box-shadow;
+  @include thumbnail($img-height);
 }
 
 .result-title {

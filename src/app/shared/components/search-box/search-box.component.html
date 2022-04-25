@@ -1,4 +1,4 @@
-<mat-form-field>
+<mat-form-field [floatLabel]="floatLabel">
   <fa-icon [icon]="faSearch" matPrefix></fa-icon>
   <input
     #inputSearch
@@ -9,7 +9,7 @@
   />
   <fa-icon [icon]="faRemove" matSuffix (click)="reset()"></fa-icon>
 </mat-form-field>
-<mat-autocomplete #auto="matAutocomplete" class="result-panel">
+<mat-autocomplete #auto="matAutocomplete">
   <mat-option
     *ngFor="let data of filteredDatas | async"
     (onSelectionChange)="select(data); inputSearch.value = ''"

@@ -46,3 +46,9 @@ $depth: (
   'top': 300,
   'modal': 400,
 );
+
+/* search-box */
+$top-gap: 5px;
+$option-height: 60px;
+$img-height: $option-height - 2px;
+$result-panel: 6 * $option-height;

@@ -1,11 +1,7 @@
 @use '/src/app/styles/imports' as *;
 
-$top-gap: 5px;
-$option-height: 60px;
-$result-panel: 6 * $option-height + $top-gap;
-
-:host {
-  ::ng-deep .mat-form-field {
+::ng-deep .minimized {
+  .mat-form-field {
     width: 100%;
     background-color: $white;
     border-width: 0 10px 0 10px;
@@ -34,47 +30,43 @@ $result-panel: 6 * $option-height + $top-gap;
       top: -0.625rem !important;
       position: relative;
     }
-  }
 
-  ::ng-deep .mat-form-field-prefix {
-    position: relative;
-    bottom: 0.6em;
-    padding-right: 5px;
-  }
-
-  ::ng-deep .mat-form-field-suffix {
-    position: relative;
-    bottom: 0.6em;
-    cursor: pointer;
-  }
-
-  ::ng-deep .mat-autocomplete-visible {
-    min-height: $result-panel !important;
-    height: $result-panel !important;
-    max-height: $result-panel !important;
-  }
-
-  ::ng-deep .mat-option,
-  ::ng-deep .mat-option-text {
-    height: $option-height !important;
-    padding: 0 !important;
-    line-height: inherit !important;
-
-    &:first-child {
-      margin-top: $top-gap;
+    &-prefix {
+      position: relative;
+      bottom: 0.6em;
+      padding-right: 5px;
     }
 
-    & > div {
-      display: flex;
-      height: $option-height !important;
-      font-size: 18px;
+    &-suffix {
+      position: relative;
+      bottom: 0.6em;
+      cursor: pointer;
     }
   }
 }
 
+::ng-deep .mat-autocomplete-visible {
+  min-height: $result-panel !important;
+  height: $result-panel !important;
+  max-height: $result-panel !important;
+  transform: translateY($top-gap);
+}
+
+::ng-deep .mat-option,
+::ng-deep .mat-option-text {
+  height: $option-height !important;
+  padding: 0 !important;
+
+  & > div {
+    display: flex;
+    height: $option-height !important;
+    font-size: 18px;
+  }
+}
+
 @include between(#{$desktop}, #{$smallscreen}) {
-  :host {
-    ::ng-deep .mat-form-field {
+  ::ng-deep .minimized {
+    .mat-form-field {
       max-width: calc(98vw / 3 - 56px / 3);
       font-size: 16px !important;
     }
@@ -90,8 +82,8 @@ $result-panel: 6 * $option-height + $top-gap;
 }
 
 @include media(#{$smallscreen}) {
-  :host {
-    ::ng-deep .mat-form-field {
+  ::ng-deep .minimized {
+    .mat-form-field {
       display: block;
       font-size: 14px !important;
 
