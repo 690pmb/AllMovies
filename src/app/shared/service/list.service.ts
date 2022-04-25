@@ -87,9 +87,9 @@ export class ListService {
     }
     try {
       return forkJoin(obs).pipe(
-        map((data: any[]) => {
-          return result.concat(...data.map(d => MapList.mapLists(d.results)));
-        })
+        map((data: any[]) =>
+          result.concat(...data.map(d => MapList.mapLists(d.results)))
+        )
       );
     } catch (err) {
       console.error(err);

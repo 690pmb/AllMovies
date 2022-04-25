@@ -188,15 +188,15 @@ export class Utils {
       return items;
     }
     const val = value.toLowerCase();
-    return items.filter(item => {
-      return fields.some(field => {
+    return items.filter(item =>
+      fields.some(field => {
         let it = item[field];
         if (it) {
           it = typeof it === 'string' ? it.toLowerCase() : it.toString();
           return it.includes(val);
         }
-      });
-    });
+      })
+    );
   }
 
   static compareWithAllFields(value: any): boolean {

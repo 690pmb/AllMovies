@@ -29,6 +29,7 @@ import {
 export class SearchDataComponent<T extends Data> implements OnInit {
   @ViewChild('inputSearch', {static: true})
   inputSearch!: ElementRef;
+
   @Input() adult!: boolean;
   @Output() selected = new EventEmitter<T[]>();
   @Output() movie = new EventEmitter<boolean>();

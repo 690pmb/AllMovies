@@ -28,8 +28,10 @@ import {ImageSize} from './../../../model/model';
 export class SeasonsComponent implements OnInit, OnChanges {
   @Input()
   serie!: string;
+
   @Input()
   seasons: Season[] = [];
+
   overviewId?: number;
   overview?: string;
   swiperConfig: SwiperConfigInterface = {
@@ -43,6 +45,7 @@ export class SeasonsComponent implements OnInit, OnChanges {
     zoom: false,
     touchEventsTarget: 'wrapper',
   };
+
   imageSize = ImageSize;
   faChevronCircleRight = faChevronCircleRight;
   faPlus = faPlus;

@@ -16,8 +16,10 @@ import {DropDownChoice, ImageSize} from '../../../model/model';
 export class ListDatasComponent<T extends Data> implements OnChanges {
   @Input()
   datas: T[] = [];
+
   @Input()
   isMovie!: boolean;
+
   @Input()
   label!: string;
 

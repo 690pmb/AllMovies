@@ -33,10 +33,13 @@ export class AddCollectionDirective<T extends Data>
 {
   @Input()
   datas: T[] = [];
+
   @Input()
   label!: string;
+
   @Input()
   isSingleData!: boolean;
+
   @Input()
   isMovie!: boolean;
 

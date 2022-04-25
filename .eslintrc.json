@@ -9,6 +9,12 @@
         "allowedNames": ["ngOnInit", "ngOnDestroy", "ngOnChanges"]
       }
     ],
-    "complexity": ["error", 18]
+    "complexity": ["error", 18],
+    "arrow-body-style": ["error", "as-needed"],
+    "lines-between-class-members": [
+      "error",
+      "always",
+      {"exceptAfterSingleLine": true}
+    ]
   }
 }

@@ -21,6 +21,7 @@ import {Data} from '../../../model/data';
 export class BookmarkedComponent implements OnInit, OnChanges, OnDestroy {
   @Input()
   isMovie!: boolean;
+
   @Input()
   id!: number;
 

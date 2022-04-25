@@ -39,6 +39,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     zoom: false,
     touchEventsTarget: 'wrapper',
   };
+
   subs: Subscription[] = [];
   Url = Url;
   pageMovies = 1;

@@ -27,12 +27,14 @@ export class ModalComponent implements OnInit, OnChanges {
       this.close();
     }
   }
+
   @HostListener('window:popstate', ['$event'])
   onBackButtonHandler(): void {
     if (this.visible) {
       this.close();
     }
   }
+
   current: Location;
 
   constructor(private location: Location, private router: Router) {}

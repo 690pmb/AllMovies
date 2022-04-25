@@ -221,6 +221,7 @@ export class SharedModule {
       ],
     };
   }
+
   static forChild(): ModuleWithProviders<SharedModule> {
     return {ngModule: SharedModule};
   }

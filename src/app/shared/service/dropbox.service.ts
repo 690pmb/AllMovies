@@ -30,12 +30,12 @@ export class DropboxService<T> {
     const pathFile = DropboxService.getPath(fileName);
     return DropboxService.getDbx()
       .filesDeleteV2({path: pathFile})
-      .then(() => {
-        return DropboxService.getDbx().filesUpload({
+      .then(() =>
+        DropboxService.getDbx().filesUpload({
           path: pathFile,
           contents: fichier,
-        });
-      })
+        })
+      )
       .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
   }
 

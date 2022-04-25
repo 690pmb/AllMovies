@@ -7,6 +7,7 @@ export class Job {
     'Co-Executive Producer',
     'Associate Producer',
   ];
+
   static readonly director = 'director';
   static readonly screenwriter = [
     'screenwriter',
@@ -17,6 +18,7 @@ export class Job {
     'Scenario Writer',
     'Co-Writer',
   ];
+
   static readonly compositor = [
     'composer',
     'music',
@@ -24,6 +26,7 @@ export class Job {
     'Main Title Theme Composer',
     'Compositor',
   ];
+
   static readonly novelist = [
     'novelist',
     'Graphic Novel',
@@ -42,5 +45,6 @@ export class Job {
     'Original Series Creator',
     'Idea',
   ];
+
   static readonly other = 'technician';
 }
