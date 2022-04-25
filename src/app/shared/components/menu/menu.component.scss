@@ -34,7 +34,7 @@
 
     &,
     & > * {
-      @include width_100percent;
+      width: 100%;
     }
   }
 }
@@ -63,6 +63,14 @@ app-dropdown-language {
   overflow: hidden auto !important;
 }
 
+@include media(#{$desktop}) {
+  .toolbar .search-boxes {
+    min-width: calc(100vw - 56px);
+    gap: 0;
+    padding-left: 1vw;
+  }
+}
+
 @include media(#{$smallscreen}) {
   :host .nav-list {
     & > * {
@@ -73,11 +81,6 @@ app-dropdown-language {
   .toolbar {
     & .search-boxes {
       flex-direction: column;
-      gap: 0;
-    }
-
-    ::ng-deep app-movie-search .mat-form-field-infix {
-      margin-top: 0.5em;
     }
   }
 

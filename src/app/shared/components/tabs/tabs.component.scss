@@ -60,6 +60,12 @@
   opacity: 0.04;
 }
 
+@include between(#{$desktop}, #{$smallscreen}) {
+  :host {
+    top: $toolbar-height-desktop;
+  }
+}
+
 @include media(#{$smallscreen}) {
   :host {
     top: $toolbar-height-mobile;
