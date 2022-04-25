@@ -4,77 +4,117 @@ $top-gap: 5px;
 $option-height: 60px;
 $result-panel: 6 * $option-height + $top-gap;
 
-::ng-deep .mat-form-field {
-  width: 100%;
-
-  &-infix,
-  &-wrapper {
-    padding-bottom: 0.4em !important;
-  }
-
-  &-label-wrapper {
-    top: -1.9em;
-  }
-
-  input {
-    top: -0.6em;
-    position: relative;
-  }
-}
-
-::ng-deep .mat-form-field-prefix {
-  position: relative;
-  bottom: 0.6em;
-  padding-right: 5px;
-}
-
-::ng-deep .mat-form-field-suffix {
-  position: relative;
-  bottom: 0.6em;
-  cursor: pointer;
-}
-
-::ng-deep .mat-autocomplete-visible {
-  min-height: $result-panel !important;
-  height: $result-panel !important;
-  max-height: $result-panel !important;
-}
-
-::ng-deep .mat-option,
-::ng-deep .mat-option-text {
-  height: $option-height !important;
-  padding: 0 !important;
-  line-height: inherit !important;
-
-  &:first-child {
-    margin-top: $top-gap;
-  }
-
-  & > div {
-    display: flex;
-    height: $option-height !important;
-    font-size: 18px;
-  }
-}
-
-@include media(#{$desktop}) {
+:host {
   ::ng-deep .mat-form-field {
-    max-width: 250px;
-    font-size: 16px !important;
+    width: 100%;
+    background-color: $white;
+    border-width: 0 10px 0 10px;
+    border-style: solid;
+    border-color: $white;
+    border-radius: 1em;
+
+    &-infix {
+      padding-bottom: 0.4rem !important;
+    }
+
+    &-wrapper {
+      padding-bottom: 0 !important;
+    }
+
+    &-label-wrapper {
+      top: -2.375rem !important;
+      height: 120% !important;
+    }
+
+    &-underline {
+      bottom: 1rem !important;
+    }
+
+    input {
+      top: -0.625rem !important;
+      position: relative;
+    }
   }
 
-  ::ng-deep .mat-option-text > div {
-    font-size: 14px !important;
+  ::ng-deep .mat-form-field-prefix {
+    position: relative;
+    bottom: 0.6em;
+    padding-right: 5px;
+  }
+
+  ::ng-deep .mat-form-field-suffix {
+    position: relative;
+    bottom: 0.6em;
+    cursor: pointer;
+  }
+
+  ::ng-deep .mat-autocomplete-visible {
+    min-height: $result-panel !important;
+    height: $result-panel !important;
+    max-height: $result-panel !important;
+  }
+
+  ::ng-deep .mat-option,
+  ::ng-deep .mat-option-text {
+    height: $option-height !important;
+    padding: 0 !important;
+    line-height: inherit !important;
+
+    &:first-child {
+      margin-top: $top-gap;
+    }
+
+    & > div {
+      display: flex;
+      height: $option-height !important;
+      font-size: 18px;
+    }
+  }
+}
+
+@include between(#{$desktop}, #{$smallscreen}) {
+  :host {
+    ::ng-deep .mat-form-field {
+      max-width: calc(98vw / 3 - 56px / 3);
+      font-size: 16px !important;
+    }
+
+    ::ng-deep .mat-option-text > div {
+      font-size: 14px !important;
+    }
+
+    ::ng-deep .mat-form-field-label {
+      top: 26px !important;
+    }
   }
 }
 
 @include media(#{$smallscreen}) {
-  ::ng-deep .mat-form-field {
-    display: inline !important;
-    font-size: 14px !important;
+  :host {
+    ::ng-deep .mat-form-field {
+      display: block;
+      font-size: 14px !important;
 
-    &-infix {
-      border-top: 0 !important;
+      input {
+        top: 0 !important;
+      }
+
+      &-underline {
+        bottom: 6px !important;
+      }
+
+      &-infix {
+        border-top: 0 !important;
+      }
+
+      &-label-wrapper {
+        top: -20px !important;
+      }
+
+      &-prefix,
+      &-suffix {
+        bottom: 0;
+      }
     }
   }
 }
