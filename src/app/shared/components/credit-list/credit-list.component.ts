@@ -10,12 +10,16 @@ import {Person} from '../../../model/person';
 export class CreditListComponent implements OnInit {
   @Input()
   creators: Person[] = [];
+
   @Input()
   actors: Person[] = [];
+
   @Input()
   crew: Person[] = [];
+
   @Input()
   isDetail!: boolean;
+
   Job = Job;
 
   constructor() {}

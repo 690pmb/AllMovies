@@ -25,9 +25,11 @@ export class OpenLinkDirective {
       this.openDialog(event);
     }, 1250);
   }
+
   @HostListener('mouseout') onMouseOut(): void {
     clearTimeout(this.setTimeoutConst);
   }
+
   @HostListener('click') onClick(): void {
     clearTimeout(this.setTimeoutConst);
     if (this.dialogRef !== undefined) {

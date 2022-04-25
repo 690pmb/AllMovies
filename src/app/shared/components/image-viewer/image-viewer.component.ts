@@ -39,12 +39,14 @@ export class ImageViewerComponent implements OnChanges {
     slideToClickedSlide: true,
     touchEventsTarget: 'wrapper',
   };
+
   thumbs: SwiperConfigInterface = {
     observer: true,
     slidesPerView: 4,
     slideToClickedSlide: true,
     mousewheel: true,
   };
+
   isOnePicture!: boolean;
   faExpand = faExpand;
   isFullscreen = false;

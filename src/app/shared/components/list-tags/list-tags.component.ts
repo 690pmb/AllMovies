@@ -25,10 +25,13 @@ import {Subscription} from 'rxjs';
 export class ListTagsComponent implements OnInit, OnChanges, OnDestroy {
   @Input()
   tags: Tag[] = [];
+
   @Input()
   dataId!: number;
+
   @Input()
   isMovie!: boolean;
+
   isBtnSaveDisabled = true;
   allSeries: Data[] = [];
   allMovies: Data[] = [];

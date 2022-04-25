@@ -32,12 +32,16 @@ export class MetaComponent implements OnInit {
 
   @Input()
   sites: Search[] = [];
+
   @Input()
   isMovie!: boolean;
+
   @Input()
   isSerie!: boolean;
+
   @Output()
   sensCritique = new EventEmitter<Score>();
+
   links: Search[] = [];
 
   constructor(

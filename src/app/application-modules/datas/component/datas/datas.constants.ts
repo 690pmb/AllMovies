@@ -15,6 +15,7 @@ export class DatasConstants {
     'details',
     'tag-icon',
   ];
+
   static readonly INIT_COLUMNS_MOVIES = [
     'id',
     'thumbnail',
@@ -31,6 +32,7 @@ export class DatasConstants {
     'details',
     'tag-icon',
   ];
+
   static readonly MEDIUM_COLUMNS_SERIES = [
     'thumbnail',
     'name',
@@ -45,6 +47,7 @@ export class DatasConstants {
     'details',
     'tag-icon',
   ];
+
   static readonly MEDIUM_COLUMNS_MOVIES = [
     'thumbnail',
     'name',
@@ -59,6 +62,7 @@ export class DatasConstants {
     'details',
     'tag-icon',
   ];
+
   static readonly MOBILE_COLUMNS_SERIES = [
     'thumbnail',
     'name',
@@ -71,6 +75,7 @@ export class DatasConstants {
     'select',
     'tag-icon',
   ];
+
   static readonly MOBILE_COLUMNS_MOVIES = [
     'thumbnail',
     'name',

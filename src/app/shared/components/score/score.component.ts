@@ -11,6 +11,7 @@ import {Score} from './../../../model/score';
 export class ScoreComponent implements OnChanges {
   @Input()
   score?: Score;
+
   @Input()
   scScore?: Score;
 

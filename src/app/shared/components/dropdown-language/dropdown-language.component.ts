@@ -20,8 +20,10 @@ import {Lang} from '../../../model/model';
 export class DropdownLanguageComponent implements OnInit, OnChanges {
   @Input()
   userLang: Lang;
+
   @Output()
   lang = new EventEmitter<Lang>();
+
   language: Lang;
   langList: Lang[];
 

@@ -22,12 +22,16 @@ import {MatAutocompleteTrigger} from '@angular/material/autocomplete';
 export class SearchBoxComponent<T> implements OnInit {
   @ViewChild(MatAutocompleteTrigger)
   trigger!: MatAutocompleteTrigger;
+
   @Input()
   template!: TemplateRef<unknown>;
+
   @Input()
   fetchOptions: (term: string, lang: string) => Observable<T[]>;
+
   @Input()
   placeholder: string;
+
   @Output() selected = new EventEmitter<T>();
   filteredDatas!: Observable<T[]>;
   dataCtrl = new FormControl();

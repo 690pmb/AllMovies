@@ -41,6 +41,7 @@ export class ListsComponent implements OnInit, OnChanges {
     zoom: false,
     touchEventsTarget: 'wrapper',
   };
+
   imageSize = ImageSize;
   faChevronCircleRight = faChevronCircleRight;
   faPlus = faPlus;

@@ -57,7 +57,6 @@ export class DiscoverComponent implements OnInit, OnDestroy {
   allCertif: DropDownChoice[];
   selectedCertif: DropDownChoice;
   selectedLangs: string[] = [];
-  allReleaseType: DropDownChoice[];
   selectedReleaseType: DropDownChoice[];
   playing = false;
   playingDate: string[];
@@ -65,6 +64,33 @@ export class DiscoverComponent implements OnInit, OnDestroy {
   clean = false;
   genresLoaded$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isMovie: boolean;
+  allReleaseType: DropDownChoice[] = [
+    new DropDownChoice(
+      'release_type.' + ReleaseType.RELEASE_PREMIERE,
+      ReleaseType.RELEASE_PREMIERE
+    ),
+    new DropDownChoice(
+      'release_type.' + ReleaseType.RELEASE_THEATRICAL_LIMITED,
+      ReleaseType.RELEASE_THEATRICAL_LIMITED
+    ),
+    new DropDownChoice(
+      'release_type.' + ReleaseType.RELEASE_THEATRICAL,
+      ReleaseType.RELEASE_THEATRICAL
+    ),
+    new DropDownChoice(
+      'release_type.' + ReleaseType.RELEASE_DIGITAL,
+      ReleaseType.RELEASE_DIGITAL
+    ),
+    new DropDownChoice(
+      'release_type.' + ReleaseType.RELEASE_PHYSICAL,
+      ReleaseType.RELEASE_PHYSICAL
+    ),
+    new DropDownChoice(
+      'release_type.' + ReleaseType.RELEASE_TV,
+      ReleaseType.RELEASE_TV
+    ),
+  ];
+
   subs: Subscription[] = [];
 
   constructor(
@@ -90,32 +116,6 @@ export class DiscoverComponent implements OnInit, OnDestroy {
         this.adult = user.adult;
       }
     });
-    this.allReleaseType = [
-      new DropDownChoice(
-        'release_type.' + ReleaseType.RELEASE_PREMIERE,
-        ReleaseType.RELEASE_PREMIERE
-      ),
-      new DropDownChoice(
-        'release_type.' + ReleaseType.RELEASE_THEATRICAL_LIMITED,
-        ReleaseType.RELEASE_THEATRICAL_LIMITED
-      ),
-      new DropDownChoice(
-        'release_type.' + ReleaseType.RELEASE_THEATRICAL,
-        ReleaseType.RELEASE_THEATRICAL
-      ),
-      new DropDownChoice(
-        'release_type.' + ReleaseType.RELEASE_DIGITAL,
-        ReleaseType.RELEASE_DIGITAL
-      ),
-      new DropDownChoice(
-        'release_type.' + ReleaseType.RELEASE_PHYSICAL,
-        ReleaseType.RELEASE_PHYSICAL
-      ),
-      new DropDownChoice(
-        'release_type.' + ReleaseType.RELEASE_TV,
-        ReleaseType.RELEASE_TV
-      ),
-    ];
     this.formatter = Utils.timeSliderFormatter;
     this.initPlayingDate();
 
