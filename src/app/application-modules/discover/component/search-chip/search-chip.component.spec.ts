@@ -12,15 +12,15 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {SharedModule} from '../../../../shared/shared.module';
-import {SearchBoxComponent} from './search-box.component';
+import { SearchChipComponent } from './search-chip.component';
 
-describe('SearchBoxComponent', () => {
-  let component: SearchBoxComponent<any>;
-  let fixture: ComponentFixture<SearchBoxComponent<any>>;
+describe('SearchChipComponent', () => {
+  let component: SearchChipComponent<any>;
+  let fixture: ComponentFixture<SearchChipComponent<any>>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SearchBoxComponent],
+      declarations: [SearchChipComponent],
       providers: [TranslateService],
       imports: [
         BrowserModule,
@@ -41,13 +41,13 @@ describe('SearchBoxComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SearchBoxComponent);
+    fixture = TestBed.createComponent(SearchChipComponent);
     component = fixture.componentInstance;
   });
 
   it('init', () => {
     fixture.detectChanges();
     expect(component).toBeTruthy();
-    console.log('SearchBoxComponent');
+    console.log('SearchChipComponent');
   });
 });
