@@ -1,34 +1,44 @@
 @use '/src/app/styles/imports' as *;
 /* stylelint-disable selector-type-no-unknown */
 
-.mat-option {
-  padding: 0 !important;
-}
-
 .result-content {
   display: flex;
   align-items: center;
 
   & img {
-    padding: 0 5px;
+    @include thumbnail($img-height);
   }
 }
 
 .result-body {
+  margin: auto 0;
+  padding-left: 0.5em;
   white-space: pre-line;
   line-height: 24px !important;
 }
 
-.mat-form-field {
-  width: 20vw;
+::ng-deep .mat-form-field {
+  width: 400px;
 }
 
 mat-slide-toggle {
   align-self: center;
+  margin-left: 15px;
 }
 
 @include media(#{$smallscreen}) {
-  .mat-form-field {
-    width: 75vw;
+  app-search-box {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  ::ng-deep .mat-slide-toggle-label {
+    margin: 0 !important;
+    padding: 0 0 1em 0 !important;
+  }
+
+  ::ng-deep .mat-form-field {
+    width: 100%;
+    margin: 0 auto;
   }
 }

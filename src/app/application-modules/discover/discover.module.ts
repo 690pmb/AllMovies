@@ -20,7 +20,7 @@ import {
 import {MatSelectModule} from '@angular/material/select';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
-import {SearchBoxComponent} from './component/search-box/search-box.component';
+import {SearchChipComponent} from './component/search-chip/search-chip.component';
 import {MyPaginator} from './../../shared/my-paginator';
 import {DiscoverComponent} from './component/discover.component';
 import {SharedModule} from './../../shared/shared.module';
@@ -62,6 +62,6 @@ const childRoutes: Routes = [
       deps: [TranslateService],
     },
   ],
-  declarations: [DiscoverComponent, SearchBoxComponent],
+  declarations: [DiscoverComponent, SearchChipComponent],
 })
 export class DiscoverModule {}

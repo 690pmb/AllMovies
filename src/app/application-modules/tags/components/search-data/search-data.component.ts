@@ -1,17 +1,6 @@
-import {FormControl} from '@angular/forms';
 import {TranslateService} from '@ngx-translate/core';
-import {Observable, of, forkJoin} from 'rxjs';
-import {debounceTime, switchMap, catchError} from 'rxjs/operators';
-import {
-  Component,
-  OnInit,
-  Input,
-  Output,
-  EventEmitter,
-  ViewChild,
-  ElementRef,
-} from '@angular/core';
-import {faTimes} from '@fortawesome/free-solid-svg-icons';
+import {Observable, forkJoin} from 'rxjs';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 import {Data} from './../../../../model/data';
 import {DetailConfig, ImageSize} from './../../../../model/model';
@@ -27,16 +16,11 @@ import {
   styleUrls: ['./search-data.component.scss'],
 })
 export class SearchDataComponent<T extends Data> implements OnInit {
-  @ViewChild('inputSearch', {static: true})
-  inputSearch!: ElementRef;
-
   @Input() adult!: boolean;
   @Output() selected = new EventEmitter<T[]>();
   @Output() movie = new EventEmitter<boolean>();
-  filteredDatas!: Observable<T[]>;
-  dataCtrl!: FormControl;
+  getData: (term: string, lang: string) => Observable<Data[]>;
   imageSize = ImageSize;
-  faRemove = faTimes;
   isMovie = true;
 
   constructor(
@@ -47,32 +31,10 @@ export class SearchDataComponent<T extends Data> implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.dataCtrl = new FormControl();
-    this.filteredDatas = this.dataCtrl.valueChanges.pipe(
-      debounceTime(300),
-      switchMap(term => {
-        if (term) {
-          return this.isMovie
-            ? this.movieSearchService.search(
-                term,
-                this.adult,
-                this.translate.currentLang
-              )
-            : this.serieService.search(term, this.translate.currentLang);
-        } else {
-          return of([]);
-        }
-      }),
-      catchError(error => {
-        console.error(error);
-        return of([]);
-      })
-    );
-  }
-
-  switch(): void {
-    this.dataCtrl.setValue(this.inputSearch.nativeElement.value);
-    this.inputSearch.nativeElement.click();
+    this.getData = (term: string, lang: string): Observable<Data[]> =>
+      this.isMovie
+        ? this.movieSearchService.search(term, this.adult, lang)
+        : this.serieService.search(term, lang);
   }
 
   add(item: T): void {

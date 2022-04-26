@@ -30,7 +30,7 @@
 </div>
 <div class="params">
   <!-- Person search -->
-  <app-search-box
+  <app-search-chip
     *ngIf="isMovie"
     [adult]="adult"
     (items)="people = $event"
@@ -39,9 +39,9 @@
     [initList]="people"
     [clear]="clean"
     [hasImage]="true"
-  ></app-search-box>
+  ></app-search-chip>
   <!-- Keyword search -->
-  <app-search-box
+  <app-search-chip
     [adult]="adult"
     (items)="keyword = $event"
     [service]="keywordService"
@@ -49,7 +49,7 @@
     [initList]="keyword"
     [clear]="clean"
     [hasImage]="false"
-  ></app-search-box>
+  ></app-search-chip>
   <mat-slide-toggle
     [color]="'primary'"
     [(checked)]="isWithoutKeyword"
@@ -75,7 +75,7 @@
     >{{ 'discover.without' | translate }}</mat-slide-toggle
   >
   <!-- Networks Filter -->
-  <app-search-box
+  <app-search-chip
     *ngIf="!isMovie"
     (items)="networks = $event"
     [service]="networkService"
@@ -83,7 +83,7 @@
     [initList]="networks"
     [clear]="clean"
     [hasImage]="false"
-  ></app-search-box>
+  ></app-search-chip>
   <!-- Certification Filter -->
   <mat-form-field *ngIf="isMovie">
     <mat-select
@@ -109,14 +109,14 @@
     </mat-select>
   </mat-form-field>
   <!-- Lang -->
-  <app-search-box
+  <app-search-chip
     (items)="selectedLangs = $event"
     [service]="langService"
     placeholder="{{ 'discover.language' | translate }}"
     [initList]="selectedLangs"
     [clear]="clean"
     [hasImage]="false"
-  ></app-search-box>
+  ></app-search-chip>
 </div>
 <!-- Runtime range -->
 <nouislider
