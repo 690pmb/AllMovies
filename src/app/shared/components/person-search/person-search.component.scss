@@ -1,9 +1,9 @@
 @use '/src/app/styles/imports' as *;
 
 .result-thumbnail {
-  height: 55px;
+  @include thumbnail($img-height);
+
   margin: 0 0.5em;
-  @include box-shadow;
 }
 
 .result-title {

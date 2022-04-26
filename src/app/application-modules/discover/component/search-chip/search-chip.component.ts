@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 import {faTimes} from '@fortawesome/free-solid-svg-icons';
 
-import {SearchService} from './../../../../shared/service/search.service';
+import {SearchService} from '../../../../shared/service/search.service';
 import {ImageSize} from '../../../../model/model';
 
 interface IdClass {
@@ -25,11 +25,11 @@ interface IdClass {
 }
 
 @Component({
-  selector: 'app-search-box',
-  templateUrl: './search-box.component.html',
-  styleUrls: ['./search-box.component.scss'],
+  selector: 'app-search-chip',
+  templateUrl: './search-chip.component.html',
+  styleUrls: ['./search-chip.component.scss'],
 })
-export class SearchBoxComponent<T extends IdClass>
+export class SearchChipComponent<T extends IdClass>
   implements OnInit, OnChanges
 {
   @Input() adult: boolean;

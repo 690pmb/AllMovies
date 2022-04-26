@@ -1,33 +1,28 @@
-<mat-form-field>
-  <input
-    #inputSearch
-    matInput
-    placeholder="{{ 'global.add' | translate }}"
-    [matAutocomplete]="auto"
-    [formControl]="dataCtrl"
-  />
-</mat-form-field>
-<mat-slide-toggle [(ngModel)]="isMovie" (change)="switch()">{{
+<app-search-box
+  [template]="dataTemplate"
+  [fetchOptions]="getData"
+  [placeholder]="'global.add'"
+  [minimized]="false"
+  floatLabel="auto"
+  (selected)="add($event)"
+  #box
+></app-search-box>
+<mat-slide-toggle [(ngModel)]="isMovie" (change)="box.reload()">{{
   (isMovie ? 'search.movies' : 'search.series') | translate
 }}</mat-slide-toggle>
-<mat-autocomplete
-  #auto="matAutocomplete"
-  autoActiveFirstOption
-  class="big-autocomplete"
->
-  <mat-option
-    *ngFor="let data of filteredDatas | async"
-    (onSelectionChange)="add(data); inputSearch.value = ''"
-  >
-    <div class="result-content" [ngClass]="{adult: data.adult}">
-      <img
-        class="align-self-center"
-        *ngIf="data.affiche"
-        src="{{ data.affiche | image: imageSize.small }}"
-      />
-      <div class="result-body">
-        <span>{{ data.title | capitalizeWord }}</span>
-      </div>
+
+<ng-template #dataTemplate let-data>
+  <div class="result-content" [ngClass]="{adult: data.adult}">
+    <img
+      class="align-self-center"
+      *ngIf="data.affiche"
+      src="{{ data.affiche | image: imageSize.small }}"
+    />
+    <div class="result-body">
+      {{ data.title | capitalizeWord | truncate: 40 }}
+      <ng-container *ngIf="data.date"
+        >({{ data.date | date: 'yyyy' }})</ng-container
+      >
     </div>
-  </mat-option>
-</mat-autocomplete>
+  </div>
+</ng-template>

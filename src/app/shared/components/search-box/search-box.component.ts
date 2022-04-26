@@ -10,6 +10,7 @@ import {
   EventEmitter,
   ViewChild,
   TemplateRef,
+  HostBinding,
 } from '@angular/core';
 import {faTimes, faSearch} from '@fortawesome/free-solid-svg-icons';
 import {MatAutocompleteTrigger} from '@angular/material/autocomplete';
@@ -24,6 +25,10 @@ export class SearchBoxComponent<T> implements OnInit {
   trigger!: MatAutocompleteTrigger;
 
   @Input()
+  @HostBinding('class.minimized')
+  minimized: boolean = true;
+
+  @Input()
   template!: TemplateRef<unknown>;
 
   @Input()
@@ -32,12 +37,15 @@ export class SearchBoxComponent<T> implements OnInit {
   @Input()
   placeholder: string;
 
+  @Input()
+  floatLabel = 'never';
+
   @Output() selected = new EventEmitter<T>();
+
   filteredDatas!: Observable<T[]>;
   dataCtrl = new FormControl();
   faRemove = faTimes;
   faSearch = faSearch;
-  isMovie = true;
 
   constructor(private translate: TranslateService) {}
 
@@ -57,6 +65,11 @@ export class SearchBoxComponent<T> implements OnInit {
   reset(): void {
     this.dataCtrl.reset();
     this.trigger.closePanel();
+  }
+
+  reload(): void {
+    this.dataCtrl.updateValueAndValidity({emitEvent: true});
+    this.trigger.openPanel();
   }
 
   select(data: T): void {
