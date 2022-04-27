@@ -51,4 +51,4 @@ $depth: (
 $top-gap: 5px;
 $option-height: 60px;
 $img-height: $option-height - 2px;
-$result-panel: 6 * $option-height;
+$result-panel: 6 * $option-height + $top-gap * 2;

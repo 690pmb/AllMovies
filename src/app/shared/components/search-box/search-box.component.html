@@ -1,5 +1,5 @@
 <mat-form-field [floatLabel]="floatLabel">
-  <fa-icon [icon]="faSearch" matPrefix></fa-icon>
+  <fa-icon [icon]="faSearch" matPrefix size="lg"></fa-icon>
   <input
     #inputSearch
     matInput
@@ -7,7 +7,7 @@
     [matAutocomplete]="auto"
     [formControl]="dataCtrl"
   />
-  <fa-icon [icon]="faRemove" matSuffix (click)="reset()"></fa-icon>
+  <fa-icon [icon]="faRemove" matSuffix (click)="reset()" size="lg"></fa-icon>
 </mat-form-field>
 <mat-autocomplete #auto="matAutocomplete">
   <mat-option

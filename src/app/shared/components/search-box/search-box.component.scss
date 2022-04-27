@@ -49,18 +49,27 @@
   min-height: $result-panel !important;
   height: $result-panel !important;
   max-height: $result-panel !important;
-  transform: translateY($top-gap);
-}
 
-::ng-deep .mat-option,
-::ng-deep .mat-option-text {
-  height: $option-height !important;
-  padding: 0 !important;
-
-  & > div {
-    display: flex;
+  .mat-option,
+  .mat-option-text {
     height: $option-height !important;
-    font-size: 18px;
+    padding: 0 !important;
+
+    & > div {
+      display: flex;
+      height: $option-height !important;
+      font-size: 18px;
+    }
+  }
+
+  .mat-option {
+    &:first-child {
+      margin-top: $top-gap;
+    }
+
+    &:last-child {
+      margin-bottom: $top-gap;
+    }
   }
 }
 
@@ -71,13 +80,15 @@
       font-size: 16px !important;
     }
 
-    ::ng-deep .mat-option-text > div {
-      font-size: 14px !important;
-    }
-
     ::ng-deep .mat-form-field-label {
       top: 26px !important;
     }
+  }
+}
+
+@include media(#{$desktop}) {
+  ::ng-deep .mat-option-text > div {
+    font-size: 14px !important;
   }
 }
 
