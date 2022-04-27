@@ -1,0 +1,35 @@
+@use './variables' as *;
+@use '~@angular/material/theming' as *;
+@include mat-core();
+
+.btn {
+  @include mat-elevation(2);
+}
+
+$palette-primary: mat-palette(
+  (
+    100: $light_blue,
+    500: $blue,
+    700: $info,
+    contrast: (
+      100: $dark-primary-text,
+      500: $light-primary-text,
+      700: $light-primary-text,
+    ),
+  )
+);
+
+$theme: mat-light-theme(
+  (
+    color: (
+      primary: $palette-primary,
+      accent: $palette-primary,
+    ),
+  )
+);
+
+@include angular-material-theme($theme);
+$typography: mat-typography-config(
+  $font-family: $font-family,
+);
+@include angular-material-typography($typography);

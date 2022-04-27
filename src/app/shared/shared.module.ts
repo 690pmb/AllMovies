@@ -78,6 +78,7 @@ import {MyMissingTranslationHandler} from './my-missing-translation-handler';
 import {BookmarkedComponent} from './components/bookmarked/bookmarked.component';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {SearchBoxComponent} from './components/search-box/search-box.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -123,6 +124,7 @@ import {SearchBoxComponent} from './components/search-box/search-box.component';
     MatButtonToggleModule,
     MatListModule,
     MatButtonModule,
+    MatCheckboxModule,
     MatAutocompleteModule,
     MatInputModule,
     MatFormFieldModule,

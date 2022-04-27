@@ -98,7 +98,7 @@
             - {{ data.vote }}/10 ({{ data.vote_count }}) -
             {{ data.popularity | number: '1.0-0':translate.currentLang }}
           </p>
-          <input [(ngModel)]="data.checked" type="checkbox" />
+          <mat-checkbox [(ngModel)]="data.checked"></mat-checkbox>
         </div>
       </div>
     </div>
