@@ -19,13 +19,13 @@
     />
     <div class="result-title">
       <div class="result-main">
-        {{ movie.title | capitalizeWord | truncate: 20 }}
+        {{ movie.title | capitalizeWord | truncate: 40 }}
         <ng-container *ngIf="movie.date"
           >({{ movie.date | date: 'yyyy' }})</ng-container
         >
       </div>
       <div *ngIf="movie.original_title" class="result-original">
-        {{ movie.original_title | truncate: 20 }}
+        {{ movie.original_title | truncate: 40 }}
       </div>
     </div>
   </div>
