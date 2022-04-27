@@ -9,10 +9,6 @@
   display: flex;
   justify-content: center;
 
-  & ::ng-deep.fa-angle-up {
-    color: $blue;
-  }
-
   & button {
     height: auto;
 
