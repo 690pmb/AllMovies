@@ -111,10 +111,6 @@ mat-row {
     width: 100vw;
   }
 
-  & ::ng-deep.fa-angle-down {
-    color: $blue;
-  }
-
   .data-row:hover & {
     animation: 1s bounce;
   }
