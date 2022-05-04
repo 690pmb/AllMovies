@@ -5,8 +5,8 @@ import {map, catchError} from 'rxjs/operators';
 
 import {DuckDuckGo} from './../../../../constant/duck-duck-go';
 import {Constants} from './../../../../constant/constants';
-import {UtilsService} from './../../../service/utils.service';
-import {ToastService} from '../../../service/toast.service';
+import {UtilsService} from '../../../../service/utils.service';
+import {ToastService} from '../../../../service/toast.service';
 
 @Injectable({
   providedIn: 'root',

@@ -12,17 +12,15 @@ import {
   faMinus,
 } from '@fortawesome/free-solid-svg-icons';
 
-import {
-  SerieService,
-  TitleService,
-  MenuService,
-  TabsService,
-  MyDatasService,
-  MyTagsService,
-} from './../../../shared/shared.module';
 import {Tag} from './../../../model/tag';
 import {DuckDuckGo} from './../../../constant/duck-duck-go';
 import {Serie} from '../../../model/serie';
+import {SerieService} from '../../../service/serie.service';
+import {TitleService} from '../../../service/title.service';
+import {TabsService} from '../../../service/tabs.service';
+import {MyTagsService} from '../../../service/my-tags.service';
+import {MyDatasService} from '../../../service/my-datas.service';
+import {MenuService} from '../../../service/menu.service';
 import {
   Keyword,
   Genre,

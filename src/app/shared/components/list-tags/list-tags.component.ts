@@ -8,14 +8,14 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
+import {Subscription} from 'rxjs';
 
 import {Data} from './../../../model/data';
 import {Tag, TagData} from './../../../model/tag';
-import {MyDatasService} from '../../service/my-datas.service';
+import {MyDatasService} from '../../../service/my-datas.service';
 import {Level} from './../../../model/model';
-import {ToastService} from '../../service/toast.service';
-import {MyTagsService} from '../../service/my-tags.service';
-import {Subscription} from 'rxjs';
+import {ToastService} from '../../../service/toast.service';
+import {MyTagsService} from '../../../service/my-tags.service';
 
 @Component({
   selector: 'app-list-tags',

@@ -9,9 +9,9 @@ import {faTimes} from '@fortawesome/free-solid-svg-icons';
 import {delay, filter} from 'rxjs/operators';
 import {BehaviorSubject, Subscription} from 'rxjs';
 
-import {TabsService} from './../../service/tabs.service';
-import {TitleService} from '../../service/title.service';
-import {AuthService} from '../../service/auth.service';
+import {TabsService} from '../../../service/tabs.service';
+import {TitleService} from '../../../service/title.service';
+import {AuthService} from '../../../service/auth.service';
 
 @Component({
   selector: 'app-tabs',

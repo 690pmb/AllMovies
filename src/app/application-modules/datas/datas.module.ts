@@ -62,8 +62,6 @@ const childRoutes: Routes = [
     MatCheckboxModule,
   ],
   providers: [
-    TranslateService,
-    DatasResolver,
     {
       provide: MatPaginatorIntl,
       useFactory: (translate: TranslateService): MyPaginator =>

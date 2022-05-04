@@ -4,9 +4,9 @@ import {Injectable} from '@angular/core';
 
 import {ToastService} from './toast.service';
 import {UtilsService} from './utils.service';
-import {Certification} from '../../model/model';
-import {Url} from '../../constant/url';
-import {Utils} from '../utils';
+import {Certification} from '../model/model';
+import {Url} from '../constant/url';
+import {Utils} from '../shared/utils';
 
 @Injectable({
   providedIn: 'root',

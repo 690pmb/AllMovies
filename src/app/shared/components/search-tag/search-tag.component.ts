@@ -19,7 +19,7 @@ import {BreakpointObserver} from '@angular/cdk/layout';
 
 import {Utils} from './../../utils';
 import {Tag} from './../../../model/tag';
-import {MyTagsService} from '../../service/my-tags.service';
+import {MyTagsService} from '../../../service/my-tags.service';
 import {Constants} from '../../../constant/constants';
 
 @Component({

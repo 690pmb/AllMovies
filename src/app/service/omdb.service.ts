@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 
-import {Score} from './../../model/score';
+import {Score} from '../model/score';
 import {UtilsService} from './utils.service';
-import {Constants} from './../../constant/constants';
+import {Constants} from '../constant/constants';
 import {ToastService} from './toast.service';
 
 @Injectable({

@@ -21,18 +21,16 @@ import {
   faMinus,
 } from '@fortawesome/free-solid-svg-icons';
 
-import {
-  TitleService,
-  MenuService,
-  MyDatasService,
-  MyTagsService,
-  TabsService,
-  MovieService,
-} from './../../../../shared/shared.module';
 import {Tag} from './../../../../model/tag';
 import {DuckDuckGo} from './../../../../constant/duck-duck-go';
 import {Movie} from '../../../../model/movie';
 import {Keyword, Genre, DetailConfig} from '../../../../model/model';
+import {MovieService} from '../../../../service/movie.service';
+import {TitleService} from '../../../../service/title.service';
+import {TabsService} from '../../../../service/tabs.service';
+import {MyTagsService} from '../../../../service/my-tags.service';
+import {MyDatasService} from '../../../../service/my-datas.service';
+import {MenuService} from '../../../../service/menu.service';
 
 @Component({
   selector: 'app-movie-detail',

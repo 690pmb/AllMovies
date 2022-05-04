@@ -10,7 +10,7 @@ import {Router} from '@angular/router';
 import {MatDialogRef, MatDialog} from '@angular/material/dialog';
 import {Link} from './../../model/model';
 import {OpenLinkDialogComponent} from '../components/open-link-dialog/open-link-dialog.component';
-import {TabsService} from '../service/tabs.service';
+import {TabsService} from '../../service/tabs.service';
 
 @Directive({
   selector: '[appOpenLink]',

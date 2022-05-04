@@ -3,8 +3,8 @@ import * as Dropbox from 'dropbox';
 
 import {ToastService} from './toast.service';
 import {UtilsService} from './utils.service';
-import {Dropbox as DropboxConstante} from '../../constant/dropbox';
-import {Utils} from '../utils';
+import {Dropbox as DropboxConstante} from '../constant/dropbox';
+import {Utils} from '../shared/utils';
 
 @Injectable({
   providedIn: 'root',

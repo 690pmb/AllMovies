@@ -4,9 +4,9 @@ import {Injectable} from '@angular/core';
 import {SearchService} from './search.service';
 import {ToastService} from './toast.service';
 import {UtilsService} from './utils.service';
-import {LangDb} from '../../model/model';
-import {Url} from '../../constant/url';
-import {Utils} from '../utils';
+import {LangDb} from '../model/model';
+import {Url} from '../constant/url';
+import {Utils} from '../shared/utils';
 
 type Lang = {iso_639_1: string; english_name: string};
 

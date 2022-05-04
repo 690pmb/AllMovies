@@ -3,13 +3,14 @@ import {BehaviorSubject} from 'rxjs';
 
 import {DropboxService} from './dropbox.service';
 import {AuthService} from './auth.service';
-import {Level} from '../../model/model';
-import {Tag} from '../../model/tag';
-import {CapitalizeWordPipe} from './../pipes/capitalizeWord.pipe';
-import {Dropbox} from './../../constant/dropbox';
+import {Level} from '../model/model';
+import {Tag} from '../model/tag';
+import {CapitalizeWordPipe} from '../shared/pipes/capitalizeWord.pipe';
+import {Dropbox} from '../constant/dropbox';
 import {UtilsService} from './utils.service';
 import {ToastService} from './toast.service';
-import {Utils} from '../utils';
+import {Utils} from '../shared/utils';
+import {MockService} from './mock.service';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +23,8 @@ export class MyTagsService {
     private auth: AuthService,
     private serviceUtils: UtilsService,
     private toast: ToastService,
-    private capitalize: CapitalizeWordPipe
+    private capitalize: CapitalizeWordPipe,
+    private asset: MockService<Tag>
   ) {}
 
   static tagsToBlob(tags: Tag[]): Blob {

@@ -4,11 +4,9 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 import {Data} from './../../../../model/data';
 import {DetailConfig, ImageSize} from './../../../../model/model';
-import {
-  SerieService,
-  MovieService,
-  MovieSearchService,
-} from './../../../../shared/shared.module';
+import {MovieSearchService} from '../../../../service/movie-search.service';
+import {MovieService} from '../../../../service/movie.service';
+import {SerieService} from '../../../../service/serie.service';
 
 @Component({
   selector: 'app-search-data',
