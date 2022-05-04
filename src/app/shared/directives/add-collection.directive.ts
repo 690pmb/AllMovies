@@ -19,11 +19,11 @@ import {FaIconComponent} from '@fortawesome/angular-fontawesome';
 
 import {Tag} from './../../model/tag';
 import {Data} from './../../model/data';
-import {MyDatasService} from './../service/my-datas.service';
+import {MyDatasService} from '../../service/my-datas.service';
 import {DetailConfig} from '../../model/model';
-import {MyTagsService} from '../service/my-tags.service';
-import {SerieService} from '../service/serie.service';
-import {MovieService} from './../service/movie.service';
+import {MyTagsService} from '../../service/my-tags.service';
+import {SerieService} from '../../service/serie.service';
+import {MovieService} from '../../service/movie.service';
 
 @Directive({
   selector: '[appAddCollection]',

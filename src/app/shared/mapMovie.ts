@@ -3,7 +3,7 @@ import {Utils} from './utils';
 import {Movie} from './../model/movie';
 import {Discover} from '../model/discover';
 import {ReleaseDate} from '../model/model';
-import {MockService} from './service/mock.service';
+import {MockService} from '../service/mock.service';
 
 export class MapMovie {
   private static flags: Flag[] = [];

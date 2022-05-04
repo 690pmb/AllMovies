@@ -5,9 +5,9 @@ import {DatePipe} from '@angular/common';
 
 import {ErrorService} from './error.service';
 import {ToastService} from './toast.service';
-import {Level} from './../../model/model';
+import {Level} from '../model/model';
 import {DropboxService} from './dropbox.service';
-import {environment} from '../../../environments/environment';
+import {environment} from '../../environments/environment';
 
 @Injectable({providedIn: 'root'})
 export class GlobalErrorHandler implements ErrorHandler {

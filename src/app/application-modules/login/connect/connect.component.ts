@@ -3,7 +3,8 @@ import {Router} from '@angular/router';
 import * as crypto from 'crypto-js';
 import {TranslateService} from '@ngx-translate/core';
 
-import {AuthService, TitleService} from './../../../shared/shared.module';
+import {AuthService} from '../../../service/auth.service';
+import {TitleService} from '../../../service/title.service';
 
 @Component({
   selector: 'app-connect',

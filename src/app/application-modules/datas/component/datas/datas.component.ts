@@ -26,14 +26,6 @@ import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 
 import {Constants} from '../../../../constant/constants';
 import {Utils} from '../../../../shared/utils';
-import {
-  SerieService,
-  TitleService,
-  MovieService,
-  MyDatasService,
-  MyTagsService,
-  ToastService,
-} from '../../../../shared/shared.module';
 import {Serie} from './../../../../model/serie';
 import {Movie} from './../../../../model/movie';
 import {Tag, TagData} from '../../../../model/tag';
@@ -41,6 +33,12 @@ import {Data} from '../../../../model/data';
 import {Genre, DetailConfig, Level, ImageSize} from '../../../../model/model';
 import {DatasConstants} from './datas.constants';
 import {ImagePipe} from '../../../../shared/pipes/image.pipe';
+import {MovieService} from '../../../../service/movie.service';
+import {SerieService} from '../../../../service/serie.service';
+import {MyDatasService} from '../../../../service/my-datas.service';
+import {MyTagsService} from '../../../../service/my-tags.service';
+import {ToastService} from '../../../../service/toast.service';
+import {TitleService} from '../../../../service/title.service';
 
 @Component({
   selector: 'app-my-datas',

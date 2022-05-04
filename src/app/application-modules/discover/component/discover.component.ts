@@ -7,21 +7,19 @@ import {NouiFormatter} from 'ng2-nouislider';
 
 import {DiscoverCriteria} from './../../../model/discover-criteria';
 import {Discover} from './../../../model/discover';
-import {
-  KeywordSearchService,
-  SerieService,
-  CertificationService,
-  LangService,
-  GenreService,
-  PersonSearchService,
-  TitleService,
-  AuthService,
-  MovieService,
-} from './../../../shared/shared.module';
 import {DropDownChoice, ImageSize} from '../../../model/model';
 import {Utils} from '../../../shared/utils';
 import {NetworkService} from './../network.service';
 import {ReleaseType} from '../../../constant/release-type';
+import {MovieService} from '../../../service/movie.service';
+import {SerieService} from '../../../service/serie.service';
+import {PersonSearchService} from '../../../service/person-search.service';
+import {KeywordSearchService} from '../../../service/keyword-search.service';
+import {GenreService} from '../../../service/genre.service';
+import {CertificationService} from '../../../service/certification.service';
+import {LangService} from '../../../service/lang.service';
+import {TitleService} from '../../../service/title.service';
+import {AuthService} from '../../../service/auth.service';
 
 @Component({
   selector: 'app-discover',

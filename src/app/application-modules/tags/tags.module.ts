@@ -57,7 +57,6 @@ const childRoutes: Routes = [
   ],
   declarations: [TagsComponent, TagDatasComponent, SearchDataComponent],
   providers: [
-    TranslateService,
     {
       provide: MatPaginatorIntl,
       useFactory: (translate: TranslateService): MyPaginator =>

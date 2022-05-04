@@ -9,7 +9,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 
-import {MockService} from '../../service/mock.service';
+import {MockService} from '../../../service/mock.service';
 import {Lang} from '../../../model/model';
 
 @Component({

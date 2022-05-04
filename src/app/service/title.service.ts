@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {BehaviorSubject} from 'rxjs';
 
-import {Utils} from '../utils';
+import {Utils} from '../shared/utils';
 
 @Injectable({
   providedIn: 'root',

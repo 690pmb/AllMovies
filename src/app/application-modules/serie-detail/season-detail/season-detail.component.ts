@@ -7,10 +7,11 @@ import {
 import {ParamMap, ActivatedRoute, Router} from '@angular/router';
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {TranslateService, LangChangeEvent} from '@ngx-translate/core';
+import {Subscription} from 'rxjs';
 
 import {Season} from './../../../model/season';
-import {SerieService, TitleService} from './../../../shared/shared.module';
-import {Subscription} from 'rxjs';
+import {SerieService} from '../../../service/serie.service';
+import {TitleService} from '../../../service/title.service';
 
 @Component({
   selector: 'app-season-detail',

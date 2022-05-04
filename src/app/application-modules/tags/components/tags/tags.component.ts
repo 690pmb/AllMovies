@@ -18,12 +18,13 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import {ActivatedRoute, Router, Params} from '@angular/router';
-
-import {MyTagsService, TitleService} from './../../../../shared/shared.module';
-import {Utils} from './../../../../shared/utils';
-import {Tag} from './../../../../model/tag';
 import {Subscription} from 'rxjs';
 import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
+
+import {Utils} from './../../../../shared/utils';
+import {Tag} from './../../../../model/tag';
+import {MyTagsService} from '../../../../service/my-tags.service';
+import {TitleService} from '../../../../service/title.service';
 
 @Component({
   selector: 'app-tags',

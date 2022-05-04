@@ -3,7 +3,7 @@ import {Observable} from 'rxjs';
 
 import {Serie} from '../../../model/serie';
 import {ImageSize} from '../../../model/model';
-import {SerieService} from '../../service/serie.service';
+import {SerieService} from '../../../service/serie.service';
 
 @Component({
   selector: 'app-serie-search',

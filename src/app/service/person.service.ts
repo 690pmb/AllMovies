@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 
-import {Utils} from './../utils';
-import {MapPerson} from './../../shared/mapPerson';
+import {Utils} from '../shared/utils';
+import {MapPerson} from '../shared/mapPerson';
 import {UtilsService} from './utils.service';
-import {Url} from './../../constant/url';
-import {Person} from '../../model/person';
+import {Url} from '../constant/url';
+import {Person} from '../model/person';
 import {ToastService} from './toast.service';
-import {UrlBuilder} from '../urlBuilder';
+import {UrlBuilder} from '../shared/urlBuilder';
 
 @Injectable({
   providedIn: 'root',

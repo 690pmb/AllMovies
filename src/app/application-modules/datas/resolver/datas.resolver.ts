@@ -3,7 +3,7 @@ import {Resolve, ActivatedRouteSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
 import {take, skipWhile} from 'rxjs/operators';
 
-import {MyDatasService} from './../../../shared/shared.module';
+import {MyDatasService} from '../../../service/my-datas.service';
 import {Data} from './../../../model/data';
 
 @Injectable({providedIn: 'root'})

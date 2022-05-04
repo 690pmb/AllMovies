@@ -2,20 +2,18 @@ import {BreakpointObserver} from '@angular/cdk/layout';
 import {TranslateService, LangChangeEvent} from '@ngx-translate/core';
 import {SwiperConfigInterface} from 'ngx-swiper-wrapper';
 import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Subscription} from 'rxjs';
 
 import {Movie} from '../../../../model/movie';
-import {
-  TitleService,
-  PersonService,
-  MovieService,
-  SerieService,
-} from '../../../../shared/shared.module';
 import {Serie} from './../../../../model/serie';
 import {Person} from '../../../../model/person';
 import {ImageSize} from '../../../../model/model';
 import {Url} from '../../../../constant/url';
 import {Constants} from './../../../../constant/constants';
-import {Subscription} from 'rxjs';
+import {MovieService} from '../../../../service/movie.service';
+import {SerieService} from '../../../../service/serie.service';
+import {PersonService} from '../../../../service/person.service';
+import {TitleService} from '../../../../service/title.service';
 
 @Component({
   selector: 'app-dashboard',

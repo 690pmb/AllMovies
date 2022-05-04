@@ -18,15 +18,14 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import 'bootstrap';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {TranslateService} from '@ngx-translate/core';
 
 import {SharedModule} from './shared/shared.module';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {AuthGard} from './app.gards';
-import {GlobalErrorHandler} from './shared/service/global-error-handler';
-import {ServerErrorInterceptor} from './shared/service/server-error.interceptor';
+import {GlobalErrorHandler} from './service/global-error-handler';
+import {ServerErrorInterceptor} from './service/server-error.interceptor';
 import {MyMissingTranslationHandler} from './shared/my-missing-translation-handler';
-import {TranslateService} from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -46,9 +45,8 @@ import {TranslateService} from '@ngx-translate/core';
       },
       loader: {
         provide: TranslateLoader,
-        useFactory: (http: HttpClient): TranslateHttpLoader => {
-          return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
-        },
+        useFactory: (http: HttpClient): TranslateHttpLoader =>
+          new TranslateHttpLoader(http, 'assets/i18n/', '.json'),
         deps: [HttpClient],
       },
     }),
@@ -56,7 +54,6 @@ import {TranslateService} from '@ngx-translate/core';
   ],
   declarations: [AppComponent],
   providers: [
-    AuthGard,
     {provide: ErrorHandler, useClass: GlobalErrorHandler},
     {provide: HTTP_INTERCEPTORS, useClass: ServerErrorInterceptor, multi: true},
     {

@@ -8,15 +8,13 @@ import {
 import * as crypto from 'crypto-js';
 import {faCheck} from '@fortawesome/free-solid-svg-icons';
 import {ActivatedRoute} from '@angular/router';
-
-import {
-  ToastService,
-  AuthService,
-  TitleService,
-  UtilsService,
-} from './../../../shared/shared.module';
-import {User} from './../../../model/user';
 import {Subscription} from 'rxjs';
+
+import {User} from './../../../model/user';
+import {AuthService} from '../../../service/auth.service';
+import {UtilsService} from '../../../service/utils.service';
+import {ToastService} from '../../../service/toast.service';
+import {TitleService} from '../../../service/title.service';
 
 @Component({
   selector: 'app-forgot',

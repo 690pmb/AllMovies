@@ -2,11 +2,11 @@ import {forkJoin, Observable, of, merge} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {map, catchError, flatMap, delay} from 'rxjs/operators';
 
-import {Url} from './../../constant/url';
-import {Paginate, List, FullList} from './../../model/model';
+import {Url} from '../constant/url';
+import {Paginate, List, FullList} from '../model/model';
 import {ToastService} from './toast.service';
 import {UtilsService} from './utils.service';
-import {MapList} from '../mapList';
+import {MapList} from '../shared/mapList';
 
 @Injectable({
   providedIn: 'root',

@@ -3,8 +3,8 @@ import {Observable, Subscription} from 'rxjs';
 
 import {Person} from '../../../model/person';
 import {ImageSize} from '../../../model/model';
-import {PersonSearchService} from '../../service/person-search.service';
-import {AuthService} from '../../service/auth.service';
+import {PersonSearchService} from '../../../service/person-search.service';
+import {AuthService} from '../../../service/auth.service';
 
 @Component({
   selector: 'app-person-search',

@@ -14,13 +14,14 @@ import {
   NgbDatepickerConfig,
   NgbDatepicker,
 } from '@ng-bootstrap/ng-bootstrap';
+import {Subscription} from 'rxjs';
 
 import {Movie} from '../../../model/movie';
-import {MovieService, TitleService} from '../../../shared/shared.module';
 import {MyNgbDate} from '../../../shared/my-ngb-date';
 import {DuckDuckGo} from '../../../constant/duck-duck-go';
 import {DetailConfig} from '../../../model/model';
-import {Subscription} from 'rxjs';
+import {MovieService} from '../../../service/movie.service';
+import {TitleService} from '../../../service/title.service';
 
 const now: Date = new Date();
 

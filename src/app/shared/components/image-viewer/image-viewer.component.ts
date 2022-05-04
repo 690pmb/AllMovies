@@ -6,7 +6,7 @@ import {
   faCompress,
 } from '@fortawesome/free-solid-svg-icons';
 
-import {MenuService} from '../../service/menu.service';
+import {MenuService} from '../../../service/menu.service';
 import {ImageSize} from '../../../model/model';
 
 @Component({

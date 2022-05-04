@@ -7,11 +7,11 @@ import {TranslateService} from '@ngx-translate/core';
 
 import {DropboxService} from './dropbox.service';
 import {ToastService} from './toast.service';
-import {Level} from './../../model/model';
+import {Level} from '../model/model';
 import {UtilsService} from './utils.service';
-import {Utils} from '../utils';
-import {Dropbox} from '../../constant/dropbox';
-import {User} from '../../model/user';
+import {Utils} from '../shared/utils';
+import {Dropbox} from '../constant/dropbox';
+import {User} from '../model/user';
 
 @Injectable({
   providedIn: 'root',

@@ -1,11 +1,11 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Router} from '@angular/router';
 import * as crypto from 'crypto-js';
-
-import {TitleService} from './../../../shared/shared.module';
-import {User} from './../../../model/user';
-import {AuthService} from '../../../shared/shared.module';
 import {Subscription} from 'rxjs';
+
+import {User} from './../../../model/user';
+import {AuthService} from '../../../service/auth.service';
+import {TitleService} from '../../../service/title.service';
 
 @Component({
   selector: 'app-change-password',

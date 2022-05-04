@@ -1,18 +1,18 @@
 import {forkJoin} from 'rxjs';
 import {Injectable} from '@angular/core';
 
-import {DiscoverCriteria} from './../../model/discover-criteria';
-import {Discover} from './../../model/discover';
-import {MapMovie} from './../../shared/mapMovie';
+import {DiscoverCriteria} from '../model/discover-criteria';
+import {Discover} from '../model/discover';
+import {MapMovie} from '../shared/mapMovie';
 import {MockService} from './mock.service';
 import {UtilsService} from './utils.service';
-import {Movie} from '../../model/movie';
-import {DetailConfig, Flag} from './../../model/model';
-import {Url} from '../../constant/url';
+import {Movie} from '../model/movie';
+import {DetailConfig, Flag} from '../model/model';
+import {Url} from '../constant/url';
 import {OmdbService} from './omdb.service';
 import {ToastService} from './toast.service';
-import {UrlBuilder} from '../../shared/urlBuilder';
-import {Utils} from '../utils';
+import {UrlBuilder} from '../shared/urlBuilder';
+import {Utils} from '../shared/utils';
 
 @Injectable({
   providedIn: 'root',
