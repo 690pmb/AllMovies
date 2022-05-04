@@ -4,17 +4,15 @@ import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BehaviorSubject, combineLatest, Subscription} from 'rxjs';
 
+import {ListService} from '../../../../service/list.service';
+import {GenreService} from '../../../../service/genre.service';
+import {TitleService} from '../../../../service/title.service';
 import {
   FullList,
   DropDownChoice,
   Genre,
   ImageSize,
 } from '../../../../model/model';
-import {
-  ListService,
-  TitleService,
-  GenreService,
-} from '../../../../shared/shared.module';
 
 @Component({
   selector: 'app-list-detail',

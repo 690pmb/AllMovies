@@ -4,12 +4,10 @@ import {Component, OnInit} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 
 import {Data} from './model/data';
-import {
-  AuthService,
-  MyDatasService,
-  MyTagsService,
-  TabsService,
-} from './shared/shared.module';
+import {TabsService} from './service/tabs.service';
+import {AuthService} from './service/auth.service';
+import {MyDatasService} from './service/my-datas.service';
+import {MyTagsService} from './service/my-tags.service';
 
 @Component({
   selector: 'app-root',

@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import {HttpHeaders, HttpClient} from '@angular/common/http';
 
 import {ToastService} from './toast.service';
-import {Level} from './../../model/model';
+import {Level} from '../model/model';
 
 @Injectable({
   providedIn: 'root',

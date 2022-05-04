@@ -18,19 +18,17 @@ import {
   OnDestroy,
 } from '@angular/core';
 import {faSave} from '@fortawesome/free-regular-svg-icons';
+import {Subscription} from 'rxjs';
 
 import {Utils} from './../../../../shared/utils';
-import {
-  MyDatasService,
-  MyTagsService,
-  AuthService,
-  MenuService,
-  ToastService,
-} from './../../../../shared/shared.module';
 import {Data} from './../../../../model/data';
 import {Level, ImageSize} from './../../../../model/model';
 import {Tag, TagData} from './../../../../model/tag';
-import {Subscription} from 'rxjs';
+import {MyTagsService} from '../../../../service/my-tags.service';
+import {MyDatasService} from '../../../../service/my-datas.service';
+import {ToastService} from '../../../../service/toast.service';
+import {AuthService} from '../../../../service/auth.service';
+import {MenuService} from '../../../../service/menu.service';
 
 @Component({
   selector: 'app-tag-datas',

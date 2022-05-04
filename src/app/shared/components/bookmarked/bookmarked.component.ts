@@ -10,7 +10,8 @@ import {
 } from '@angular/core';
 import {faStar} from '@fortawesome/free-solid-svg-icons';
 import {Subscription} from 'rxjs';
-import {MyDatasService} from '../../service/my-datas.service';
+
+import {MyDatasService} from '../../../service/my-datas.service';
 import {Data} from '../../../model/data';
 
 @Component({

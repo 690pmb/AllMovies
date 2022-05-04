@@ -9,8 +9,8 @@ import {
   faMinusSquare,
   faImage,
 } from '@fortawesome/free-solid-svg-icons';
+import {Subscription} from 'rxjs';
 
-import {PersonService, TitleService} from '../../../shared/shared.module';
 import {DropDownChoice, ImageSize} from './../../../model/model';
 import {Person} from '../../../model/person';
 import {Job} from './../../../constant/job';
@@ -18,7 +18,8 @@ import {Url} from '../../../constant/url';
 import {DuckDuckGo} from '../../../constant/duck-duck-go';
 import {Utils} from '../../../shared/utils';
 import {Data} from '../../../model/data';
-import {Subscription} from 'rxjs';
+import {PersonService} from '../../../service/person.service';
+import {TitleService} from '../../../service/title.service';
 
 @Component({
   selector: 'app-person-detail',

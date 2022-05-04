@@ -2,9 +2,9 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {map, catchError} from 'rxjs/operators';
 
-import {MapMovie} from './../../shared/mapMovie';
-import {Url} from './../../constant/url';
-import {Movie} from './../../model/movie';
+import {MapMovie} from '../shared/mapMovie';
+import {Url} from '../constant/url';
+import {Movie} from '../model/movie';
 import {ToastService} from './toast.service';
 import {UtilsService} from './utils.service';
 

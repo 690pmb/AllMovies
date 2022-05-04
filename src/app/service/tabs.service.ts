@@ -2,7 +2,7 @@ import {BehaviorSubject} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {Router, NavigationStart} from '@angular/router';
 
-import {Link} from './../../model/model';
+import {Link} from '../model/model';
 
 @Injectable({
   providedIn: 'root',

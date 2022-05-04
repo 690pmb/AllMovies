@@ -3,8 +3,8 @@ import {Observable, Subscription} from 'rxjs';
 
 import {Movie} from '../../../model/movie';
 import {ImageSize} from '../../../model/model';
-import {MovieSearchService} from '../../service/movie-search.service';
-import {AuthService} from '../../service/auth.service';
+import {MovieSearchService} from '../../../service/movie-search.service';
+import {AuthService} from '../../../service/auth.service';
 
 @Component({
   selector: 'app-movie-search',

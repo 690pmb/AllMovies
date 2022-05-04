@@ -22,11 +22,11 @@ import {
 import {MediaMatcher} from '@angular/cdk/layout';
 import {MatSidenav, MatSidenavContent} from '@angular/material/sidenav';
 
-import {TabsService} from './../../service/tabs.service';
+import {TabsService} from '../../../service/tabs.service';
 import {Constants} from './../../../constant/constants';
-import {AuthService} from '../../service/auth.service';
+import {AuthService} from '../../../service/auth.service';
 import {User} from '../../../model/user';
-import {MenuService} from '../../service/menu.service';
+import {MenuService} from '../../../service/menu.service';
 
 @Component({
   selector: 'app-menu',

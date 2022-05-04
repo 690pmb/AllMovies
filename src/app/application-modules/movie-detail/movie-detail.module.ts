@@ -46,7 +46,6 @@ const childRoutes: Routes = [
   exports: [MovieDetailComponent],
   declarations: [MovieDetailComponent, ListsComponent, ListDetailComponent],
   providers: [
-    TranslateService,
     {
       provide: MatPaginatorIntl,
       useFactory: (translate: TranslateService): MyPaginator =>

@@ -1,8 +1,9 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-
-import {AuthService, TitleService} from './../../../shared/shared.module';
-import {User} from './../../../model/user';
 import {Subscription} from 'rxjs';
+
+import {User} from './../../../model/user';
+import {AuthService} from '../../../service/auth.service';
+import {TitleService} from '../../../service/title.service';
 
 @Component({
   selector: 'app-profile',

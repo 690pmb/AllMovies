@@ -2,8 +2,8 @@ import {Observable} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {map, catchError} from 'rxjs/operators';
 
-import {Url} from './../../constant/url';
-import {Genre} from './../../model/model';
+import {Url} from '../constant/url';
+import {Genre} from '../model/model';
 import {ToastService} from './toast.service';
 import {UtilsService} from './utils.service';
 

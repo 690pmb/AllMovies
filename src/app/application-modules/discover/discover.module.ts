@@ -54,7 +54,6 @@ const childRoutes: Routes = [
     MatButtonToggleModule,
   ],
   providers: [
-    TranslateService,
     {
       provide: MatPaginatorIntl,
       useFactory: (translate: TranslateService): MyPaginator =>

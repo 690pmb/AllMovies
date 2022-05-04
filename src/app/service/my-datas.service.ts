@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 
-import {Dropbox} from '../../constant/dropbox';
+import {Dropbox} from '../constant/dropbox';
 import {DropboxService} from './dropbox.service';
-import {Data, DataI18N} from './../../model/data';
+import {Data, DataI18N} from '../model/data';
 import {AuthService} from './auth.service';
-import {Level} from '../../model/model';
+import {Level} from '../model/model';
 import {UtilsService} from './utils.service';
 import {ToastService} from './toast.service';
-import {Utils} from '../utils';
+import {Utils} from '../shared/utils';
 
 @Injectable({
   providedIn: 'root',

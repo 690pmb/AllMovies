@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 import {faTimes} from '@fortawesome/free-solid-svg-icons';
 
-import {SearchService} from '../../../../shared/service/search.service';
+import {SearchService} from '../../../../service/search.service';
 import {ImageSize} from '../../../../model/model';
 
 interface IdClass {

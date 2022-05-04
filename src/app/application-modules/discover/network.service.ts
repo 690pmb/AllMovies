@@ -2,9 +2,9 @@ import {Observable, from} from 'rxjs';
 import {Injectable} from '@angular/core';
 
 import {Utils} from './../../shared/utils';
-import {MockService} from './../../shared/shared.module';
-import {SearchService} from './../../shared/service/search.service';
+import {SearchService} from '../../service/search.service';
 import {Network} from './../../model/model';
+import {MockService} from '../../service/mock.service';
 
 @Injectable({providedIn: 'root'})
 export class NetworkService implements SearchService<Network> {

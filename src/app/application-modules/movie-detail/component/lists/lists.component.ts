@@ -16,8 +16,8 @@ import {SwiperConfigInterface} from 'ngx-swiper-wrapper';
 
 import {Constants} from './../../../../constant/constants';
 import {Utils} from './../../../../shared/utils';
-import {ListService} from './../../../../shared/shared.module';
 import {List, ImageSize} from './../../../../model/model';
+import {ListService} from '../../../../service/list.service';
 
 @Component({
   selector: 'app-lists',

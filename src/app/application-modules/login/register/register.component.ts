@@ -3,8 +3,9 @@ import * as crypto from 'crypto-js';
 import {ActivatedRoute} from '@angular/router';
 
 import {User} from '../../../model/user';
-import {AuthService, TitleService} from '../../../shared/shared.module';
 import {Lang} from '../../../model/model';
+import {AuthService} from '../../../service/auth.service';
+import {TitleService} from '../../../service/title.service';
 
 @Component({
   selector: 'app-register',

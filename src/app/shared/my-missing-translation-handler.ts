@@ -5,7 +5,7 @@ import {
 } from '@ngx-translate/core';
 import {Injectable, Injector} from '@angular/core';
 
-import {DropboxService} from './service/dropbox.service';
+import {DropboxService} from '../service/dropbox.service';
 import {Dropbox} from '../constant/dropbox';
 import {Constants} from '../constant/constants';
 import {Utils} from './utils';
