@@ -1,5 +1,7 @@
 import {Score} from './score';
 import {Genre, Keyword, AlternativeTitle} from './model';
+import {Movie} from './movie';
+import {Serie} from './serie';
 
 export class DataI18N {
   constructor(
@@ -16,7 +18,7 @@ export class Data {
   affiche!: string;
   overview!: string;
   genres: Genre[] = [];
-  translation!: Map<string, DataI18N>; // key!: lang
+  translation!: Map<string, DataI18N>; // key: lang
   score!: Score;
   imdb_id!: string;
   popularity!: number;
@@ -41,5 +43,13 @@ export class Data {
   removeFields(key: string, value: string): string | undefined {
     console.log('removeFields');
     return value;
+  }
+
+  movie(): this is Movie {
+    return this.isMovie;
+  }
+
+  serie(): this is Serie {
+    return !this.isMovie;
   }
 }

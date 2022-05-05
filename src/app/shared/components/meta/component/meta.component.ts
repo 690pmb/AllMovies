@@ -1,34 +1,34 @@
 import {TranslateService} from '@ngx-translate/core';
-import {BehaviorSubject} from 'rxjs';
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {parse} from 'node-html-parser';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 
 import {Utils} from './../../../utils';
 import {MetaService} from './../service/meta.service';
 import {DuckDuckGo, Search} from '../../../../constant/duck-duck-go';
 import {Score} from '../../../../model/score';
 import {Person} from '../../../../model/person';
-import {Movie} from '../../../../model/movie';
-import {Serie} from '../../../../model/serie';
 import {Data} from '../../../../model/data';
+import {switchMap, map} from 'rxjs/operators';
+import {of, forkJoin} from 'rxjs';
 
-type Datas = Movie | Serie | Person;
+type Datas = Data | Person;
+
+type Result = {url: string; site: string; icon: any; key: string};
 
 @Component({
   selector: 'app-meta',
   templateUrl: './meta.component.html',
   styleUrls: ['./meta.component.scss'],
 })
-export class MetaComponent implements OnInit {
-  _entry = new BehaviorSubject<Datas>(undefined);
+export class MetaComponent implements OnChanges {
   @Input()
-  set entry(value: Datas) {
-    this._entry.next(value);
-  }
-
-  get entry(): Datas {
-    return this._entry.getValue();
-  }
+  entry: Datas;
 
   @Input()
   sites: Search[] = [];
@@ -44,63 +44,96 @@ export class MetaComponent implements OnInit {
 
   links: Search[] = [];
 
+  results: Result[] = [];
+
+  id = 0;
+
   constructor(
     private metaService: MetaService,
     private translate: TranslateService
   ) {}
 
-  ngOnInit(): void {
-    this._entry.subscribe(() => {
-      let term: string;
-      let original: string;
-      let itemLang: string;
-      if (this.isMovie || this.isSerie) {
-        // if serie or movie
-        const data = this.entry as Data;
-        term = data.title;
-        original = data.original_title;
-        itemLang = this.isMovie
-          ? (this.entry as Movie).spokenLangs[0].code.toLowerCase()
-          : (this.entry as Serie).originLang.toLowerCase();
-      } else {
-        // if person
-        term = (this.entry as Person).name;
-      }
-      this.links = [];
-      this.sites.forEach(site => {
-        this.metaService
-          .getLinkScore(
-            term,
-            original,
-            this.translate.currentLang,
-            itemLang,
-            site.site,
-            this.entry.imdb_id,
-            this.isMovie,
-            this.isSerie
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.entry) {
+      if (
+        changes.entry &&
+        (changes.entry.currentValue as Datas).id !== this.id
+      ) {
+        this.entry = changes.entry.currentValue;
+        this.id = this.entry.id;
+        let term: string;
+        let original: string;
+        let itemLang: string;
+        if (this.isPerson(this.entry)) {
+          term = this.entry.name;
+        } else {
+          term = this.entry.title;
+          original = this.entry.original_title;
+          if (this.entry.movie()) {
+            itemLang = this.entry.spokenLangs[0].code.toLowerCase();
+          } else if (this.entry.serie()) {
+            itemLang = this.entry.originLang.toLowerCase();
+          }
+        }
+        forkJoin(
+          this.sites.map(site =>
+            this.metaService
+              .getLinkScore(
+                term,
+                original,
+                this.translate.currentLang,
+                itemLang,
+                site.site,
+                this.entry.imdb_id,
+                this.isMovie,
+                this.isSerie
+              )
+              .pipe(
+                switchMap(result => {
+                  if (!result && (this.isMovie || this.isSerie)) {
+                    return this.metaService.getLinkScore(
+                      original,
+                      term,
+                      this.translate.currentLang,
+                      itemLang,
+                      site.site,
+                      undefined,
+                      this.isMovie,
+                      this.isSerie
+                    );
+                  } else {
+                    return of(result);
+                  }
+                }),
+                map(result => ({
+                  url: result,
+                  site: site.site,
+                  icon: site.icon,
+                  key: site.key,
+                }))
+              )
           )
-          .then(result => {
-            if (!result && (this.isMovie || this.isSerie)) {
-              this.metaService
-                .getLinkScore(
-                  original,
-                  term,
-                  this.translate.currentLang,
-                  itemLang,
-                  site.site,
-                  undefined,
-                  this.isMovie,
-                  this.isSerie
-                )
-                .then(result_2 => {
-                  this.handleResult(result_2, site);
-                });
-            } else {
-              this.handleResult(result, site);
-            }
-          });
-      });
+        ).subscribe(results => this.handleResult(results));
+      }
+    }
+  }
+
+  handleResult(results: Result[]): void {
+    this.links = results.map(result => {
+      const link: Search = {
+        site: result.url,
+        icon: result.icon,
+        key: result.site,
+      };
+      if (
+        result.site === DuckDuckGo.SEARCH_BANG_SENSCRITIQUE.site &&
+        (this.isMovie || this.isSerie)
+      ) {
+        this.scSearch(result.url);
+      }
+      return link;
     });
+    this.links.sort((a, b) => Utils.compare(a.key, b.key, false));
   }
 
   scSearch(url: string): void {
@@ -113,8 +146,14 @@ export class MetaComponent implements OnInit {
         }
       })
       .then(data => {
-        const score = this.scrapping(data.contents, '.gOdLCC');
-        const vote = this.scrapping(data.contents, '.lhjmGg, .iqaSNz');
+        const score = this.scrapping(
+          data.contents,
+          /(\d{1,2}\.\d\/10)|(\d{1,2}\/10)/g
+        );
+        const vote = this.scrapping(
+          data.contents,
+          /<span>(\(\d+,\d{1,3}\))|(\(\d{1,3}\))<\/span>/g
+        ).replace(/<\/?span>/g, '');
         if (score) {
           this.sensCritique.emit(
             new Score(
@@ -128,29 +167,20 @@ export class MetaComponent implements OnInit {
       });
   }
 
-  scrapping(html: string, selector: string): string {
-    const selected = parse(html).querySelector(selector);
-    let data;
+  scrapping(html: string, reg: RegExp): string {
+    const selected = html.match(reg);
+    let data = '';
     if (selected) {
-      data = selected.rawText.replace(/(\r\n|\n|\r|\t|\n\t)/gm, '');
+      data = selected[0].replace(/(\r\n|\n|\r|\t|\n\t)/gm, '');
     }
     return data;
   }
 
-  handleResult(result: string, site: Search): void {
-    this.links.push({site: result, icon: site.icon, key: site.site});
-    this.links.sort((a, b) => Utils.compare(a.key, b.key, false));
-    if (
-      site.site === DuckDuckGo.SEARCH_BANG_SENSCRITIQUE.site &&
-      (this.isMovie || this.isSerie)
-    ) {
-      this.scSearch(result);
-    }
+  openAll(): void {
+    this.links.slice(0, 4).forEach(link => window.open(link.site));
   }
 
-  openAll(): void {
-    this.links.slice(0, 4).forEach(link => {
-      window.open(link.site);
-    });
+  isPerson(data: Datas): data is Person {
+    return !this.isMovie && !this.isSerie;
   }
 }

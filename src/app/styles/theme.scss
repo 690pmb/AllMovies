@@ -4,6 +4,12 @@
 
 .btn {
   @include mat-elevation(2);
+
+  &:hover {
+    fa-icon {
+      color: white;
+    }
+  }
 }
 
 $palette-primary: mat-palette(
