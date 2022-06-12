@@ -2,6 +2,7 @@ import {Data} from './data';
 import {ReleaseDate, Lang} from './model';
 
 export class Movie extends Data {
+  isMovie = true;
   date!: string;
   adult!: boolean;
   time!: number;

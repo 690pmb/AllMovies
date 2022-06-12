@@ -4,6 +4,7 @@ import {Person} from './person';
 import {Season} from './season';
 
 export class Serie extends Data {
+  isMovie = false;
   originLang!: string;
   originCountries: string[] = [];
   creators: Person[] = [];

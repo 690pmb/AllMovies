@@ -84,35 +84,42 @@ export class MovieService {
               config.video) ||
             !movie.original_title)
         ) {
-          return this.getMovie(
-            id,
-            new DetailConfig(
-              false,
-              false,
-              false,
-              false,
-              config.video,
-              false,
-              false,
-              false,
-              false,
-              'en'
-            ),
-            false
-          ).then(enMovie => {
-            movie.overview = Utils.isBlank(movie.overview)
-              ? enMovie.overview
-              : movie.overview;
-            movie.videos =
-              movie.videos && movie.videos.length > 0
-                ? movie.videos
-                : enMovie.videos;
-            movie.original_title = Utils.isBlank(movie.original_title)
-              ? enMovie.original_title
-              : movie.original_title;
-            movie.score = enMovie.score;
-            return movie;
-          });
+          return this.serviceUtils
+            .getPromise(
+              UrlBuilder.detailUrlBuilder(
+                true,
+                id,
+                config.video,
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+                undefined,
+                false,
+                'en'
+              )
+            )
+            .then(enMovie => {
+              const resp = MapMovie.mapForMovie(enMovie, this.mockService);
+              resp.lang_version = config.lang ?? movie.lang_version;
+              return resp;
+            })
+            .then(enMovie => {
+              movie.overview = Utils.isBlank(movie.overview)
+                ? enMovie.overview
+                : movie.overview;
+              movie.videos =
+                movie.videos && movie.videos.length > 0
+                  ? movie.videos
+                  : enMovie.videos;
+              movie.original_title = Utils.isBlank(movie.original_title)
+                ? enMovie.original_title
+                : movie.original_title;
+              movie.score = enMovie.score;
+              return movie;
+            });
         } else {
           return this.getImdbScore(movie);
         }
