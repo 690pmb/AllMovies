@@ -11,6 +11,10 @@
     &:hover {
       color: $true_white;
       background-color: $blue;
+
+      fa-icon {
+        color: white;
+      }
     }
   }
 }

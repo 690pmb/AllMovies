@@ -1,4 +1,4 @@
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {HttpParams} from '@angular/common/http';
 import {map, catchError} from 'rxjs/operators';
@@ -26,7 +26,7 @@ export class MetaService {
     imdbId: string,
     isMovie: boolean,
     isSerie: boolean
-  ): Promise<string> {
+  ): Observable<string> {
     const workingTitle =
       (userLang === 'fr' &&
         ['gb', 'en'].includes(itemLang) &&
@@ -47,25 +47,22 @@ export class MetaService {
       site === DuckDuckGo.SEARCH_BANG_WIKI_EN.site ||
       site === DuckDuckGo.SEARCH_BANG_WIKI_FR.site
     ) {
-      return this.wikisearch(workingTitle, site).toPromise();
+      return this.wikisearch(workingTitle, site);
     } else if (site === DuckDuckGo.SEARCH_BANG_IMDB.site && imdbId) {
-      return new Promise(resolve =>
-        resolve(
-          Constants.IMDB_URL +
-            (isMovie || isSerie
-              ? Constants.IMDB_MOVIE_SUFFIX
-              : Constants.IMDB_PERSON_SUFFIX) +
-            imdbId
-        )
+      return of(
+        Constants.IMDB_URL +
+          (isMovie || isSerie
+            ? Constants.IMDB_MOVIE_SUFFIX
+            : Constants.IMDB_PERSON_SUFFIX) +
+          imdbId
       );
     } else {
       let url = DuckDuckGo.DUCKDUCKGO_URL + site + '+';
       url +=
         UtilsService.encodeQueryUrl(workingTitle) +
         '&format=json&no_redirect=1';
-      return this.serviceUtils
-        .getPromise(url)
-        .then((data: any) => {
+      return this.serviceUtils.getObservable(url).pipe(
+        map((data: any) => {
           let result = <string>data.Redirect;
           if (site === DuckDuckGo.SEARCH_BANG_METACRITIC.site) {
             if (isMovie) {
@@ -76,19 +73,12 @@ export class MetaService {
               result = result.replace('/all/', '/person/');
             }
           } else if (site === DuckDuckGo.SEARCH_BANG_SENSCRITIQUE.site) {
-            if (isMovie) {
-              result = result.replace('recherche?query', 'search?q');
-              result += '&categories[0][0]=Films';
-            } else if (isSerie) {
-              result = result.replace('recherche?query', 'search?q');
-              result += '&categories[0][0]=Séries';
-            } else {
-              result = result.replace('recherche?query', 'searchArtist?q');
-            }
+            result = `https://www.google.com/search?q=${workingTitle}+site%3Asenscritique.com`;
           }
           return result;
-        })
-        .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
+        }),
+        catchError(err => this.serviceUtils.handlePromiseError(err, this.toast))
+      );
     }
   }
 
@@ -102,7 +92,6 @@ export class MetaService {
       site === DuckDuckGo.SEARCH_BANG_WIKI_EN.site ? 'en' : 'fr'
     }.wikipedia.org/w/api.php?${params.toString()}`;
 
-    console.log('meta', url);
     return this.serviceUtils.jsonpObservable(url, 'callback').pipe(
       map(response => response[3][0]),
       catchError(err => this.serviceUtils.handlePromiseError(err, this.toast))
