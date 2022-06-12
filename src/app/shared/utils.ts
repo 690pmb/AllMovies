@@ -358,7 +358,10 @@ export class Utils {
     return new Map(JSON.parse(json));
   }
 
-  static imageExists(id: number, url: string): Promise<any> {
+  static imageExists(
+    id: number,
+    url: string
+  ): Promise<{id: number; result: boolean}> {
     const img = new Image();
     return new Promise(resolve => {
       img.onload = () => resolve({id: id, result: true});

@@ -1,7 +1,7 @@
 /* tslint:disable:no-string-literal */
 import {ActivatedRoute, Router} from '@angular/router';
 import {Component, OnInit, OnDestroy, ElementRef} from '@angular/core';
-import {forkJoin, BehaviorSubject, Observable, Subscription} from 'rxjs';
+import {forkJoin, BehaviorSubject, Observable, Subscription, from} from 'rxjs';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {Sort} from '@angular/material/sort';
 import {TranslateService, LangChangeEvent} from '@ngx-translate/core';
@@ -125,11 +125,14 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
     this.formatter = Utils.timeSliderFormatter;
     this.subs.push(
       this.activeRoute.data.subscribe(data => {
+        this.allDatas = data.dataList;
         this.isMovie = data.isMovie;
         this.initColumns();
         this.observeScreenSize();
-        const times = data.dataList
-          .map(d => (this.isMovie ? d['time'] : d['runtimes'][0]))
+        const times = this.allDatas
+          .map(d =>
+            this.movie(d) ? d?.time : this.serie(d) ? d?.runtimes[0] : undefined
+          )
           .filter(d => d !== undefined && d !== null);
         this.maxRuntime = times.reduce((a, b) => (a > b ? a : b));
         this.runtimeRange = [0, this.maxRuntime];
@@ -138,10 +141,10 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
           active: this.isMovie ? 'added' : 'firstAired',
           direction: 'desc',
         };
-        this.getDatas(this.translate.currentLang, data.dataList);
+        this.getDatas(this.translate.currentLang);
         this.subs.push(
           this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-            this.getDatas(event.lang, data.dataList);
+            this.getDatas(event.lang);
           })
         );
         this.subs.push(
@@ -201,8 +204,7 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
     this.displayedColumns = this.init_columns;
   }
 
-  getDatas(lang: string, datas: T[]): void {
-    this.allDatas = datas;
+  getDatas(lang: string): void {
     this.length = this.allDatas.length;
     this.getAllGenres(lang);
   }
@@ -374,48 +376,52 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
    * @param  {T[]} datas datas to check
    * @param  {string} lang the lang to request the data to
    */
-  checkAndFixData(datas: T[], lang: string): void {
+  checkAndFixData(datas: Data[], lang: string): void {
     let incomplete: number[] = [];
     const twoMonthsAgo = moment().add(-2, 'months');
     try {
-      for (const data of datas) {
-        const tr = data.translation.get(lang);
-        let isNoTime = false;
-        if (data instanceof Movie) {
-          isNoTime = (<Movie>data).time === undefined;
-        } else if (data instanceof Serie) {
-          isNoTime = (<Serie>data).runtimes === undefined;
-        }
-        if (
-          (isNoTime || tr.category === undefined || data.score === undefined) &&
-          (data.updated === undefined ||
-            moment(data.updated).isBefore(twoMonthsAgo))
-        ) {
-          incomplete.push(data.id);
-        }
-      }
+      datas
+        .filter(data => {
+          let isNoTime = false;
+          if (this.movie(data)) {
+            isNoTime = data.time === undefined;
+          } else if (this.serie(data)) {
+            isNoTime = data.runtimes === undefined;
+          }
+          const translation = data.translation.get(lang);
+          return (
+            (isNoTime ||
+              translation.category === undefined ||
+              data.score === undefined) &&
+            (data.updated === undefined ||
+              moment(data.updated).isBefore(twoMonthsAgo))
+          );
+        })
+        .map(data => data.id);
     } catch (err) {
       console.error(err);
     }
-    forkJoin(
-      datas.map(d =>
-        Utils.imageExists(
-          d.id,
-          this.imagePipe.transform(
-            d.translation.get(lang).poster,
-            ImageSize.small
+    this.subs.push(
+      forkJoin(
+        datas.map(d =>
+          Utils.imageExists(
+            d.id,
+            this.imagePipe.transform(
+              d.translation.get(lang).poster,
+              ImageSize.small
+            )
           )
         )
-      )
-    ).subscribe((exists: any[]) => {
-      exists.forEach(e => {
-        if (e.result === false && !incomplete.includes(e.id)) {
-          incomplete.push(e.id);
-        }
-      });
-      incomplete = incomplete.slice(0, 15);
-      this.updateDatas(incomplete, lang);
-    });
+      ).subscribe(exists => {
+        exists.forEach(e => {
+          if (e.result === false && !incomplete.includes(e.id)) {
+            incomplete.push(e.id);
+          }
+        });
+        incomplete = incomplete.slice(0, 15);
+        this.updateDatas(incomplete, lang);
+      })
+    );
   }
 
   updateDatas(toUpdate: number[], lang: string): void {
@@ -434,7 +440,7 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
               up.added = this.allDatas[index].added;
               this.allDatas[index] = up;
             });
-            this.paginate(this.refreshData());
+            this.refreshData();
           });
         },
         err => console.error(err)
@@ -444,8 +450,8 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
     }
   }
 
-  download(toDownload: number[], lang: string): Observable<T>[] {
-    const obs = [];
+  download(toDownload: number[], lang: string): Observable<Data>[] {
+    const obs: Observable<Data>[] = [];
     const otherLang = lang === 'fr' ? 'en' : 'fr';
     const conf1 = new DetailConfig(
       false,
@@ -473,11 +479,11 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
     );
     toDownload.forEach((id: number) => {
       if (this.isMovie) {
-        obs.push(this.movieService.getMovie(id, conf1, false));
-        obs.push(this.movieService.getMovie(id, conf2, false));
+        obs.push(from(this.movieService.getMovie(id, conf1, false)));
+        obs.push(from(this.movieService.getMovie(id, conf2, false)));
       } else {
-        obs.push(this.serieService.getSerie(id, conf1, false));
-        obs.push(this.serieService.getSerie(id, conf2, false));
+        obs.push(from(this.serieService.getSerie(id, conf1, false)));
+        obs.push(from(this.serieService.getSerie(id, conf2, false)));
       }
     });
     return obs;
@@ -561,6 +567,14 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
 
   onTop(): void {
     this.elemRef.nativeElement.querySelector('.filters').scrollIntoView();
+  }
+
+  movie(d: Data): d is Movie {
+    return this.isMovie;
+  }
+
+  serie(d: Data): d is Serie {
+    return !this.isMovie;
   }
 
   ngOnDestroy(): void {
