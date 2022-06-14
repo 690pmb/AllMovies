@@ -69,7 +69,7 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
   tags: Tag[];
   filteredTags: number[];
   length: number;
-  maxRuntime = 1;
+  maxRuntime?: number;
   runtimeRange: any[] = [0, 1];
   formatter: NouiFormatter;
   displayedData: T[] = [];
@@ -126,26 +126,25 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
     this.subs.push(
       this.activeRoute.data.subscribe(data => {
         this.allDatas = data.dataList;
+        this.length = this.allDatas.length;
         this.isMovie = data.isMovie;
         this.initColumns();
         this.observeScreenSize();
         const times = this.allDatas
-          .map(d =>
-            this.movie(d) ? d?.time : this.serie(d) ? d?.runtimes[0] : undefined
-          )
+          .map(d => this.getTime(d))
           .filter(d => d !== undefined && d !== null);
-        this.maxRuntime = times.reduce((a, b) => (a > b ? a : b));
+        this.maxRuntime = times.reduce((a, b) => (a > b ? a : b), 0);
         this.runtimeRange = [0, this.maxRuntime];
         this.title.setTitle('title.' + (this.isMovie ? 'movies' : 'series'));
         this.sort = {
           active: this.isMovie ? 'added' : 'firstAired',
           direction: 'desc',
         };
-        this.getDatas(this.translate.currentLang);
+        this.getAllGenres(this.translate.currentLang);
         this.subs.push(
-          this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-            this.getDatas(event.lang);
-          })
+          this.translate.onLangChange.subscribe((event: LangChangeEvent) =>
+            this.getAllGenres(event.lang)
+          )
         );
         this.subs.push(
           this.activeRoute.queryParams.subscribe(params => {
@@ -204,11 +203,6 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
     this.displayedColumns = this.init_columns;
   }
 
-  getDatas(lang: string): void {
-    this.length = this.allDatas.length;
-    this.getAllGenres(lang);
-  }
-
   getTags(): void {
     this.subs.push(
       this.myTagsService.myTags$.subscribe(tags => (this.tags = tags))
@@ -236,8 +230,8 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
   refreshData(): T[] {
     let list = this.filterGenres();
     list = this.filterTags(list);
-    list = list.filter(data => {
-      const time = this.isMovie ? data['time'] : data['runtimes'][0];
+    list = list.filter(d => {
+      const time = this.getTime(d);
       return (
         (time >= this.runtimeRange[0] && time <= this.runtimeRange[1]) ||
         (this.runtimeRange[0] === 0 && !time)
@@ -280,6 +274,14 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
     this.isIndeterminate = false;
     this.updateSizeChecked();
     return list;
+  }
+
+  getTime(data: T): number {
+    return this.movie(data)
+      ? data?.time
+      : this.serie(data)
+      ? data?.runtimes[0]
+      : undefined;
   }
 
   paginate(data: T[]): void {

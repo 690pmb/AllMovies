@@ -11,7 +11,10 @@ export class Utils {
     },
     from(time: string): number {
       const res = Utils.convertTimeStringToNumber(time);
-      return isNaN(res) ? 0 : res;
+      if (isNaN(res)) {
+        return +time;
+      }
+      return res;
     },
   };
 

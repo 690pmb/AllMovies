@@ -90,14 +90,15 @@ export class MyDatasService<T extends Data> {
     );
   }
 
-  getAll(isMovie: boolean): void {
+  getAll(isMovie: boolean): Promise<T[]> {
     console.log('getAll');
-    this.getFileName(isMovie)
+    return this.getFileName(isMovie)
       .then((fileName: string) => this.dropboxService.downloadRaw(fileName))
       .then((datasFromFile: string) => this.fromJson(datasFromFile))
       .then((datas: T[]) => {
         console.log(isMovie ? 'movies' : 'series', datas);
         this.next(datas, isMovie);
+        return datas;
       })
       .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
   }
@@ -262,6 +263,24 @@ export class MyDatasService<T extends Data> {
         this.serviceUtils.handleError(err, this.toast);
         return [];
       });
+  }
+
+  removeDuplicate(data: T[], isMovie: boolean): Promise<T[]> {
+    const groupById = Utils.groupBy(data, 'id');
+    const duplication = groupById.filter(g => g.items.length > 1);
+    if (duplication.length > 1) {
+      console.error(
+        `There are ${duplication.length} duplications in ${
+          isMovie ? 'movies' : 'series'
+        } !`
+      );
+      return this.update(
+        groupById.map(g => g.items[0]),
+        isMovie
+      );
+    } else {
+      return new Promise(resolve => resolve(data));
+    }
   }
 
   next(datas: T[], isMovie: boolean): void {

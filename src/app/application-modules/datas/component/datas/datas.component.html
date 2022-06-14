@@ -1,6 +1,6 @@
 <h2>{{ (isMovie ? 'movies' : 'series') + '.header' | translate }}:</h2>
 
-<ng-container *ngIf="allDatas">
+<ng-container *ngIf="allDatas && sort && maxRuntime">
   <div class="filters">
     <!-- Input Filter -->
     <div class="filter-item">
