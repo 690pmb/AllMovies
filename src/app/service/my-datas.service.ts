@@ -275,7 +275,15 @@ export class MyDatasService<T extends Data> {
         } !`
       );
       return this.update(
-        groupById.map(g => g.items[0]),
+        groupById.map(g => {
+          if (g.items.length > 1) {
+            return g.items[0].updated > g.items[1].updated
+              ? g.items[0]
+              : g.items[1];
+          } else {
+            return g.items[0];
+          }
+        }),
         isMovie
       );
     } else {
