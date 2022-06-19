@@ -11,7 +11,10 @@ export class Utils {
     },
     from(time: string): number {
       const res = Utils.convertTimeStringToNumber(time);
-      return isNaN(res) ? 0 : res;
+      if (isNaN(res)) {
+        return +time;
+      }
+      return res;
     },
   };
 
@@ -358,7 +361,10 @@ export class Utils {
     return new Map(JSON.parse(json));
   }
 
-  static imageExists(id: number, url: string): Promise<any> {
+  static imageExists(
+    id: number,
+    url: string
+  ): Promise<{id: number; result: boolean}> {
     const img = new Image();
     return new Promise(resolve => {
       img.onload = () => resolve({id: id, result: true});
