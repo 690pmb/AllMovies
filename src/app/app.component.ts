@@ -34,8 +34,12 @@ export class AppComponent implements OnInit {
     this.auth.getCurrentUser(false);
     this.auth.user$.subscribe(user => {
       if (user) {
-        this.myDatasService.getAll(true);
-        this.myDatasService.getAll(false);
+        this.myDatasService
+          .getAll(true)
+          .then(d => this.myDatasService.removeDuplicate(d, true));
+        this.myDatasService
+          .getAll(false)
+          .then(d => this.myDatasService.removeDuplicate(d, false));
         this.myTagsService.getAll();
         this.translate.use(user.lang.code);
       }
