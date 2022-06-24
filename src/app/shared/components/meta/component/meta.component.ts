@@ -16,6 +16,8 @@ import {Person} from '../../../../model/person';
 import {Data} from '../../../../model/data';
 import {switchMap, map} from 'rxjs/operators';
 import {of, forkJoin} from 'rxjs';
+import {ToastService} from '../../../../service/toast.service';
+import {Level} from '../../../../model/model';
 
 type Datas = Data | Person;
 
@@ -50,7 +52,8 @@ export class MetaComponent implements OnChanges {
 
   constructor(
     private metaService: MetaService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private toast: ToastService
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -163,17 +166,14 @@ export class MetaComponent implements OnChanges {
               vote
             )
           );
+        } else if (this.scrapping(data.contents, /captcha/g)) {
+          this.toast.open(Level.warning, 'meta.captcha');
         }
       });
   }
 
   scrapping(html: string, reg: RegExp): string {
-    const selected = html.match(reg);
-    let data = '';
-    if (selected) {
-      data = selected[0].replace(/(\r\n|\n|\r|\t|\n\t)/gm, '');
-    }
-    return data;
+    return html.match(reg)?.[0].replace(/(\r\n|\n|\r|\t|\n\t)/gm, '') ?? '';
   }
 
   openAll(): void {

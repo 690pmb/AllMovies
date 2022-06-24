@@ -44,8 +44,10 @@ export class MetaService {
         : title;
 
     if (
-      site === DuckDuckGo.SEARCH_BANG_WIKI_EN.site ||
-      site === DuckDuckGo.SEARCH_BANG_WIKI_FR.site
+      [
+        DuckDuckGo.SEARCH_BANG_WIKI_EN.site,
+        DuckDuckGo.SEARCH_BANG_WIKI_FR.site,
+      ].includes(site)
     ) {
       return this.wikisearch(workingTitle, site);
     } else if (site === DuckDuckGo.SEARCH_BANG_IMDB.site && imdbId) {
@@ -56,11 +58,15 @@ export class MetaService {
             : Constants.IMDB_PERSON_SUFFIX) +
           imdbId
       );
+    } else if (site === DuckDuckGo.SEARCH_BANG_SENSCRITIQUE.site) {
+      return of(
+        `${DuckDuckGo.GOOGLE_SEARCH_URL}${workingTitle}+site%3Asenscritique.com`
+      );
+    } else if (site === DuckDuckGo.SEARCH_BANG_GOOGLE.site) {
+      return of(`${DuckDuckGo.GOOGLE_SEARCH_URL}${workingTitle}`);
     } else {
-      let url = DuckDuckGo.DUCKDUCKGO_URL + site + '+';
-      url +=
-        UtilsService.encodeQueryUrl(workingTitle) +
-        '&format=json&no_redirect=1';
+      const url = `${DuckDuckGo.DUCKDUCKGO_URL}${site}+
+        ${UtilsService.encodeQueryUrl(workingTitle)}&format=json&no_redirect=1`;
       return this.serviceUtils.getObservable(url).pipe(
         map((data: any) => {
           let result = <string>data.Redirect;
@@ -72,8 +78,6 @@ export class MetaService {
             } else {
               result = result.replace('/all/', '/person/');
             }
-          } else if (site === DuckDuckGo.SEARCH_BANG_SENSCRITIQUE.site) {
-            result = `https://www.google.com/search?q=${workingTitle}+site%3Asenscritique.com`;
           }
           return result;
         }),
@@ -82,7 +86,7 @@ export class MetaService {
     }
   }
 
-  wikisearch(term: string, site: string): Observable<any> {
+  wikisearch(term: string, site: string): Observable<string> {
     const params = new HttpParams()
       .set('action', 'opensearch')
       .set('search', term)
