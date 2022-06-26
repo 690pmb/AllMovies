@@ -121,9 +121,10 @@ export class MovieService {
               return movie;
             });
         } else {
-          return this.getImdbScore(movie);
+          return movie;
         }
       })
+      .then(movie => this.getImdbScore(movie))
       .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
   }
 

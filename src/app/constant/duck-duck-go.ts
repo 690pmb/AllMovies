@@ -1,5 +1,9 @@
 import {faDatabase, faFilm} from '@fortawesome/free-solid-svg-icons';
-import {faImdb, faWikipediaW} from '@fortawesome/free-brands-svg-icons';
+import {
+  faGoogle,
+  faImdb,
+  faWikipediaW,
+} from '@fortawesome/free-brands-svg-icons';
 
 export class Search {
   site!: string;
@@ -18,6 +22,11 @@ export class DuckDuckGo {
     icon: faFilm,
   };
 
+  static readonly SEARCH_BANG_GOOGLE: Search = {
+    site: 'google',
+    icon: faGoogle,
+  };
+
   static readonly SEARCH_BANG_IMDB: Search = {site: 'imdb', icon: faImdb};
   static readonly SEARCH_BANG_WIKI_EN: Search = {
     site: 'wen',
@@ -30,4 +39,6 @@ export class DuckDuckGo {
   };
 
   static readonly DUCKDUCKGO_URL = 'https://api.duckduckgo.com/?q=!';
+
+  static readonly GOOGLE_SEARCH_URL = 'https://www.google.com/search?q=';
 }

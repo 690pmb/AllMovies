@@ -207,6 +207,8 @@
     "wikifr": "FR",
     "wen": "EN",
     "imdb": "IMDB",
+    "google": "Google",
+    "captcha": "Note de SensCritique bloquée par Google",
     "links": "Ouvrir les 4 liens"
   },
   "movies": {
