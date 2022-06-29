@@ -1,0 +1,11 @@
+@use '/src/app/styles/imports' as *;
+
+.mat-menu-item {
+  height: 40px !important;
+  padding: 0 8px !important;
+  line-height: 40px !important;
+
+  fa-icon {
+    margin-right: 3px;
+  }
+}

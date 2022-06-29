@@ -12,9 +12,7 @@ import {
 import {ActivatedRoute, Router, ParamMap} from '@angular/router';
 import {filter} from 'rxjs/operators';
 import {combineLatest, Subscription} from 'rxjs';
-import {Location} from '@angular/common';
 import {
-  faChevronCircleLeft,
   faImage,
   faChevronCircleRight,
   faPlus,
@@ -51,7 +49,6 @@ export class MovieDetailComponent implements OnInit, OnChanges, OnDestroy {
   Url = DuckDuckGo;
   subs: Subscription[] = [];
 
-  faChevronCircleLeft = faChevronCircleLeft;
   faChevronCircleRight = faChevronCircleRight;
   faImage = faImage;
   faPlus = faPlus;
@@ -61,7 +58,6 @@ export class MovieDetailComponent implements OnInit, OnChanges, OnDestroy {
     private movieService: MovieService,
     private route: ActivatedRoute,
     private translate: TranslateService,
-    private location: Location,
     private title: TitleService,
     private router: Router,
     public tabsService: TabsService,
@@ -162,13 +158,6 @@ export class MovieDetailComponent implements OnInit, OnChanges, OnDestroy {
     this.router.navigate(['discover'], {
       queryParams: {keyword: JSON.stringify([keyword.id])},
     });
-  }
-
-  goBack(): void {
-    const back = this.location.back();
-    if (back === undefined) {
-      this.router.navigate(['/']);
-    }
   }
 
   ngOnDestroy(): void {

@@ -32,11 +32,6 @@
       </div>
     </span>
     <div class="detail-btn">
-      <!-- Go Back Btn -->
-      <button class="btn btn-outline-primary" (click)="goBack()">
-        <fa-icon [icon]="faChevronCircleLeft"></fa-icon
-        >{{ 'global.previous' | translate }}
-      </button>
       <!-- Add to collection btn -->
       <button
         class="btn btn-outline-primary"
@@ -46,6 +41,7 @@
         [isSingleData]="true"
         [isMovie]="false"
       ></button>
+      <app-share-button></app-share-button>
     </div>
   </div>
   <app-meta

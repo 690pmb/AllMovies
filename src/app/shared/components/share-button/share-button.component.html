@@ -1,0 +1,11 @@
+<ng-container *ngIf="isSupported">
+  <button [matMenuTriggerFor]="menu" class="btn btn-outline-primary">
+    <fa-icon [icon]="faShareAlt"></fa-icon>{{ 'global.share' | translate }}
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item *ngFor="let site of sites" (click)="share(site.url)">
+      <fa-icon [icon]="site.icon"></fa-icon>
+      <span> {{ 'meta.' + site.label | translate }}</span>
+    </button>
+  </mat-menu>
+</ng-container>

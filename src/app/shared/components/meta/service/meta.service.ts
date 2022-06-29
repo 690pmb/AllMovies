@@ -1,9 +1,9 @@
-import {Observable, of} from 'rxjs';
+import {Observable, of, ReplaySubject} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {HttpParams} from '@angular/common/http';
 import {map, catchError} from 'rxjs/operators';
 
-import {DuckDuckGo} from './../../../../constant/duck-duck-go';
+import {DuckDuckGo, Site} from './../../../../constant/duck-duck-go';
 import {Constants} from './../../../../constant/constants';
 import {UtilsService} from '../../../../service/utils.service';
 import {ToastService} from '../../../../service/toast.service';
@@ -12,6 +12,8 @@ import {ToastService} from '../../../../service/toast.service';
   providedIn: 'root',
 })
 export class MetaService {
+  sites: ReplaySubject<Site[]> = new ReplaySubject<Site[]>();
+
   constructor(
     private serviceUtils: UtilsService,
     private toast: ToastService
@@ -31,26 +33,26 @@ export class MetaService {
       (userLang === 'fr' &&
         ['gb', 'en'].includes(itemLang) &&
         [
-          DuckDuckGo.SEARCH_BANG_METACRITIC.site,
-          DuckDuckGo.SEARCH_BANG_WIKI_EN.site,
+          DuckDuckGo.SEARCH_BANG_METACRITIC.label,
+          DuckDuckGo.SEARCH_BANG_WIKI_EN.label,
         ].includes(site)) ||
       (userLang === 'en' &&
         itemLang === 'fr' &&
         [
-          DuckDuckGo.SEARCH_BANG_SENSCRITIQUE.site,
-          DuckDuckGo.SEARCH_BANG_WIKI_FR.site,
+          DuckDuckGo.SEARCH_BANG_SENSCRITIQUE.label,
+          DuckDuckGo.SEARCH_BANG_WIKI_FR.label,
         ].includes(site))
         ? original_title
         : title;
 
     if (
       [
-        DuckDuckGo.SEARCH_BANG_WIKI_EN.site,
-        DuckDuckGo.SEARCH_BANG_WIKI_FR.site,
+        DuckDuckGo.SEARCH_BANG_WIKI_EN.label,
+        DuckDuckGo.SEARCH_BANG_WIKI_FR.label,
       ].includes(site)
     ) {
       return this.wikisearch(workingTitle, site);
-    } else if (site === DuckDuckGo.SEARCH_BANG_IMDB.site && imdbId) {
+    } else if (site === DuckDuckGo.SEARCH_BANG_IMDB.label && imdbId) {
       return of(
         Constants.IMDB_URL +
           (isMovie || isSerie
@@ -58,11 +60,11 @@ export class MetaService {
             : Constants.IMDB_PERSON_SUFFIX) +
           imdbId
       );
-    } else if (site === DuckDuckGo.SEARCH_BANG_SENSCRITIQUE.site) {
+    } else if (site === DuckDuckGo.SEARCH_BANG_SENSCRITIQUE.label) {
       return of(
         `${DuckDuckGo.GOOGLE_SEARCH_URL}${workingTitle}+site%3Asenscritique.com`
       );
-    } else if (site === DuckDuckGo.SEARCH_BANG_GOOGLE.site) {
+    } else if (site === DuckDuckGo.SEARCH_BANG_GOOGLE.label) {
       return of(`${DuckDuckGo.GOOGLE_SEARCH_URL}${workingTitle}`);
     } else {
       const url = `${DuckDuckGo.DUCKDUCKGO_URL}${site}+
@@ -70,7 +72,7 @@ export class MetaService {
       return this.serviceUtils.getObservable(url).pipe(
         map((data: any) => {
           let result = <string>data.Redirect;
-          if (site === DuckDuckGo.SEARCH_BANG_METACRITIC.site) {
+          if (site === DuckDuckGo.SEARCH_BANG_METACRITIC.label) {
             if (isMovie) {
               result = result.replace('/all/', '/movie/');
             } else if (isSerie) {
@@ -93,7 +95,7 @@ export class MetaService {
       .set('format', 'json');
 
     const url = `https://${
-      site === DuckDuckGo.SEARCH_BANG_WIKI_EN.site ? 'en' : 'fr'
+      site === DuckDuckGo.SEARCH_BANG_WIKI_EN.label ? 'en' : 'fr'
     }.wikipedia.org/w/api.php?${params.toString()}`;
 
     return this.serviceUtils.jsonpObservable(url, 'callback').pipe(

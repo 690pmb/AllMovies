@@ -1,10 +1,8 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router, ParamMap} from '@angular/router';
-import {Location} from '@angular/common';
 import {TranslateService, LangChangeEvent} from '@ngx-translate/core';
 import {
   faAtom,
-  faChevronCircleLeft,
   faPlusSquare,
   faMinusSquare,
   faImage,
@@ -38,7 +36,6 @@ export class PersonDetailComponent implements OnInit, OnDestroy {
   imageSize = ImageSize;
   DuckDuckGo = DuckDuckGo;
   faAtom = faAtom;
-  faChevronCircleLeft = faChevronCircleLeft;
   faPlusSquare = faPlusSquare;
   faMinusSquare = faMinusSquare;
   faImage = faImage;
@@ -46,7 +43,6 @@ export class PersonDetailComponent implements OnInit, OnDestroy {
   constructor(
     private personService: PersonService,
     private route: ActivatedRoute,
-    private location: Location,
     private router: Router,
     private translate: TranslateService,
     private title: TitleService
@@ -227,13 +223,6 @@ export class PersonDetailComponent implements OnInit, OnDestroy {
     this.router.navigate(['discover'], {
       queryParams: {people: JSON.stringify([this.person.id])},
     });
-  }
-
-  goBack(): void {
-    const back = this.location.back();
-    if (back === undefined) {
-      this.router.navigate(['/']);
-    }
   }
 
   ngOnDestroy(): void {

@@ -10,7 +10,7 @@ import {
 
 import {Utils} from './../../../utils';
 import {MetaService} from './../service/meta.service';
-import {DuckDuckGo, Search} from '../../../../constant/duck-duck-go';
+import {DuckDuckGo, Search, Site} from '../../../../constant/duck-duck-go';
 import {Score} from '../../../../model/score';
 import {Person} from '../../../../model/person';
 import {Data} from '../../../../model/data';
@@ -20,8 +20,6 @@ import {ToastService} from '../../../../service/toast.service';
 import {Level} from '../../../../model/model';
 
 type Datas = Data | Person;
-
-type Result = {url: string; site: string; icon: any; key: string};
 
 @Component({
   selector: 'app-meta',
@@ -44,9 +42,7 @@ export class MetaComponent implements OnChanges {
   @Output()
   sensCritique = new EventEmitter<Score>();
 
-  links: Search[] = [];
-
-  results: Result[] = [];
+  links: Site[] = [];
 
   id = 0;
 
@@ -73,7 +69,7 @@ export class MetaComponent implements OnChanges {
           term = this.entry.title;
           original = this.entry.original_title;
           if (this.entry.movie()) {
-            itemLang = this.entry.spokenLangs[0].code.toLowerCase();
+            itemLang = this.entry?.spokenLangs[0].code?.toLowerCase();
           } else if (this.entry.serie()) {
             itemLang = this.entry.originLang.toLowerCase();
           }
@@ -86,7 +82,7 @@ export class MetaComponent implements OnChanges {
                 original,
                 this.translate.currentLang,
                 itemLang,
-                site.site,
+                site.label,
                 this.entry.imdb_id,
                 this.isMovie,
                 this.isSerie
@@ -99,7 +95,7 @@ export class MetaComponent implements OnChanges {
                       term,
                       this.translate.currentLang,
                       itemLang,
-                      site.site,
+                      site.label,
                       undefined,
                       this.isMovie,
                       this.isSerie
@@ -110,9 +106,8 @@ export class MetaComponent implements OnChanges {
                 }),
                 map(result => ({
                   url: result,
-                  site: site.site,
+                  label: site.label,
                   icon: site.icon,
-                  key: site.key,
                 }))
               )
           )
@@ -121,26 +116,27 @@ export class MetaComponent implements OnChanges {
     }
   }
 
-  handleResult(results: Result[]): void {
-    this.links = results.map(result => {
-      const link: Search = {
-        site: result.url,
-        icon: result.icon,
-        key: result.site,
-      };
-      if (
-        result.site === DuckDuckGo.SEARCH_BANG_SENSCRITIQUE.site &&
-        (this.isMovie || this.isSerie)
-      ) {
-        this.scSearch(result.url);
-      }
-      return link;
+  handleResult(results: Site[]): void {
+    this.links = results;
+    this.scSearch(
+      this.links.find(
+        l =>
+          l.label === DuckDuckGo.SEARCH_BANG_SENSCRITIQUE.label &&
+          (this.isMovie || this.isSerie)
+      )?.url
+    ).then(() => {
+      this.links.sort((a, b) => Utils.compare(a.label, b.label, false));
+      this.metaService.sites.next([...this.links]);
     });
-    this.links.sort((a, b) => Utils.compare(a.key, b.key, false));
   }
 
-  scSearch(url: string): void {
-    fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`)
+  scSearch(url?: string): Promise<boolean> {
+    if (!url) {
+      return new Promise<boolean>(resolve => resolve(true));
+    }
+    return fetch(
+      `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`
+    )
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -169,6 +165,7 @@ export class MetaComponent implements OnChanges {
         } else if (this.scrapping(data.contents, /captcha/g)) {
           this.toast.open(Level.warning, 'meta.captcha');
         }
+        return true;
       });
   }
 
@@ -177,7 +174,7 @@ export class MetaComponent implements OnChanges {
   }
 
   openAll(): void {
-    this.links.slice(0, 4).forEach(link => window.open(link.site));
+    this.links.slice(0, 4).forEach(link => window.open(link.url));
   }
 
   isPerson(data: Datas): data is Person {
