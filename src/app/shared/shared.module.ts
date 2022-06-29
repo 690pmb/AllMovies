@@ -25,6 +25,9 @@ import {
   MAT_DIALOG_DEFAULT_OPTIONS,
 } from '@angular/material/dialog';
 import {MatTabsModule} from '@angular/material/tabs';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatMenuModule} from '@angular/material/menu';
 
 import {MetaComponent} from './components/meta/component/meta.component';
 import {GoToTopComponent} from './components/go-to-top/go-to-top.component';
@@ -53,9 +56,8 @@ import {SerieSearchComponent} from './components/serie-search/serie-search.compo
 import {VideosComponent} from './components/videos/videos.component';
 import {CreditListComponent} from './components/credit-list/credit-list.component';
 import {BookmarkedComponent} from './components/bookmarked/bookmarked.component';
-import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {SearchBoxComponent} from './components/search-box/search-box.component';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import {ShareButtonComponent} from './components/share-button/share-button.component';
 
 @NgModule({
   declarations: [
@@ -87,6 +89,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     TabsComponent,
     ImageViewerComponent,
     BookmarkedComponent,
+    ShareButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -105,6 +108,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatAutocompleteModule,
     MatInputModule,
     MatFormFieldModule,
+    MatMenuModule,
     MatChipsModule,
     MatIconModule,
     SwiperModule,
@@ -148,6 +152,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     SwiperModule,
     BookmarkedComponent,
     SearchBoxComponent,
+    ShareButtonComponent,
   ],
 })
 export class SharedModule {

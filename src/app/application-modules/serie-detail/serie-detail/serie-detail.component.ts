@@ -3,9 +3,7 @@ import {combineLatest, Subscription} from 'rxjs';
 import {TranslateService, LangChangeEvent} from '@ngx-translate/core';
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute, Router, ParamMap} from '@angular/router';
-import {Location} from '@angular/common';
 import {
-  faChevronCircleLeft,
   faImage,
   faChevronCircleRight,
   faPlus,
@@ -47,7 +45,6 @@ export class SerieDetailComponent implements OnInit, OnDestroy {
   sc!: string;
   subs: Subscription[] = [];
 
-  faChevronCircleLeft = faChevronCircleLeft;
   faChevronCircleRight = faChevronCircleRight;
   faImage = faImage;
   faPlus = faPlus;
@@ -57,7 +54,6 @@ export class SerieDetailComponent implements OnInit, OnDestroy {
     private serieService: SerieService,
     private route: ActivatedRoute,
     private translate: TranslateService,
-    private location: Location,
     private title: TitleService,
     private router: Router,
     public tabsService: TabsService,
@@ -151,13 +147,6 @@ export class SerieDetailComponent implements OnInit, OnDestroy {
     this.router.navigate(['discover'], {
       queryParams: {networks: JSON.stringify([network.id]), isMovie: false},
     });
-  }
-
-  goBack(): void {
-    const back = this.location.back();
-    if (back === undefined) {
-      this.router.navigate(['/']);
-    }
   }
 
   ngOnDestroy(): void {

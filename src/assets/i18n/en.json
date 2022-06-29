@@ -1,6 +1,6 @@
 {
   "global": {
-    "previous": "Previous Page",
+    "share": "Share",
     "add_collection": "Add To Collection",
     "go_detail": "See Details",
     "remove": "Remove",
@@ -208,6 +208,7 @@
     "wen": "EN",
     "imdb": "IMDB",
     "google": "Google",
+    "allmovies": "AllMovies",
     "captcha": "SensCritique's score blocked by Google",
     "links": "Open the 4 links"
   },

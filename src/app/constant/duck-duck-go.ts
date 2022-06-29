@@ -1,40 +1,45 @@
-import {faDatabase, faFilm} from '@fortawesome/free-solid-svg-icons';
+import {
+  faDatabase,
+  faFilm,
+  IconDefinition,
+} from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
   faImdb,
   faWikipediaW,
 } from '@fortawesome/free-brands-svg-icons';
 
-export class Search {
-  site!: string;
-  icon: any;
-  key?: string;
-}
+export type Search = {
+  icon: IconDefinition;
+  label: string;
+};
+
+export type Site = Search & {url: string};
 
 export class DuckDuckGo {
   static readonly SEARCH_BANG_METACRITIC: Search = {
-    site: 'metacritic',
+    label: 'metacritic',
     icon: faDatabase,
   };
 
   static readonly SEARCH_BANG_SENSCRITIQUE: Search = {
-    site: 'scq',
+    label: 'scq',
     icon: faFilm,
   };
 
   static readonly SEARCH_BANG_GOOGLE: Search = {
-    site: 'google',
+    label: 'google',
     icon: faGoogle,
   };
 
-  static readonly SEARCH_BANG_IMDB: Search = {site: 'imdb', icon: faImdb};
+  static readonly SEARCH_BANG_IMDB: Search = {label: 'imdb', icon: faImdb};
   static readonly SEARCH_BANG_WIKI_EN: Search = {
-    site: 'wen',
+    label: 'wen',
     icon: faWikipediaW,
   };
 
   static readonly SEARCH_BANG_WIKI_FR: Search = {
-    site: 'wikifr',
+    label: 'wikifr',
     icon: faWikipediaW,
   };
 
