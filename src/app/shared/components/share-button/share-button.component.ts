@@ -4,6 +4,7 @@ import {Site} from '../../../constant/duck-duck-go';
 import {MetaService} from '../meta/service/meta.service';
 import {UtilsService} from '../../../service/utils.service';
 import {ToastService} from '../../../service/toast.service';
+import {environment} from '../../../../environments/environment';
 
 @Component({
   selector: 'app-share-button',
@@ -23,16 +24,18 @@ export class ShareButtonComponent implements OnInit {
 
   ngOnInit(): void {
     this.meta.sites.subscribe(sites => {
+      const url = environment.base_url
+        ? `${environment.base_url}/${window.location.pathname}`
+        : window.location.href;
       this.sites = sites;
       if (!this.sites.map(s => s.label).includes(this.ALLMOVIES)) {
         this.sites.unshift({
           icon: faTicketAlt,
           label: this.ALLMOVIES,
-          url: window.location.href,
+          url,
         });
       } else {
-        this.sites.find(s => s.label === this.ALLMOVIES).url =
-          window.location.href;
+        this.sites.find(s => s.label === this.ALLMOVIES).url = url;
       }
     });
   }

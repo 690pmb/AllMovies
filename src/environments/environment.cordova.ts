@@ -1,4 +1,4 @@
 export const environment = {
-  base_url: undefined,
+  base_url: 'xxx.synology.me',
   production: true,
 };
