@@ -12,10 +12,6 @@
       {{ person.name }}
     </h1>
     <div class="detail-btn">
-      <button class="btn btn-outline-primary" (click)="goBack()">
-        <fa-icon [icon]="faChevronCircleLeft"></fa-icon>
-        {{ 'global.previous' | translate }}
-      </button>
       <button
         class="btn btn-outline-primary"
         appOpenLink
@@ -25,6 +21,7 @@
       >
         <fa-icon [icon]="faAtom"></fa-icon> {{ 'title.discover' | translate }}
       </button>
+      <app-share-button></app-share-button>
     </div>
   </div>
   <app-meta

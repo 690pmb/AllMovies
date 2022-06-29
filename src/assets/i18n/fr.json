@@ -1,6 +1,6 @@
 {
   "global": {
-    "previous": "Page précédente",
+    "share": "Partager",
     "add_collection": "Ajouter à la collection",
     "go_detail": "Voir Détails",
     "remove": "Supprimer",
@@ -208,6 +208,7 @@
     "wen": "EN",
     "imdb": "IMDB",
     "google": "Google",
+    "allmovies": "AllMovies",
     "captcha": "Note de SensCritique bloquée par Google",
     "links": "Ouvrir les 4 liens"
   },
