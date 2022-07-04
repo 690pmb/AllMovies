@@ -47,7 +47,7 @@ $levels: (
 
 @each $lvl, $color in $levels {
   .toast-#{$lvl} {
-    @include background-color($color);
+    @include bg($color);
   }
 }
 

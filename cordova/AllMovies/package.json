@@ -22,8 +22,7 @@
   },
   "cordova": {
     "plugins": {
-      "cordova-plugin-whitelist": {},
-      "cordova-plugin-web-share": {}
+      "cordova-plugin-whitelist": {}
     },
     "platforms": [
       "android"

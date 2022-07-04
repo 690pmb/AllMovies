@@ -212,6 +212,14 @@
     "captcha": "Note de SensCritique bloquée par Google",
     "links": "Ouvrir les 4 liens"
   },
+  "share": {
+    "title": "Partager avec:",
+    "whatsapp": "WhatsApp",
+    "email": "E-Mail",
+    "sms": "SMS",
+    "clipboard": "Presse-papiers",
+    "copied": "Copié !"
+  },
   "movies": {
     "header": "Mes Films",
     "remove": "Retirer les films sélectionnés ({{size}})",
