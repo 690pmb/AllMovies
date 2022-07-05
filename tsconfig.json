@@ -10,6 +10,7 @@
     "skipLibCheck": true,
     "strict": false
   },
+  "files": ["src/main.ts", "src/polyfills.ts"],
   "include": ["src/**/*.ts", "test/**/*.ts"],
   "exclude": ["**/*.spec.ts"]
 }

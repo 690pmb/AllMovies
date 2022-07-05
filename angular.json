@@ -43,6 +43,24 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ]
+            },
+            "cordova": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": false,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "outputPath": "cordova/AllMovies/www",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.cordova.ts"
+                }
+              ]
             }
           }
         },
@@ -54,6 +72,9 @@
           "configurations": {
             "production": {
               "browserTarget": "all-movies:build:production"
+            },
+            "cordova": {
+              "browserTarget": "all-movies:build:cordova"
             }
           }
         },
