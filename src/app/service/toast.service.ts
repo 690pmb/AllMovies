@@ -24,7 +24,7 @@ export class ToastService {
         this.translate.instant(message, translateArgs),
         undefined,
         {
-          duration: 1500,
+          duration: level === Level.success ? 1500 : 2500,
           panelClass: 'toast-' + level,
         }
       );

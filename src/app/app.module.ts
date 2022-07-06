@@ -1,4 +1,9 @@
-import {CommonModule, registerLocaleData} from '@angular/common';
+import {
+  APP_BASE_HREF,
+  CommonModule,
+  PlatformLocation,
+  registerLocaleData,
+} from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import localeEn from '@angular/common/locales/en';
 import {NgModule, ErrorHandler, APP_INITIALIZER} from '@angular/core';
@@ -64,6 +69,11 @@ import {MyMissingTranslationHandler} from './shared/my-missing-translation-handl
           service.use('en').toPromise(),
       deps: [TranslateService],
       multi: true,
+    },
+    {
+      provide: APP_BASE_HREF,
+      useFactory: (s: PlatformLocation) => s.getBaseHrefFromDOM(),
+      deps: [PlatformLocation],
     },
   ],
   bootstrap: [AppComponent],
