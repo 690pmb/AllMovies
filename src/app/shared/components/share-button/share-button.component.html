@@ -1,4 +1,4 @@
-<ng-container *ngIf="isSupported">
+<ng-container>
   <button [matMenuTriggerFor]="menu" class="btn btn-outline-primary">
     <fa-icon [icon]="faShareAlt"></fa-icon>{{ 'global.share' | translate }}
   </button>
@@ -9,3 +9,20 @@
     </button>
   </mat-menu>
 </ng-container>
+
+<ng-template let-data #shareDialog>
+  <div appClickOutside (outside)="close()">
+    <h1 mat-dialog-title>{{ 'share.title' | translate }}</h1>
+    <div mat-dialog-content>
+      <button
+        class="btn btn-outline-primary"
+        *ngFor="let app of apps"
+        (click)="shareWithApp(app, data.url)"
+        mat-dialog-close
+      >
+        <fa-icon [icon]="app.icon" size="2x"></fa-icon>
+        <div>{{ 'share.' + app.label | translate }}</div>
+      </button>
+    </div>
+  </div>
+</ng-template>

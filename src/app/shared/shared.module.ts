@@ -58,12 +58,14 @@ import {CreditListComponent} from './components/credit-list/credit-list.componen
 import {BookmarkedComponent} from './components/bookmarked/bookmarked.component';
 import {SearchBoxComponent} from './components/search-box/search-box.component';
 import {ShareButtonComponent} from './components/share-button/share-button.component';
+import {ClickOutsideDirective} from './directives/click-outside.directive';
 
 @NgModule({
   declarations: [
     ConvertToHHmmPipe,
     SubstractDatePipe,
     CapitalizeWordPipe,
+    ClickOutsideDirective,
     FilterCrewPipe,
     TruncatePipe,
     ImagePipe,
