@@ -15,7 +15,7 @@
   <!-- Swiper for gallery of images -->
   <ng-container *ngIf="!isOnePicture">
     <!-- Full size gallery -->
-    <div class="gallery-top">
+    <div #galleryTop>
       <swiper [config]="config" [(index)]="index">
         <div *ngFor="let img of images">
           <pinch-zoom [disableZoomControl]="'disable'">
@@ -28,10 +28,14 @@
       </span>
     </div>
     <!-- Thumbnails gallery -->
-    <div class="gallery-thumbs">
+    <div class="gallery-thumbs" #galleryThumbs>
       <swiper [config]="thumbs" [(index)]="index">
         <div *ngFor="let thumb of thumbnails">
-          <img src="{{ thumb | image: imageSize.medium }}" />
+          <img
+            src="{{ thumb | image: imageSize.medium }}"
+            #img
+            [class.portrait]="isPortrait"
+          />
         </div>
       </swiper>
     </div>

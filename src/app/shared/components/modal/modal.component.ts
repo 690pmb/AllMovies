@@ -11,6 +11,7 @@ import {
 import {faTimes, IconDefinition} from '@fortawesome/free-solid-svg-icons';
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
+import {ViewChild, ElementRef, ChangeDetectorRef} from '@angular/core';
 
 @Component({
   selector: 'app-modal',
@@ -18,6 +19,7 @@ import {Router} from '@angular/router';
   styleUrls: ['./modal.component.scss'],
 })
 export class ModalComponent implements OnInit, OnChanges {
+  @ViewChild('modal') modal: ElementRef;
   @Input() visible!: boolean;
   @Input() closeBtn!: IconDefinition;
   @Output() update = new EventEmitter<boolean>();
@@ -37,7 +39,11 @@ export class ModalComponent implements OnInit, OnChanges {
 
   current: Location;
 
-  constructor(private location: Location, private router: Router) {}
+  constructor(
+    private location: Location,
+    private router: Router,
+    private changeDetector: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     if (!this.closeBtn) {
@@ -53,14 +59,17 @@ export class ModalComponent implements OnInit, OnChanges {
         this.visible = changedProp.currentValue;
       }
       if (this.current) {
+        const currentPath = this.current.path().split('?')[0];
         if (this.visible) {
-          this.router.navigate([this.current.path().split('?')[0]], {
+          this.changeDetector.detectChanges();
+          this.modal.nativeElement.style.height = `${window.innerHeight}px`;
+          this.router.navigate([currentPath], {
             queryParams: {modal: true},
             replaceUrl: true,
             queryParamsHandling: 'merge',
           });
         } else {
-          this.router.navigate([this.current.path().split('?')[0]], {
+          this.router.navigate([currentPath], {
             queryParams: null,
             replaceUrl: true,
           });
