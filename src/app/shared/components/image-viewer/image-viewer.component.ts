@@ -1,5 +1,13 @@
 import {SwiperConfigInterface} from 'ngx-swiper-wrapper';
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChildren,
+  QueryList,
+  AfterViewInit,
+} from '@angular/core';
 import {
   faExpand,
   IconDefinition,
@@ -8,13 +16,17 @@ import {
 
 import {MenuService} from '../../../service/menu.service';
 import {ImageSize} from '../../../model/model';
+import {ElementRef, ViewChild} from '@angular/core';
 
 @Component({
   selector: 'app-image-viewer',
   templateUrl: './image-viewer.component.html',
   styleUrls: ['./image-viewer.component.scss'],
 })
-export class ImageViewerComponent implements OnChanges {
+export class ImageViewerComponent implements OnChanges, AfterViewInit {
+  @ViewChild('galleryTop') galleryTop: ElementRef;
+  @ViewChild('galleryThumbs') galleryThumbs: ElementRef;
+  @ViewChildren('img') imgs: QueryList<HTMLImageElement>;
   @Input() visible!: boolean;
   @Input() images!: string[] | string;
   @Input() thumbnails!: string[] | string;
@@ -52,8 +64,23 @@ export class ImageViewerComponent implements OnChanges {
   isFullscreen = false;
   fullScreenImg!: string;
   closeBtn!: IconDefinition;
+  isPortrait!: boolean;
 
   constructor(private menuService: MenuService) {}
+
+  ngAfterViewInit(): void {
+    this.imgs.changes.subscribe(
+      (x: QueryList<ElementRef<HTMLImageElement>>) => {
+        if (x.length > 0) {
+          this.setGalleriesHeight();
+          x.first.nativeElement.onload = event => {
+            const target = event.currentTarget as HTMLImageElement;
+            this.isPortrait = target.naturalHeight > target.naturalWidth;
+          };
+        }
+      }
+    );
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.visible = changes.visible
@@ -76,6 +103,15 @@ export class ImageViewerComponent implements OnChanges {
     if (!this.isOnePicture) {
       this.menuService.visible$.next(!this.visible);
     }
+  }
+
+  setGalleriesHeight(): void {
+    this.galleryTop.nativeElement.style.height = `${
+      window.innerHeight * 0.8
+    }px`;
+    this.galleryThumbs.nativeElement.style.height = `${
+      window.innerHeight * 0.2
+    }px`;
   }
 
   fullscreen(): void {

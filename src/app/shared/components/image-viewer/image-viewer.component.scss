@@ -57,26 +57,28 @@ pinch-zoom {
   }
 }
 
-.gallery-top {
-  height: 80% !important;
-}
-
 .gallery-thumbs {
-  height: 20% !important;
-
   & .swiper-slide {
     box-sizing: border-box;
-    padding: 10px 0;
+    display: flex;
+    align-items: center;
     overflow: hidden !important;
     opacity: 0.4;
   }
 
   & img {
     display: block;
-    height: 100%;
-    max-width: 100%;
-    margin-left: auto;
-    margin-right: auto;
+    margin: auto;
+    border-right: white solid 0.5px;
+    border-left: white solid 0.5px;
+
+    &.portrait {
+      height: 100%;
+    }
+
+    &:not(.portrait) {
+      width: 100%;
+    }
   }
 
   & .swiper-slide-active {
@@ -89,9 +91,5 @@ pinch-zoom {
     top: 70px;
     right: 10px;
     font-size: 17px;
-  }
-
-  .gallery-thumbs img {
-    height: auto;
   }
 }
