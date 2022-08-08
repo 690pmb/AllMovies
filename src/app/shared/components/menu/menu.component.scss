@@ -58,9 +58,13 @@ app-dropdown-language {
   top: $toolbar-height !important;
 }
 
+.mat-sidenav-container,
 .sidenav-content {
-  width: 101vw;
-  overflow: hidden auto !important;
+  overflow: unset !important;
+}
+
+.sidenav-content {
+  width: 100vw;
 }
 
 @include media(#{$desktop}) {
