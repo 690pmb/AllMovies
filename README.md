@@ -1,3 +1,6 @@
+[![Quality](https://github.com/690pmb/AllMovies/actions/workflows/quality.yml/badge.svg)](https://github.com/690pmb/AllMovies/actions/workflows/quality.yml)
+[![Deploy](https://github.com/690pmb/AllMovies/actions/workflows/deploy.yml/badge.svg)](https://github.com/690pmb/AllMovies/actions/workflows/deploy.yml)
+
 # How to deploy it:
 
 To build a Docker image, launch the following command:
