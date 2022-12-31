@@ -1,3 +1,21 @@
 {
-  "extends": ["config:base"]
+  "extends": ["config:base"],
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["karma", "jasmine"],
+      "addLabels": ["test"],
+      "groupName": "test packages"
+    },
+    {
+      "matchPackagePatterns": ["angular"],
+      "addLabels": ["angular"],
+      "groupName": "angular packages"
+    },
+    {
+      "matchDepTypes": ["devDependencies"],
+      "addLabels": ["devDep"]
+    }
+  ],
+  "rebaseWhen": "behind-base-branch"
 }
