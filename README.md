@@ -8,7 +8,7 @@ To build a Docker image, launch the following command:
 ```
 docker build --build-arg GITHUB_DIR=69pmb \
 --build-arg GITHUB_PROJECT=AllMovies \
---build-arg GITHUB_HASH=master \
+--build-arg GITHUB_HASH=main \
 --build-arg NODE_VERSION=14.18.2-alpine3.12 \
 --build-arg ANGULAR_VERSION=10.2.4 \
 --build-arg NG_NGINX_VERSION=0.1.1 \
