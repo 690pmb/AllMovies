@@ -33,17 +33,15 @@ export class GoToTopComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.cdRef.detectChanges();
-    const scroll$ = fromEvent(
-      this.elemRef.nativeElement.parentNode,
-      'scroll'
-    ).pipe(
+    const scroll$ = fromEvent(window, 'scroll').pipe(
       throttleTime(10),
-      map(
-        (x: any) =>
-          x.target.scrollTop >
-            (x.target.scrollHeight - x.target.offsetHeight) / 5 &&
-          x.target.scrollHeight - x.target.offsetHeight > x.target.offsetHeight
-      ),
+      map(x => {
+        const doc = (x.target as Document).documentElement;
+        return (
+          doc.scrollTop > (doc.scrollHeight - doc.offsetHeight) / 5 &&
+          doc.scrollHeight - doc.offsetHeight > doc.offsetHeight
+        );
+      }),
       distinctUntilChanged(),
       share()
     );
@@ -61,6 +59,6 @@ export class GoToTopComponent implements OnInit, AfterViewInit {
   }
 
   onTop(): void {
-    this.elemRef.nativeElement.parentNode.scrollTo(0, 0);
+    window.scrollTo(0, 0);
   }
 }
