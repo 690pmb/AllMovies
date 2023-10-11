@@ -64,6 +64,7 @@ export class SeasonDetailComponent implements OnInit, OnDestroy {
   getSeason(id: number, season: number, language: string): void {
     this.serieService.getSeason(id, season, language, true).then(res => {
       this.season = res;
+      this.season.images.push(...this.season.episodes.map(e => e.poster));
     });
   }
 
