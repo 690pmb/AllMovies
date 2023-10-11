@@ -16,7 +16,7 @@
       <button
         class="btn btn-outline-primary"
         (click)="goPrev()"
-        *ngIf="season.seasonNumber !== 0"
+        *ngIf="season.seasonNumber !== minSeason"
       >
         <fa-icon [icon]="faArrowCircleLeft"></fa-icon
         >{{ 'season.previous' | translate }}
@@ -30,7 +30,7 @@
       <button
         class="btn btn-outline-primary"
         (click)="goNext()"
-        *ngIf="season.seasonNumber + 1 < maxSeason"
+        *ngIf="season.seasonNumber < maxSeason"
       >
         {{ 'season.next' | translate
         }}<fa-icon [icon]="faArrowCircleRight"></fa-icon>

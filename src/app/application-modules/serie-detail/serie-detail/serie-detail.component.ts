@@ -64,6 +64,7 @@ export class SerieDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     sessionStorage.removeItem('serie');
+    sessionStorage.removeItem('season_min');
     sessionStorage.removeItem('season_max');
     this.config = new DetailConfig(
       true,

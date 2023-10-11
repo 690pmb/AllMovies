@@ -21,6 +21,7 @@ import {TitleService} from '../../../service/title.service';
 export class SeasonDetailComponent implements OnInit, OnDestroy {
   serieId!: number;
   season!: Season;
+  minSeason!: number;
   maxSeason!: number;
   serie!: string;
   isImagesVisible = false;
@@ -40,6 +41,7 @@ export class SeasonDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.minSeason = +(sessionStorage.getItem('season_min') ?? 0);
     this.maxSeason = +(sessionStorage.getItem('season_max') ?? 1);
     this.serie = sessionStorage.getItem('serie') ?? '';
     this.title.setTitle(this.serie);

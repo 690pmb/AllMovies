@@ -94,6 +94,7 @@ export class SeasonsComponent implements OnInit, OnChanges {
 
   goToSeasonDetail(season: number): void {
     sessionStorage.setItem('serie', this.serie);
+    sessionStorage.setItem('season_min', '' + this.seasons[0].seasonNumber);
     sessionStorage.setItem('season_max', '' + this.seasons.length);
     this.router.navigate(['./' + season], {relativeTo: this.route});
   }
