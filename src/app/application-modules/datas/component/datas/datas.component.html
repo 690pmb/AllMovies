@@ -167,27 +167,7 @@
     </button>
   </div>
 
-  <div class="paginator mat-elevation-z4">
-    <!-- Paginator -->
-    <mat-paginator
-      #paginator
-      [length]="length"
-      [pageIndex]="pageIndex"
-      [pageSize]="pageSize"
-      [pageSizeOptions]="pageSizeOptions"
-      (page)="
-        onFilterOrPaginate(
-          filteredGenres,
-          filteredTags,
-          $event.pageIndex,
-          $event.pageSize,
-          runtimeRange
-        )
-      "
-      [showFirstLastButtons]="true"
-    >
-    </mat-paginator>
-  </div>
+  <ng-container [ngTemplateOutlet]="pagination"></ng-container>
 
   <!-- Table -->
   <mat-table
@@ -562,4 +542,30 @@
       class="tag-row"
     ></mat-row>
   </mat-table>
+
+  <ng-container [ngTemplateOutlet]="pagination"></ng-container>
 </ng-container>
+
+<ng-template #pagination>
+  <div class="paginator mat-elevation-z4">
+    <!-- Paginator -->
+    <mat-paginator
+      #paginator
+      [length]="length"
+      [pageIndex]="pageIndex"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="
+        onFilterOrPaginate(
+          filteredGenres,
+          filteredTags,
+          $event.pageIndex,
+          $event.pageSize,
+          runtimeRange
+        )
+      "
+      [showFirstLastButtons]="true"
+    >
+    </mat-paginator>
+  </div>
+</ng-template>
