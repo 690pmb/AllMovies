@@ -223,12 +223,14 @@
   "movies": {
     "header": "My Movies",
     "remove": "Remove selected movies ({{size}})",
-    "add_tag": "Add the tag {{tag}} to selected movies ({{size}})"
+    "add_tag": "Add the tag {{tag}} to selected movies ({{size}})",
+    "mat-table.itemsPerPageLabel": "Movies per page: "
   },
   "series": {
     "header": "My Series",
     "remove": "Remove selected series ({{size}})",
-    "add_tag": "Add the tag {{tag}} to selected series ({{size}})"
+    "add_tag": "Add the tag {{tag}} to selected series ({{size}})",
+    "mat-table.itemsPerPageLabel": "Series per page: "
   },
   "datas": {
     "poster": "Poster",
@@ -240,9 +242,6 @@
     "filter": {
       "placeholder": "Search",
       "genres": "Genres"
-    },
-    "mat-table": {
-      "itemsPerPageLabel": "Datas per page: "
     }
   },
   "release": {

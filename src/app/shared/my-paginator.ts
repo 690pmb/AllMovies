@@ -27,6 +27,7 @@ export class MyPaginator extends MatPaginatorIntl {
     this.firstPageLabel = this.translate.instant(
       'global.mat-table.firstPageLabel'
     );
+    this.changes.next();
   }
 
   getRangeLabel = (page: number, pageSize: number, length: number): string => {

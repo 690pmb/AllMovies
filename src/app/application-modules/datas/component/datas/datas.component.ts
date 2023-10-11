@@ -23,6 +23,7 @@ import * as moment from 'moment-mini-ts';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {NouiFormatter} from 'ng2-nouislider';
 import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
+import {MatPaginatorIntl} from '@angular/material/paginator';
 
 import {Constants} from '../../../../constant/constants';
 import {Utils} from '../../../../shared/utils';
@@ -39,11 +40,26 @@ import {MyDatasService} from '../../../../service/my-datas.service';
 import {MyTagsService} from '../../../../service/my-tags.service';
 import {ToastService} from '../../../../service/toast.service';
 import {TitleService} from '../../../../service/title.service';
+import {MyPaginator} from '../../../../shared/my-paginator';
 
 @Component({
   selector: 'app-my-datas',
   templateUrl: './datas.component.html',
   styleUrls: ['./datas.component.scss'],
+  providers: [
+    {
+      provide: MatPaginatorIntl,
+      useFactory: (
+        translate: TranslateService,
+        activatedRoute: ActivatedRoute
+      ): MyPaginator =>
+        new MyPaginator(
+          translate,
+          activatedRoute.snapshot.data.isMovie ? 'movies' : 'series'
+        ),
+      deps: [TranslateService, ActivatedRoute],
+    },
+  ],
   animations: [
     trigger('detailExpand', [
       state(
