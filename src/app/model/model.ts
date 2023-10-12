@@ -38,15 +38,15 @@ export class GroupBy<T> {
   }
 }
 
-export class Keyword {
-  id!: number;
-  name!: string;
-}
+export type Id = {id: number};
 
-export class Genre {
-  id!: number;
-  name!: string;
-}
+export type Keyword = Id & {
+  name: string;
+};
+
+export type Genre = Id & {
+  name: string;
+};
 
 export class List {
   id!: number;
@@ -80,12 +80,12 @@ export class FullList {
   revenue!: string;
 }
 
-export class Network {
-  id!: number;
-  name!: string;
-  logo_path!: string;
-  origin_country!: string;
-}
+export type Network = Id & {
+  id: number;
+  name: string;
+  logo_path: string;
+  origin_country: string;
+};
 
 export class Certification {
   certification!: string;

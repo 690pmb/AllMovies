@@ -1,4 +1,4 @@
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {HttpHeaders, HttpClient} from '@angular/common/http';
 
@@ -49,12 +49,14 @@ export class UtilsService {
   }
 
   handlePromiseError(error: any, toast: ToastService): Promise<any> {
+    return this.handleObsError(error, toast).toPromise();
+  }
+
+  handleObsError(error: any, toast: ToastService): Observable<any> {
     console.log('handlePromiseError');
     console.error('error', error);
     toast.open(Level.error, UtilsService.getErrorMessage(error));
-    return new Promise<any>(resolve => {
-      resolve('');
-    });
+    return of('');
   }
 
   getPromise<T>(url: string, headers?: HttpHeaders): Promise<T> {
@@ -62,7 +64,7 @@ export class UtilsService {
   }
 
   getObservable<T>(url: string, headers?: HttpHeaders): Observable<T> {
-    console.log('url', url);
+    console.log('URL', url);
     return headers
       ? this.http.get<T>(url, {headers: headers})
       : this.http.get<T>(url);

@@ -64,9 +64,9 @@ import {MyMissingTranslationHandler} from './shared/my-missing-translation-handl
     {
       provide: APP_INITIALIZER,
       useFactory:
-        (service: TranslateService): (() => Promise<any>) =>
+        (translate: TranslateService): (() => Promise<any>) =>
         () =>
-          service.use('en').toPromise(),
+          translate.use(translate.getBrowserLang()).toPromise(),
       deps: [TranslateService],
       multi: true,
     },

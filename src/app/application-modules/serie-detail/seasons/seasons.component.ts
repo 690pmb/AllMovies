@@ -5,33 +5,22 @@ import {
   faMinus,
   faChevronCircleRight,
 } from '@fortawesome/free-solid-svg-icons';
-import {Router, ActivatedRoute} from '@angular/router';
-import {
-  Component,
-  OnInit,
-  Input,
-  SimpleChanges,
-  OnChanges,
-} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {SwiperConfigInterface} from 'ngx-swiper-wrapper';
+import {map} from 'rxjs/operators';
 
 import {Constants} from './../../../constant/constants';
 import {Utils} from './../../../shared/utils';
 import {Season} from './../../../model/season';
 import {ImageSize} from './../../../model/model';
+import {SerieManager} from '../../../manager/serie.manager';
 
 @Component({
   selector: 'app-seasons',
   templateUrl: './seasons.component.html',
   styleUrls: ['./seasons.component.scss'],
 })
-export class SeasonsComponent implements OnInit, OnChanges {
-  @Input()
-  serie!: string;
-
-  @Input()
-  seasons: Season[] = [];
-
+export class SeasonsComponent implements OnInit {
   overviewId?: number;
   overview?: string;
   swiperConfig: SwiperConfigInterface = {
@@ -51,11 +40,19 @@ export class SeasonsComponent implements OnInit, OnChanges {
   faPlus = faPlus;
   faMinus = faMinus;
 
+  seasons$ = this.serieManager.listen().pipe(
+    map(s => s.seasons),
+    map(seasons =>
+      seasons.sort((a, b) =>
+        Utils.compare(a.seasonNumber, b.seasonNumber, true)
+      )
+    )
+  );
+
   constructor(
     private breakpointObserver: BreakpointObserver,
     public translate: TranslateService,
-    private router: Router,
-    private route: ActivatedRoute
+    private serieManager: SerieManager
   ) {}
 
   ngOnInit(): void {
@@ -81,22 +78,6 @@ export class SeasonsComponent implements OnInit, OnChanges {
           this.swiperConfig.slidesPerView = 8;
         }
       });
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.serie = changes.serie ? changes.serie.currentValue : undefined;
-    this.seasons = changes.seasons
-      ? (changes.seasons.currentValue as Season[]).sort((a, b) =>
-          Utils.compare(a.seasonNumber, b.seasonNumber, true)
-        )
-      : [];
-  }
-
-  goToSeasonDetail(season: number): void {
-    sessionStorage.setItem('serie', this.serie);
-    sessionStorage.setItem('season_min', '' + this.seasons[0].seasonNumber);
-    sessionStorage.setItem('season_max', '' + this.seasons.length);
-    this.router.navigate(['./' + season], {relativeTo: this.route});
   }
 
   setOverview(season: Season): void {

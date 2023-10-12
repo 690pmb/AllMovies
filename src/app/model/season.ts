@@ -1,3 +1,5 @@
+export type SeasonId = {id: number; serieId: number; lang: string};
+
 export class Episode {
   id!: number;
   name!: string;

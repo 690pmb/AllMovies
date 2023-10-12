@@ -21,7 +21,6 @@ export class UrlBuilder {
       url += parametres.join(',');
     }
     url = UrlBuilder.langUrlBuilder(url, language);
-    console.log('personUrlBuilder', url);
     return url;
   }
 
@@ -49,7 +48,6 @@ export class UrlBuilder {
       url += parametres.join(',');
     }
     url = UrlBuilder.langUrlBuilder(url, language);
-    console.log('seasonUrlBuilder', url);
     return url;
   }
 
@@ -102,7 +100,6 @@ export class UrlBuilder {
       url += parametres.join(',');
     }
     url = UrlBuilder.langUrlBuilder(url, language);
-    console.log('detailUrlBuilder', url);
     return url;
   }
 
@@ -117,7 +114,6 @@ export class UrlBuilder {
     }
     url += parametres.join('');
     url = UrlBuilder.langUrlBuilder(url, criteria.language);
-    console.log('playingUrlBuilder', url);
     return url;
   }
 
@@ -184,7 +180,6 @@ export class UrlBuilder {
     UrlBuilder.networksUrlBuilder(parametres, networks);
     url += parametres.join('');
     url = UrlBuilder.langUrlBuilder(url, criteria.language);
-    console.log('discoverUrlBuilder', url);
     return url;
   }
 

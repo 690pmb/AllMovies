@@ -10,7 +10,6 @@ import {Dropbox} from '../constant/dropbox';
 import {UtilsService} from './utils.service';
 import {ToastService} from './toast.service';
 import {Utils} from '../shared/utils';
-import {MockService} from './mock.service';
 
 @Injectable({
   providedIn: 'root',
@@ -23,8 +22,7 @@ export class MyTagsService {
     private auth: AuthService,
     private serviceUtils: UtilsService,
     private toast: ToastService,
-    private capitalize: CapitalizeWordPipe,
-    private asset: MockService<Tag>
+    private capitalize: CapitalizeWordPipe
   ) {}
 
   static tagsToBlob(tags: Tag[]): Blob {
