@@ -13,7 +13,7 @@
   }
 }
 
-@mixin border($size: 1px, $color) {
+@mixin border($color, $size: 1px) {
   border: $size solid $color;
 }
 
@@ -30,7 +30,7 @@
 @mixin thumbnail($height) {
   height: $height;
   margin-left: 10px;
-  @include border(1px, $black);
+  @include border($black);
 
   box-shadow: -3px 1px 6px $black;
 }

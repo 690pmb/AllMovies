@@ -150,7 +150,7 @@ export class MapMovie {
         MapMovie.convertLangToCountry(spoken.iso_639_1, mockService).then(
           code => (lang.code = code)
         );
-        lang.label = spoken.name;
+        lang.label = spoken.english_name;
         return lang;
       });
     }
