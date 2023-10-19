@@ -4,6 +4,8 @@ import {Score} from '../model/score';
 import {UtilsService} from './utils.service';
 import {Constants} from '../constant/constants';
 import {ToastService} from './toast.service';
+import {catchError, map} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -15,10 +17,13 @@ export class OmdbService {
   ) {}
 
   getScore(id: string): Promise<Score> {
+    return this.getScore$(id).toPromise();
+  }
+
+  getScore$(id: string): Observable<Score> {
     const url = `${Constants.OMDB_URL}${Constants.OMDB_ID}${id}${Constants.OMDB_API_KEY}`;
-    return this.serviceUtils
-      .getPromise(url)
-      .then((response: any) => {
+    return this.serviceUtils.getObservable(url).pipe(
+      map((response: any) => {
         if (!response.Error) {
           const score = new Score();
           score.ratings = response.Ratings.map(r => {
@@ -34,10 +39,11 @@ export class OmdbService {
         } else {
           return undefined;
         }
-      })
-      .catch(err => {
-        this.serviceUtils.handlePromiseError(err, this.toast);
+      }),
+      catchError(err => {
+        this.serviceUtils.handleObsError(err, this.toast);
         return undefined;
-      });
+      })
+    );
   }
 }

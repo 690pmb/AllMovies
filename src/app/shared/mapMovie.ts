@@ -1,4 +1,4 @@
-import {AlternativeTitle, Lang, Flag, Genre} from './../model/model';
+import {AlternativeTitle, Lang, Flag} from './../model/model';
 import {Utils} from './utils';
 import {Movie} from './../model/movie';
 import {Discover} from '../model/discover';
@@ -57,11 +57,7 @@ export class MapMovie {
           original_title: Utils.getTitle(r),
           popularity: r.popularity,
           vote_count: r.vote_count,
-          genres: r.genre_ids.map(g => {
-            const genre = new Genre();
-            genre.id = g;
-            return genre;
-          }),
+          genres: r.genre_ids.map(id => ({id})),
         }
     );
     discover.total_pages = response.total_pages;
@@ -237,11 +233,7 @@ export class MapMovie {
           overview: r.overview,
           date: r.release_date,
           original_title: Utils.getTitle(r),
-          genres: r.genre_ids.map(g => {
-            const genre = new Genre();
-            genre.id = g;
-            return genre;
-          }),
+          genres: r.genre_ids.map(id => ({id})),
           id: r.id,
           language: r.original_language,
           title: r.title,

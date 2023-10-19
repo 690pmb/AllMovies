@@ -1,49 +1,77 @@
-import {filter} from 'rxjs/operators';
-import {combineLatest, Subscription} from 'rxjs';
-import {TranslateService, LangChangeEvent} from '@ngx-translate/core';
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {ActivatedRoute, Router, ParamMap} from '@angular/router';
+import {filter, map, tap} from 'rxjs/operators';
+import {combineLatest} from 'rxjs';
+import {Component} from '@angular/core';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {
   faImage,
   faChevronCircleRight,
   faPlus,
   faMinus,
 } from '@fortawesome/free-solid-svg-icons';
+import {TranslateService} from '@ngx-translate/core';
 
-import {Tag} from './../../../model/tag';
 import {DuckDuckGo} from './../../../constant/duck-duck-go';
 import {Serie} from '../../../model/serie';
-import {SerieService} from '../../../service/serie.service';
 import {TitleService} from '../../../service/title.service';
 import {TabsService} from '../../../service/tabs.service';
 import {MyTagsService} from '../../../service/my-tags.service';
 import {MyDatasService} from '../../../service/my-datas.service';
 import {MenuService} from '../../../service/menu.service';
-import {
-  Keyword,
-  Genre,
-  DetailConfig,
-  Network,
-  ImageSize,
-} from '../../../model/model';
+import {ImageSize, Id} from '../../../model/model';
+import {SerieManager} from '../../../manager/serie.manager';
 
 @Component({
   selector: 'app-serie-detail',
   styleUrls: ['./serie-detail.component.scss'],
   templateUrl: './serie-detail.component.html',
 })
-export class SerieDetailComponent implements OnInit, OnDestroy {
-  id!: number;
-  config!: DetailConfig;
-  serie!: Serie;
-  tags: Tag[] = [];
+export class SerieDetailComponent {
   showTags = false;
   isImagesVisible = false;
   showTitles = false;
   Url = DuckDuckGo;
   imageSize = ImageSize;
-  sc!: string;
-  subs: Subscription[] = [];
+  protected sc!: string;
+
+  serie$ = this.serieManager.find(this.route.paramMap, 'id').pipe(
+    tap(serie => {
+      this.title.setTitle(serie.title);
+      this.menuService.scrollTo$.next(0);
+    })
+  );
+
+  loading$ = combineLatest([
+    this.serieManager.listenParam(this.route.paramMap, 'id'),
+    this.serie$,
+  ]).pipe(map(([p, s]) => !s || p !== s.id));
+
+  tags$ = combineLatest([
+    this.myTagsService.myTags$,
+    this.myDatasService.mySeries$,
+    this.serie$,
+  ]).pipe(
+    filter(
+      ([tags, series, serie]) =>
+        tags !== undefined &&
+        tags.length > 0 &&
+        series !== undefined &&
+        serie !== undefined
+    ),
+    map(([tags, series, serie]) => {
+      this.showTags = false;
+      if (series.map(m => m.id).includes(serie.id)) {
+        this.showTags = true;
+        return tags.filter(t =>
+          t.datas
+            .filter(d => !d.movie)
+            .map(d => d.id)
+            .includes(serie.id)
+        );
+      } else {
+        return [];
+      }
+    })
+  );
 
   faChevronCircleRight = faChevronCircleRight;
   faImage = faImage;
@@ -51,9 +79,9 @@ export class SerieDetailComponent implements OnInit, OnDestroy {
   faMinus = faMinus;
 
   constructor(
-    private serieService: SerieService,
+    private serieManager: SerieManager,
     private route: ActivatedRoute,
-    private translate: TranslateService,
+    protected translate: TranslateService,
     private title: TitleService,
     private router: Router,
     public tabsService: TabsService,
@@ -62,95 +90,12 @@ export class SerieDetailComponent implements OnInit, OnDestroy {
     private myDatasService: MyDatasService<Serie>
   ) {}
 
-  ngOnInit(): void {
-    sessionStorage.removeItem('serie');
-    sessionStorage.removeItem('season_min');
-    sessionStorage.removeItem('season_max');
-    this.config = new DetailConfig(
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      true,
-      this.translate.currentLang
-    );
-    this.subs.push(
-      this.route.paramMap.subscribe((params: ParamMap) => {
-        const id = params.get('id');
-        if (id) {
-          const idParam = +id;
-          if (idParam && idParam !== 0) {
-            this.id = idParam;
-            this.getSerie(this.id);
-          }
-        }
-      })
-    );
-    this.subs.push(
-      this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-        this.config.lang = event.lang;
-        this.getSerie(this.id);
-      })
-    );
-  }
-
-  getSerie(id: number): void {
-    if (this.id && this.id !== 0) {
-      this.serieService.getSerie(id, this.config, true).then(serie => {
-        this.serie = serie;
-        this.title.setTitle(serie.title);
-        this.menuService.scrollTo$.next(0);
-      });
-      this.subs.push(
-        combineLatest([
-          this.myTagsService.myTags$,
-          this.myDatasService.mySeries$,
-        ])
-          .pipe(
-            filter(
-              ([tags, series]) => tags !== undefined && series !== undefined
-            )
-          )
-          .subscribe(([tags, series]) => {
-            this.tags = [];
-            this.showTags = false;
-            if (series.map(m => m.id).includes(this.id)) {
-              this.showTags = true;
-              this.tags = tags.filter(t =>
-                t.datas
-                  .filter(d => !d.movie)
-                  .map(d => d.id)
-                  .includes(this.id)
-              );
-            }
-          })
-      );
-    }
-  }
-
-  redirectGenreToDiscover(genre: Genre): void {
+  toDiscover<T extends Id>(item: T, key: string): void {
+    const params: Params = {};
+    params[key] = JSON.stringify([item.id]);
+    params['isMovie'] = false;
     this.router.navigate(['discover'], {
-      queryParams: {genre: JSON.stringify([genre.id]), isMovie: false},
+      queryParams: params,
     });
-  }
-
-  redirectKeywordToDiscover(keyword: Keyword): void {
-    this.router.navigate(['discover'], {
-      queryParams: {keyword: JSON.stringify([keyword.id]), isMovie: false},
-    });
-  }
-
-  redirectNetworkToDiscover(network: Network): void {
-    this.router.navigate(['discover'], {
-      queryParams: {networks: JSON.stringify([network.id]), isMovie: false},
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.subs.forEach(subscription => subscription.unsubscribe());
   }
 }

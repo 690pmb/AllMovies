@@ -4,89 +4,53 @@ import {
   faArrowCircleLeft,
   faArrowCircleRight,
 } from '@fortawesome/free-solid-svg-icons';
-import {ParamMap, ActivatedRoute, Router} from '@angular/router';
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {TranslateService, LangChangeEvent} from '@ngx-translate/core';
-import {Subscription} from 'rxjs';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Component} from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
+import {tap, map} from 'rxjs/operators';
 
-import {Season} from './../../../model/season';
-import {SerieService} from '../../../service/serie.service';
 import {TitleService} from '../../../service/title.service';
+import {Utils} from '../../../shared/utils';
+import {SerieManager} from '../../../manager/serie.manager';
+import {SeasonManager} from '../../../manager/season.manager';
 
 @Component({
   selector: 'app-season-detail',
   templateUrl: './season-detail.component.html',
   styleUrls: ['./season-detail.component.scss'],
 })
-export class SeasonDetailComponent implements OnInit, OnDestroy {
-  serieId!: number;
-  season!: Season;
-  minSeason!: number;
-  maxSeason!: number;
-  serie!: string;
+export class SeasonDetailComponent {
   isImagesVisible = false;
 
   faChevronCircleLeft = faChevronCircleLeft;
   faImage = faImage;
   faArrowCircleLeft = faArrowCircleLeft;
   faArrowCircleRight = faArrowCircleRight;
-  subs: Subscription[] = [];
+
+  serie$ = this.serieManager
+    .find(this.route.paramMap, 'id')
+    .pipe(tap(s => this.title.setTitle(s.title)));
+
+  season$ = this.seasonManager.find(this.route.paramMap, 'season').pipe(
+    map(season => {
+      season.images.push(...season.episodes.map(e => e.poster));
+      season.images = season.images.filter(i => Utils.isNotBlank(i));
+      return season;
+    })
+  );
 
   constructor(
-    private serieService: SerieService,
-    private translate: TranslateService,
+    private serieManager: SerieManager,
+    private seasonManager: SeasonManager,
+    protected translate: TranslateService,
     private route: ActivatedRoute,
     private router: Router,
     private title: TitleService
   ) {}
 
-  ngOnInit(): void {
-    this.minSeason = +(sessionStorage.getItem('season_min') ?? 0);
-    this.maxSeason = +(sessionStorage.getItem('season_max') ?? 1);
-    this.serie = sessionStorage.getItem('serie') ?? '';
-    this.title.setTitle(this.serie);
-    this.route.paramMap.subscribe((params: ParamMap) => {
-      const id = params.get('id') ?? undefined;
-      if (id) {
-        this.serieId = +id;
-        this.getSeason(
-          this.serieId,
-          +(params.get('season') ?? 1),
-          this.translate.currentLang
-        );
-      }
-    });
-    this.subs.push(
-      this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-        this.getSeason(this.serieId, this.season.seasonNumber, event.lang);
-      })
-    );
-  }
-
-  getSeason(id: number, season: number, language: string): void {
-    this.serieService.getSeason(id, season, language, true).then(res => {
-      this.season = res;
-      this.season.images.push(...this.season.episodes.map(e => e.poster));
-    });
-  }
-
-  goBack(): void {
-    this.router.navigate(['serie/' + this.serieId]);
-  }
-
-  goPrev(): void {
+  navigate(serieId: number, seasonNumber?: number): void {
     this.router.navigate([
-      'serie/' + this.serieId + '/' + (this.season.seasonNumber - 1),
+      `serie/${serieId}${seasonNumber ? `/${seasonNumber}` : ''}`,
     ]);
-  }
-
-  goNext(): void {
-    this.router.navigate([
-      'serie/' + this.serieId + '/' + (this.season.seasonNumber + 1),
-    ]);
-  }
-
-  ngOnDestroy(): void {
-    this.subs.forEach(subscription => subscription.unsubscribe());
   }
 }

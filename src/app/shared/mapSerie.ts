@@ -1,4 +1,3 @@
-import {Genre} from './../model/model';
 import {Discover} from './../model/discover';
 import {MapSeason} from './mapSeason';
 import {AlternativeTitle} from '../model/model';
@@ -36,11 +35,7 @@ export class MapSerie {
           original_title: Utils.getTitle(r, false),
           popularity: r.popularity,
           vote_count: r.vote_count,
-          genres: r.genre_ids.map(g => {
-            const genre = new Genre();
-            genre.id = g;
-            return genre;
-          }),
+          genres: r.genre_ids.map(id => ({id})),
         }
     );
     discover.total_pages = response.total_pages;

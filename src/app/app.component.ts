@@ -1,5 +1,5 @@
 import {filter} from 'rxjs/operators';
-import {Router, NavigationStart} from '@angular/router';
+import {Router, NavigationStart, NavigationEnd} from '@angular/router';
 import {Component, OnInit} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -25,12 +25,14 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.translate.use(this.translate.getBrowserLang());
     this.router.events
       .pipe(filter(event => event instanceof NavigationStart))
       .subscribe((event: NavigationStart) => {
         this.tabsService.onNavigation(event);
       });
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => window.scrollTo(0, 0));
     this.auth.getCurrentUser(false);
     this.auth.user$.subscribe(user => {
       if (user) {

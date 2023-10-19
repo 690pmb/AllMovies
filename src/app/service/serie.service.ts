@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
-import {map, catchError} from 'rxjs/operators';
+import {Observable, of, iif} from 'rxjs';
+import {map, catchError, mergeMap} from 'rxjs/operators';
 
 import {MapSerie} from '../shared/mapSerie';
 import {Utils} from '../shared/utils';
@@ -36,8 +36,16 @@ export class SerieService {
   }
 
   getSerie(id: number, config: DetailConfig, detail: boolean): Promise<Serie> {
+    return this.getSerie$(id, config, detail).toPromise();
+  }
+
+  getSerie$(
+    id: number,
+    config: DetailConfig,
+    detail: boolean
+  ): Observable<Serie> {
     return this.serviceUtils
-      .getPromise(
+      .getObservable(
         UrlBuilder.detailUrlBuilder(
           false,
           id,
@@ -53,72 +61,79 @@ export class SerieService {
           config.lang
         )
       )
-      .then(response => {
-        const serie = MapSerie.mapForSerie(response);
-        serie.lang_version = config.lang;
-        if (
-          detail &&
-          (!serie.overview ||
-            (!serie.videos && config.video) ||
-            !serie.original_title)
-        ) {
-          return this.getSerie(
-            id,
-            new DetailConfig(
-              false,
-              false,
-              false,
-              false,
-              config.video,
-              false,
-              false,
-              false,
-              false,
-              'en'
+      .pipe(
+        map(response => {
+          const serie = MapSerie.mapForSerie(response);
+          serie.lang_version = config.lang;
+          return serie;
+        }),
+        mergeMap(serie =>
+          iif(
+            () =>
+              detail &&
+              config.lang !== 'en' &&
+              (!serie.overview ||
+                (!serie.videos && config.video) ||
+                !serie.original_title),
+            this.getSerie$(
+              id,
+              new DetailConfig(
+                false,
+                false,
+                false,
+                false,
+                config.video,
+                false,
+                false,
+                false,
+                false,
+                'en'
+              ),
+              false
+            ).pipe(
+              map(enSerie => {
+                serie.overview = Utils.isBlank(serie.overview)
+                  ? enSerie.overview
+                  : serie.overview;
+                serie.videos =
+                  serie.videos && serie.videos.length > 0
+                    ? serie.videos
+                    : enSerie.videos;
+                serie.original_title = Utils.isBlank(serie.original_title)
+                  ? enSerie.overview
+                  : serie.original_title;
+                serie.score = enSerie.score;
+                return serie;
+              })
             ),
-            false
-          ).then(enSerie => {
-            serie.overview = Utils.isBlank(serie.overview)
-              ? enSerie.overview
-              : serie.overview;
-            serie.videos =
-              serie.videos && serie.videos.length > 0
-                ? serie.videos
-                : enSerie.videos;
-            serie.original_title = Utils.isBlank(serie.original_title)
-              ? enSerie.overview
-              : serie.original_title;
-            serie.score = enSerie.score;
-            return serie;
-          });
-        } else {
-          return this.getImdbScore(serie);
-        }
-      })
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
+            this.getImdbScore(serie)
+          )
+        ),
+        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+      );
   }
 
-  getImdbScore(serie: Serie): Promise<Serie> {
+  getImdbScore(serie: Serie): Observable<Serie> {
     if (serie.imdb_id) {
-      return this.omdb.getScore(serie.imdb_id).then(score => {
-        if (score) {
-          score.ratings.splice(
-            -1,
-            0,
-            ...[
-              {Source: 'MovieDB', Value: serie.vote + '/10'},
-              {Source: 'Popularity', Value: serie.popularity},
-            ]
-          );
-          score.moviedb_votes = serie.vote_count;
-          serie.score = score;
-        }
-        return serie;
-      });
+      return this.omdb.getScore$(serie.imdb_id).pipe(
+        map(score => {
+          if (score) {
+            score.ratings.splice(
+              -1,
+              0,
+              ...[
+                {Source: 'MovieDB', Value: serie.vote + '/10'},
+                {Source: 'Popularity', Value: serie.popularity},
+              ]
+            );
+            score.moviedb_votes = serie.vote_count;
+            serie.score = score;
+          }
+          return serie;
+        })
+      );
     } else {
-      return new Promise<Serie>(resolve => {
-        resolve(serie);
-      });
+      return of(serie);
     }
   }
 
@@ -127,9 +142,9 @@ export class SerieService {
     seasonNumber: number,
     language: string,
     detail: boolean
-  ): Promise<Season> {
+  ): Observable<Season> {
     return this.serviceUtils
-      .getPromise(
+      .getObservable(
         UrlBuilder.seasonUrlBuilder(
           id,
           seasonNumber,
@@ -139,35 +154,37 @@ export class SerieService {
           detail
         )
       )
-      .then(response => {
-        const season = MapSeason.mapForSeasonDetail(response);
-        if (
-          detail &&
-          (!season.overview || !season.videos) &&
-          language !== 'en'
-        ) {
-          return this.getSeason(id, seasonNumber, 'en', true).then(enSeason => {
-            season.overview = Utils.isBlank(season.overview)
-              ? enSeason.overview
-              : season.overview;
-            season.videos =
-              season.videos && season.videos.length > 0
-                ? season.videos
-                : enSeason.videos;
-            return season;
-          });
-        } else {
-          return season;
-        }
-      })
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
+      .pipe(
+        map(response => MapSeason.mapForSeasonDetail(response)),
+        mergeMap(season =>
+          iif(
+            () =>
+              detail &&
+              (!season.overview || !season.videos) &&
+              language !== 'en',
+            this.getSeason(id, seasonNumber, 'en', true).pipe(
+              map(enSeason => {
+                season.overview = Utils.isBlank(season.overview)
+                  ? enSeason.overview
+                  : season.overview;
+                season.videos =
+                  season.videos && season.videos.length > 0
+                    ? season.videos
+                    : enSeason.videos;
+                return season;
+              })
+            ),
+            of(season)
+          )
+        ),
+        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+      );
   }
 
   search(term: string, language: string): Observable<Serie[]> {
     const url = `${Url.SERIE_SEARCH_URL}${Url.API_KEY}${
       Url.QUERY_URL
     }${UtilsService.encodeQueryUrl(term)}${Url.LANGUE}${language}`;
-    console.log(url);
     return this.serviceUtils
       .getObservable(url, this.serviceUtils.getHeaders())
       .pipe(

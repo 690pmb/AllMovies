@@ -3,6 +3,8 @@ import {Network} from './model';
 import {Person} from './person';
 import {Season} from './season';
 
+export type SerieId = {id: number; lang: string};
+
 export class Serie extends Data {
   isMovie = false;
   originLang!: string;
