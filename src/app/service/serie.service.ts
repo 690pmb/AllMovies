@@ -106,35 +106,11 @@ export class SerieService {
                 return serie;
               })
             ),
-            this.getImdbScore(serie)
+            this.omdb.getImdbScore(serie)
           )
         ),
         catchError(err => this.serviceUtils.handleObsError(err, this.toast))
       );
-  }
-
-  getImdbScore(serie: Serie): Observable<Serie> {
-    if (serie.imdb_id) {
-      return this.omdb.getScore$(serie.imdb_id).pipe(
-        map(score => {
-          if (score) {
-            score.ratings.splice(
-              -1,
-              0,
-              ...[
-                {Source: 'MovieDB', Value: serie.vote + '/10'},
-                {Source: 'Popularity', Value: serie.popularity},
-              ]
-            );
-            score.moviedb_votes = serie.vote_count;
-            serie.score = score;
-          }
-          return serie;
-        })
-      );
-    } else {
-      return of(serie);
-    }
   }
 
   getSeason(

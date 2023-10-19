@@ -124,32 +124,8 @@ export class MovieService {
           return movie;
         }
       })
-      .then(movie => this.getImdbScore(movie))
+      .then(movie => this.omdb.getImdbScore(movie).toPromise())
       .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
-  }
-
-  getImdbScore(movie: Movie): Promise<Movie> {
-    if (movie.imdb_id) {
-      return this.omdb.getScore(movie.imdb_id).then(score => {
-        if (score) {
-          score.ratings?.splice(
-            -1,
-            0,
-            ...[
-              {Source: 'MovieDB', Value: movie.vote + '/10'},
-              {Source: 'Popularity', Value: movie.popularity},
-            ]
-          );
-          score.moviedb_votes = movie.vote_count;
-          movie.score = score;
-        }
-        return movie;
-      });
-    } else {
-      return new Promise<Movie>(resolve => {
-        resolve(movie);
-      });
-    }
   }
 
   getMoviesByReleaseDates(

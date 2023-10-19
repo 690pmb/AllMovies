@@ -1,11 +1,12 @@
 import {Injectable} from '@angular/core';
+import {catchError, map} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
 
 import {Score} from '../model/score';
 import {UtilsService} from './utils.service';
 import {Constants} from '../constant/constants';
 import {ToastService} from './toast.service';
-import {catchError, map} from 'rxjs/operators';
-import {Observable} from 'rxjs';
+import {Data} from '../model/data';
 
 @Injectable({
   providedIn: 'root',
@@ -45,5 +46,29 @@ export class OmdbService {
         return undefined;
       })
     );
+  }
+
+  getImdbScore<T extends Data>(data: T): Observable<T> {
+    if (data.imdb_id) {
+      return this.getScore$(data.imdb_id).pipe(
+        map(score => {
+          if (score) {
+            score.ratings.splice(
+              -1,
+              0,
+              ...[
+                {Source: 'MovieDB', Value: data.vote + '/10'},
+                {Source: 'Popularity', Value: data.popularity},
+              ]
+            );
+            score.moviedb_votes = data.vote_count;
+            data.score = score;
+          }
+          return data;
+        })
+      );
+    } else {
+      return of(data);
+    }
   }
 }
