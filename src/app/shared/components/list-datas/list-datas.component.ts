@@ -1,6 +1,5 @@
 import {TranslateService} from '@ngx-translate/core';
 import {Component, Input, OnChanges, SimpleChange} from '@angular/core';
-import {SortDirection} from '@angular/material/sort';
 import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 import {faTimesCircle} from '@fortawesome/free-regular-svg-icons';
 
@@ -30,7 +29,8 @@ export class ListDatasComponent<T extends Data> implements OnChanges {
   datasToShow: T[] = [];
   sortChoices: DropDownChoice[] = [];
   sortChosen!: DropDownChoice;
-  sortDir!: SortDirection;
+  isSortDesc = true;
+  hideUnknown = true;
   pageSize = 5;
 
   constructor(public translate: TranslateService, library: FaIconLibrary) {
@@ -52,6 +52,12 @@ export class ListDatasComponent<T extends Data> implements OnChanges {
     if (this.research && this.research.trim() !== '') {
       list = Utils.filterByFields(datas, ['title'], this.research);
     }
+    if (this.hideUnknown) {
+      list = list.filter(
+        l =>
+          Utils.isNotBlank(l.affiche) && l.vote_count !== 0 && l.popularity > 2
+      );
+    }
     this.resultLength = list.length;
     this.datasToShow = list.slice(
       (page - 1) * this.pageSize,
@@ -62,16 +68,13 @@ export class ListDatasComponent<T extends Data> implements OnChanges {
   sortOrSearchChanged(): void {
     this.datas = Utils.sortData(this.datas, {
       active: this.sortChosen.value,
-      direction: this.sortDir,
+      direction: this.isSortDesc ? 'desc' : 'asc',
     });
     this.page = 1;
     this.getDatasToShow(this.datas, this.page);
   }
 
   initSortProperties(): void {
-    if (!this.sortDir) {
-      this.sortDir = 'desc';
-    }
     if (!this.sortChoices || this.sortChoices.length === 0) {
       this.sortChoices = [
         new DropDownChoice('discover.sort_field.popularity', 'popularity'),

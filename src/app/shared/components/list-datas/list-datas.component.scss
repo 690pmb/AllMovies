@@ -27,14 +27,8 @@
   padding: 0 10px;
 }
 
-.datas-sorting {
-  & .toogleHeader {
-    margin: auto;
-  }
-
-  & .mat-select {
-    width: calc(100% - 20px) !important;
-  }
+.datas-sorting .mat-select {
+  width: calc(100% - 20px) !important;
 }
 
 .card-body {
@@ -107,6 +101,10 @@
     display: inline-flex !important;
     flex-wrap: wrap;
     flex-direction: column;
+  }
+
+  .datas-params {
+    width: 100%;
   }
 
   .data-item {

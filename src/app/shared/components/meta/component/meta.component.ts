@@ -69,7 +69,10 @@ export class MetaComponent implements OnChanges {
           term = this.entry.title;
           original = this.entry.original_title;
           if (this.entry.movie()) {
-            itemLang = this.entry?.spokenLangs[0].code?.toLowerCase();
+            itemLang =
+              this.entry?.spokenLangs.length > 0
+                ? this.entry?.spokenLangs[0].code?.toLowerCase()
+                : this.entry.language;
           } else if (this.entry.serie()) {
             itemLang = this.entry.originLang.toLowerCase();
           }

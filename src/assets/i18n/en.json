@@ -239,6 +239,7 @@
     "rating": "Ratings",
     "length": "Running Time",
     "added": "Added",
+    "hide_unknown": "Hide the less known",
     "filter": {
       "placeholder": "Search",
       "genres": "Genres"

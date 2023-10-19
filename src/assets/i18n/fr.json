@@ -35,7 +35,7 @@
     "languages": "Langues",
     "clear": "Rénitialiser",
     "sort": "Trier",
-    "sort_direction": "Direction",
+    "sort_direction": "Tri",
     "sort_up": "Croissant",
     "sort_down": "Décroissant",
     "keyword": "Mots Clés",
@@ -239,6 +239,7 @@
     "rating": "Note",
     "length": "Durée",
     "added": "Ajouté",
+    "hide_unknown": "Cacher les peu connus",
     "filter": {
       "placeholder": "Rechercher",
       "genres": "Genres"

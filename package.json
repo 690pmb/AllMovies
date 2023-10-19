@@ -59,7 +59,7 @@
     "moment-mini-ts": "2.20.1",
     "ng2-nouislider": "1.8.3",
     "ngx-color-picker": "11.0.0",
-    "ngx-pinch-zoom": "2.6.2",
+    "ngx-pinch-zoom": "2.5.4",
     "ngx-swiper-wrapper": "10.0.0",
     "nouislider": "15.5.1",
     "popper": "1.0.1",
@@ -92,7 +92,7 @@
     "protractor": "7.0.0",
     "stylelint": "13.13.1",
     "stylelint-config-standard": "22.0.0",
-    "stylelint-order": "5.0.0",
+    "stylelint-order": "4.1.0",
     "ts-node": "10.5.0",
     "typescript": "4.0.8",
     "webpack-bundle-analyzer": "4.5.0"

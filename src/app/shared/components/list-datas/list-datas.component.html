@@ -16,20 +16,20 @@
         </mat-form-field>
       </div>
       <div class="datas-params datas-sorting">
-        <mat-button-toggle-group
-          [(value)]="sortDir"
-          (change)="sortDir = $event.value; sortOrSearchChanged()"
-        >
-          <div class="toogleHeader">
-            {{ 'global.sort_direction' | translate }}:
-          </div>
-          <mat-button-toggle value="desc">
-            {{ 'global.sort_up' | translate }}
-          </mat-button-toggle>
-          <mat-button-toggle value="asc">
-            {{ 'global.sort_down' | translate }}
-          </mat-button-toggle>
-        </mat-button-toggle-group>
+        {{ 'global.sort_direction' | translate }}:
+        <mat-slide-toggle
+          (change)="sortOrSearchChanged()"
+          [(ngModel)]="isSortDesc"
+        ></mat-slide-toggle>
+        {{ 'global.sort_' + (isSortDesc ? 'up' : 'down') | translate }}
+      </div>
+      <div class="datas-params">
+        {{ 'datas.hide_unknown' | translate }}:
+        <mat-slide-toggle
+          (change)="sortOrSearchChanged()"
+          [(ngModel)]="hideUnknown"
+        ></mat-slide-toggle>
+        {{ 'global.' + hideUnknown | translate }}
       </div>
       <div class="datas-params datas-search">
         <mat-form-field>

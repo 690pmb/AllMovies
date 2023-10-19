@@ -59,6 +59,7 @@ import {BookmarkedComponent} from './components/bookmarked/bookmarked.component'
 import {SearchBoxComponent} from './components/search-box/search-box.component';
 import {ShareButtonComponent} from './components/share-button/share-button.component';
 import {ClickOutsideDirective} from './directives/click-outside.directive';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
@@ -104,6 +105,7 @@ import {ClickOutsideDirective} from './directives/click-outside.directive';
     MatToolbarModule,
     MatSelectModule,
     MatButtonToggleModule,
+    MatSlideToggleModule,
     MatListModule,
     MatButtonModule,
     MatCheckboxModule,
