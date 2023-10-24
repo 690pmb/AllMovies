@@ -1,3 +1,4 @@
+<ng-progress id="progressBar" [color]="'blue'"></ng-progress>
 <div *ngIf="movie">
   <app-modal [visible]="isImagesVisible" (update)="isImagesVisible = $event">
     <app-image-viewer
@@ -247,7 +248,7 @@
     <!-- Videos -->
     <app-videos [videos]="movie.videos" *ngIf="config.video"></app-videos>
     <!-- Lists -->
-    <app-lists class="pad-left" [id]="id"></app-lists>
+    <app-lists class="pad-left" [id]="id" (loading)="onLoadingList($event)"></app-lists>
   </div>
   <div class="media-content">
     <!-- recommendations -->
