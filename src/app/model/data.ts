@@ -40,7 +40,8 @@ export class Data {
 
   constructor() {}
 
-  removeFields(key: string, value: string): string | undefined {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  removeFields(_key: string, value: string): string | undefined {
     console.log('removeFields');
     return value;
   }

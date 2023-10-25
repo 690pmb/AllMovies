@@ -7,6 +7,7 @@
     "target": "es5",
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
+    "noUnusedLocals": true,
     "skipLibCheck": true,
     "strict": false
   },

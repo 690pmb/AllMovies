@@ -16,4 +16,7 @@ export class Constants {
 
   static readonly TRANSLATION_KEY_REGEX =
     /^[a-z]+[a-z_-]*[a-z]+\.[a-z._-]*[a-z]+$/;
+
+  static readonly LOGIN_CANCEL = 'cancel';
+  static readonly LOGIN_FEATURE = 'feature';
 }

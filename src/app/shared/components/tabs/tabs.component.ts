@@ -1,41 +1,30 @@
-import {
-  Component,
-  OnInit,
-  ElementRef,
-  ChangeDetectorRef,
-  OnDestroy,
-} from '@angular/core';
+import {Component, OnInit, ElementRef, ChangeDetectorRef} from '@angular/core';
 import {faTimes} from '@fortawesome/free-solid-svg-icons';
 import {delay, filter} from 'rxjs/operators';
-import {BehaviorSubject, Subscription} from 'rxjs';
 
 import {TabsService} from '../../../service/tabs.service';
 import {TitleService} from '../../../service/title.service';
-import {AuthService} from '../../../service/auth.service';
+import {MenuService} from '../../../service/menu.service';
 
 @Component({
   selector: 'app-tabs',
   templateUrl: './tabs.component.html',
   styleUrls: ['./tabs.component.scss'],
 })
-export class TabsComponent implements OnInit, OnDestroy {
+export class TabsComponent implements OnInit {
   title!: string;
   faClose = faTimes;
-  isLogged$ = new BehaviorSubject<boolean>(false);
-  subs: Subscription[] = [];
+  isNotLoginPage$ = this.menuService.isNotLoginPage$;
 
   constructor(
     private titleService: TitleService,
     public tabsService: TabsService,
     private elemRef: ElementRef,
-    private auth: AuthService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    public menuService: MenuService
   ) {}
 
   ngOnInit(): void {
-    this.subs.push(
-      this.auth.user$.subscribe(user => this.isLogged$.next(user !== undefined))
-    );
     this.titleService.header.subscribe(title => {
       this.tabsService.updateCurTabLabel(title);
       this.cdRef.detectChanges();
@@ -53,9 +42,5 @@ export class TabsComponent implements OnInit, OnDestroy {
           active.scrollIntoView(0);
         }
       });
-  }
-
-  ngOnDestroy(): void {
-    this.subs.forEach(sub => sub.unsubscribe());
   }
 }

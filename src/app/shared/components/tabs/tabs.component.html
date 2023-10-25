@@ -1,4 +1,4 @@
-<ng-container *ngIf="isLogged$ | async">
+<ng-container *ngIf="isNotLoginPage$ | async">
   <nav mat-tab-nav-bar *ngIf="tabsService.links | async as links">
     <a
       mat-tab-link

@@ -10,7 +10,6 @@ const routes: Routes = [
       import('./application-modules/dashboard/dashboard.module').then(
         m => m.DashboardModule
       ),
-    canActivate: [AuthGard],
   },
   {
     path: 'movie',
@@ -18,7 +17,6 @@ const routes: Routes = [
       import('./application-modules/movie-detail/movie-detail.module').then(
         m => m.MovieDetailModule
       ),
-    canActivate: [AuthGard],
   },
   {
     path: 'serie',
@@ -26,7 +24,6 @@ const routes: Routes = [
       import('./application-modules/serie-detail/serie-detail.module').then(
         m => m.SerieDetailModule
       ),
-    canActivate: [AuthGard],
   },
   {
     path: 'person',
@@ -34,7 +31,6 @@ const routes: Routes = [
       import('./application-modules/person-detail/person-detail.module').then(
         m => m.PersonDetailModule
       ),
-    canActivate: [AuthGard],
   },
   {
     path: 'release',
@@ -42,7 +38,6 @@ const routes: Routes = [
       import('./application-modules/release/release.module').then(
         m => m.ReleaseModule
       ),
-    canActivate: [AuthGard],
   },
   {
     path: 'datas',
@@ -58,7 +53,6 @@ const routes: Routes = [
       import('./application-modules/discover/discover.module').then(
         m => m.DiscoverModule
       ),
-    canActivate: [AuthGard],
   },
   {
     path: 'tags',

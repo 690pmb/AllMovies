@@ -24,6 +24,7 @@ import {DetailConfig} from '../../model/model';
 import {MyTagsService} from '../../service/my-tags.service';
 import {SerieService} from '../../service/serie.service';
 import {MovieService} from '../../service/movie.service';
+import {AuthService} from '../../service/auth.service';
 
 @Directive({
   selector: '[appAddCollection]',
@@ -54,11 +55,17 @@ export class AddCollectionDirective<T extends Data>
   faTrash = faTrash;
 
   @HostListener('click', ['$event']) onClick(): void {
-    if (!this.isAlreadyAdded) {
-      this.add();
-    } else {
-      this.remove();
-    }
+    this.auth.isAuthenticated().subscribe(isAuth => {
+      if (!isAuth) {
+        this.auth.redirectToLogin(true);
+      } else {
+        if (!this.isAlreadyAdded) {
+          this.add();
+        } else {
+          this.remove();
+        }
+      }
+    });
   }
 
   constructor(
@@ -68,6 +75,7 @@ export class AddCollectionDirective<T extends Data>
     private myTagsService: MyTagsService,
     private translate: TranslateService,
     private vcRef: ViewContainerRef,
+    private auth: AuthService,
     private el: ElementRef,
     private cfr: ComponentFactoryResolver,
     private render: Renderer2
@@ -100,7 +108,9 @@ export class AddCollectionDirective<T extends Data>
     this.subs.push(
       this.myDatasService.mySeries$.subscribe(myDatas => {
         this.mySeries = myDatas;
-        if (!this.isMovie && this.mySeries && this.mySeries.length > 0) {
+        if (!this.mySeries || this.mySeries.length === 0) {
+          this.isAlreadyAdded = false;
+        } else if (!this.isMovie) {
           this.isAlreadyAdded = this.datas.every(data =>
             this.mySeries.map(m => m.id).includes(data.id)
           );
@@ -111,7 +121,9 @@ export class AddCollectionDirective<T extends Data>
     this.subs.push(
       this.myDatasService.myMovies$.subscribe(myDatas => {
         this.myMovies = myDatas;
-        if (this.isMovie && this.myMovies && this.myMovies.length > 0) {
+        if (!this.myMovies || this.myMovies.length === 0) {
+          this.isAlreadyAdded = false;
+        } else if (this.isMovie) {
           this.isAlreadyAdded = this.datas.every(data =>
             this.myMovies.map(m => m.id).includes(data.id)
           );

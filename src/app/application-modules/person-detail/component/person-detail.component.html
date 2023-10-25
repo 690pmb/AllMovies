@@ -184,12 +184,14 @@
           <app-list-datas
             [datas]="list.value.get('movie')"
             [isMovie]="true"
+            [hideUnknown]="!person.adult"
             *ngIf="['movie', 'both'].includes(show.value)"
             [label]="('data-list.' + list.label_key | translate).concat(':')"
           ></app-list-datas>
           <app-list-datas
             [datas]="list.value.get('serie')"
             [isMovie]="false"
+            [hideUnknown]="!person.adult"
             *ngIf="['serie', 'both'].includes(show.value)"
             [label]="('data-list.' + list.label_key | translate).concat(':')"
           ></app-list-datas>

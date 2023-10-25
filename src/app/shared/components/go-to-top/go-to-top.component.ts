@@ -4,7 +4,6 @@ import {
   ViewChild,
   AfterViewInit,
   ChangeDetectorRef,
-  ElementRef,
 } from '@angular/core';
 import {fromEvent} from 'rxjs';
 import {
@@ -27,7 +26,7 @@ export class GoToTopComponent implements OnInit, AfterViewInit {
   isVisible = false;
   faAngleUp = faAngleUp;
 
-  constructor(private cdRef: ChangeDetectorRef, private elemRef: ElementRef) {}
+  constructor(private cdRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {}
 
