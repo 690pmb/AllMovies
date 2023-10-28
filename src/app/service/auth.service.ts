@@ -1,4 +1,4 @@
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable, from} from 'rxjs';
 import {Router} from '@angular/router';
 import {Injectable} from '@angular/core';
 import jwt_decode from 'jwt-decode';
@@ -12,6 +12,8 @@ import {UtilsService} from './utils.service';
 import {Utils} from '../shared/utils';
 import {Dropbox} from '../constant/dropbox';
 import {User} from '../model/user';
+import {Constants} from '../constant/constants';
+import {map, catchError, tap, take} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -53,31 +55,27 @@ export class AuthService {
     return KJUR.jws.JWS.sign('HS256', sHeader, JSON.stringify(user), 'secret');
   }
 
-  private reject(loggout: boolean): Promise<User | undefined> {
-    if (loggout) {
-      this.logout();
-    }
-    return new Promise(resolve => resolve(undefined));
-  }
-
-  isAuthenticated(): Promise<User> {
+  isAuthenticated(): Observable<User> {
     console.log('isAuthenticated');
-    let user = this.user$.getValue();
-    if (!user || !user.id) {
-      user = AuthService.decodeToken();
-      if (!user || !user.id) {
-        return this.reject(true);
-      }
-    }
-    return new Promise(resolve => resolve(user));
+    return this.user$.pipe(
+      map(user => {
+        if (!user || !user.id) {
+          user = AuthService.decodeToken();
+          if (!user || !user.id) {
+            this.logout();
+          }
+        }
+        return user;
+      }),
+      take(1)
+    );
   }
 
   /**
    * Checks in db that the user stored in the token is allowed.
-   * @param  {boolean} loggout if the user will logged out if not allowed
    * @returns Promise the user from the db, undefined if not allowed
    */
-  isAllowed(loggout: boolean): Promise<User> {
+  isAllowed(): Promise<User> {
     console.log('isAllowed');
     const user = AuthService.decodeToken();
     if (user && user.id) {
@@ -92,30 +90,34 @@ export class AuthService {
           ) {
             return user;
           } else {
-            return this.reject(loggout);
+            return undefined;
           }
         })
         .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
     } else {
-      return this.reject(loggout);
+      return undefined;
     }
   }
 
-  login(name: string, password: string): Promise<User> {
-    return this.getUserFile()
-      .then((users: User[]) => {
-        const found_user = users.find(
+  login(name: string, password: string): Observable<boolean> {
+    return from(this.getUserFile()).pipe(
+      map((users: User[]) =>
+        users.find(
           (user: User) => user.name === name && user.password === password
-        );
-        if (found_user) {
-          AuthService.setToken(AuthService.createToken(found_user));
-          this.user$.next(found_user);
-          return found_user;
+        )
+      ),
+      tap(user => {
+        if (user) {
+          AuthService.setToken(AuthService.createToken(user));
+          this.user$.next(user);
         } else {
-          return this.reject(false);
+          this.logout();
         }
-      })
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
+      }),
+      map(u => !!u),
+      take(1),
+      catchError(err => this.serviceUtils.handlePromiseError(err, this.toast))
+    );
   }
 
   checkAnswer(name: string, answer: string): Promise<boolean> {
@@ -218,8 +220,8 @@ export class AuthService {
       .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
   }
 
-  getCurrentUser(loggout: boolean): Promise<User> {
-    return this.isAllowed(loggout)
+  getCurrentUser(): Promise<User> {
+    return this.isAllowed()
       .then(user => {
         this.user$.next(user);
         return user;
@@ -228,9 +230,17 @@ export class AuthService {
   }
 
   logout(): void {
-    sessionStorage.clear();
-    localStorage.clear();
+    localStorage.removeItem('token');
     this.user$.next(undefined);
-    this.router.navigate(['/login']);
+  }
+
+  redirectToLogin(feature: boolean): void {
+    localStorage.removeItem('token');
+    const param = {};
+    param[Constants.LOGIN_CANCEL] = true;
+    param[Constants.LOGIN_FEATURE] = feature;
+    this.router.navigate(['/login/connect'], {
+      queryParams: param,
+    });
   }
 }

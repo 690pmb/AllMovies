@@ -72,6 +72,7 @@
     "playing": "Now Playing",
     "profile": "My Profile",
     "logout": "Log Out",
+    "login": "Log In",
     "discover": "Discover",
     "change_language": "Change Language",
     "tags": "My Tags"
@@ -267,9 +268,11 @@
     "lang": "Language",
     "connect": {
       "title": "LOGIN",
+      "feature": "Log in or register to take advantage of this feature",
       "log_in": "Log In",
       "sign_up": "Sign Up",
       "connected": "Connected !!",
+      "disconnect": "Disconnected !!",
       "forgot": "Forgot password",
       "wrong": "Incorrect entry.."
     },

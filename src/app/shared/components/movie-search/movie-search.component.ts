@@ -14,7 +14,7 @@ import {AuthService} from '../../../service/auth.service';
 })
 export class MovieSearchComponent implements OnInit, OnDestroy {
   movies!: Observable<Movie[]>;
-  adult!: boolean;
+  adult = false;
   subs: Subscription[] = [];
   imageSize = ImageSize;
   getMovie: (term: string, lang: string) => Observable<Movie[]>;

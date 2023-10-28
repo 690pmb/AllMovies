@@ -29,11 +29,13 @@ export class TabsService {
   }
 
   onNavigation(event: NavigationStart): void {
-    this.liens[this.liens.map(l => l.url).indexOf(this.activeLink.url)].url =
-      event.url;
-    this.activeLink.url = event.url;
-    this.links.next(this.liens);
-    this.storeTabs();
+    if (!event.url.includes('/login/connect')) {
+      this.liens[this.liens.map(l => l.url).indexOf(this.activeLink.url)].url =
+        event.url;
+      this.activeLink.url = event.url;
+      this.links.next(this.liens);
+      this.storeTabs();
+    }
   }
 
   openTab(link: Link, selectAfterAdding: boolean): void {
@@ -70,13 +72,6 @@ export class TabsService {
     } else {
       this.storeTabs();
     }
-  }
-
-  closeAll(): void {
-    this.liens = [new Link('AllMovies', '/')];
-    this.activeLink = this.liens[0];
-    this.links.next(this.liens);
-    this.router.navigateByUrl(this.activeLink.url);
   }
 
   changeTab(link: Link): void {

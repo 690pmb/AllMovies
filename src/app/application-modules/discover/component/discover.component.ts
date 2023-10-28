@@ -35,7 +35,7 @@ export class DiscoverComponent implements OnInit, OnDestroy {
   page: PageEvent;
   nbChecked = 0;
   max = 300;
-  adult: boolean;
+  adult = false;
   runtimeRange: any[] = [0, this.max];
   formatter: NouiFormatter;
   minYear = 1890;

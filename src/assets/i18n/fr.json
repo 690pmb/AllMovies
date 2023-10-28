@@ -71,7 +71,8 @@
     "release": "Sorties Cinéma",
     "playing": "À l'Affiche",
     "profile": "Mon Profil",
-    "logout": "Déconnexion",
+    "logout": "Se Déconnecter",
+    "login": "Se Connecter",
     "discover": "Explorer",
     "change_language": "Changer de Langue",
     "tags": "Mes Tags"
@@ -267,9 +268,11 @@
     "lang": "Langue",
     "connect": {
       "title": "S'IDENTIFIER",
+      "feature": "Connectez ou inscrivez vous pour profiter de cette fonctionnalité",
       "log_in": "Se connecter",
       "sign_up": "S'inscrire",
       "connected": "Connecté !!",
+      "disconnected": "Déconnecté !!",
       "forgot": "Mot de passe oublié",
       "wrong": "Saisie incorrecte.."
     },

@@ -254,6 +254,7 @@
     <ng-container *ngIf="movie.recommendations">
       <app-list-datas
         [datas]="movie.recommendations"
+        [hideUnknown]="!movie.adult"
         [isMovie]="true"
         [label]="('global.reco' | translate).concat(':')"
       ></app-list-datas>
@@ -262,6 +263,7 @@
     <ng-container *ngIf="movie.similars">
       <app-list-datas
         [datas]="movie.similars"
+        [hideUnknown]="!movie.adult"
         [isMovie]="true"
         [label]="('global.similar' | translate).concat(':')"
       ></app-list-datas>

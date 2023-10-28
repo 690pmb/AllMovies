@@ -17,13 +17,13 @@ import {
 import {
   TranslateLoader,
   TranslateModule,
+  TranslateService,
   MissingTranslationHandler,
 } from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import 'bootstrap';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {TranslateService} from '@ngx-translate/core';
 
 import {SharedModule} from './shared/shared.module';
 import {AppRoutingModule} from './app-routing.module';

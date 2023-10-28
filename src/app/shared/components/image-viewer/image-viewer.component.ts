@@ -7,6 +7,8 @@ import {
   ViewChildren,
   QueryList,
   AfterViewInit,
+  ElementRef,
+  ViewChild,
 } from '@angular/core';
 import {
   faExpand,
@@ -16,7 +18,6 @@ import {
 
 import {MenuService} from '../../../service/menu.service';
 import {ImageSize} from '../../../model/model';
-import {ElementRef, ViewChild} from '@angular/core';
 
 @Component({
   selector: 'app-image-viewer',

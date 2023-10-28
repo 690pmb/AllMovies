@@ -7,11 +7,13 @@ import {
   EventEmitter,
   OnChanges,
   HostListener,
+  ViewChild,
+  ElementRef,
+  ChangeDetectorRef,
 } from '@angular/core';
 import {faTimes, IconDefinition} from '@fortawesome/free-solid-svg-icons';
 import {Location} from '@angular/common';
 import {Router} from '@angular/router';
-import {ViewChild, ElementRef, ChangeDetectorRef} from '@angular/core';
 
 @Component({
   selector: 'app-modal',

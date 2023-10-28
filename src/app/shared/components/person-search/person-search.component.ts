@@ -13,7 +13,7 @@ import {AuthService} from '../../../service/auth.service';
 })
 export class PersonSearchComponent implements OnInit {
   persons!: Observable<Person[]>;
-  adult!: boolean;
+  adult = false;
   subs: Subscription[] = [];
   imageSize = ImageSize;
   getPerson: (term: string) => Observable<Person[]>;

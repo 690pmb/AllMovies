@@ -1,5 +1,5 @@
 import {filter} from 'rxjs/operators';
-import {Router, NavigationStart, NavigationEnd} from '@angular/router';
+import {Router, NavigationStart} from '@angular/router';
 import {Component, OnInit} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -8,6 +8,7 @@ import {TabsService} from './service/tabs.service';
 import {AuthService} from './service/auth.service';
 import {MyDatasService} from './service/my-datas.service';
 import {MyTagsService} from './service/my-tags.service';
+import {MenuService} from './service/menu.service';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +22,8 @@ export class AppComponent implements OnInit {
     private auth: AuthService,
     private myDatasService: MyDatasService<Data>,
     private myTagsService: MyTagsService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private menuService: MenuService
   ) {}
 
   ngOnInit(): void {
@@ -30,10 +32,8 @@ export class AppComponent implements OnInit {
       .subscribe((event: NavigationStart) => {
         this.tabsService.onNavigation(event);
       });
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => window.scrollTo(0, 0));
-    this.auth.getCurrentUser(false);
+    this.menuService.event$.subscribe(() => window.scrollTo(0, 0));
+    this.auth.getCurrentUser();
     this.auth.user$.subscribe(user => {
       if (user) {
         this.myDatasService
@@ -44,6 +44,10 @@ export class AppComponent implements OnInit {
           .then(d => this.myDatasService.removeDuplicate(d, false));
         this.myTagsService.getAll();
         this.translate.use(user.lang.code);
+      } else {
+        this.myDatasService.next([], true);
+        this.myDatasService.next([], false);
+        this.myTagsService.myTags$.next([]);
       }
     });
   }

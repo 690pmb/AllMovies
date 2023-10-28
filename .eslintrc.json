@@ -9,8 +9,13 @@
         "allowedNames": ["ngOnInit", "ngOnDestroy", "ngOnChanges"]
       }
     ],
+    "node/no-unpublished-import": ["error"],
     "complexity": ["error", 18],
+    "curly": ["warn"],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error", {"args": "all"}],
     "arrow-body-style": ["error", "as-needed"],
+    "no-duplicate-imports": ["error"],
     "lines-between-class-members": [
       "error",
       "always",

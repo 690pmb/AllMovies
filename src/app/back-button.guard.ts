@@ -4,8 +4,8 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
   UrlTree,
+  Router,
 } from '@angular/router';
-import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +14,8 @@ export class BackButtonGuard implements CanDeactivate<unknown> {
   constructor(private router: Router) {}
 
   canDeactivate(
-    component: unknown,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _component: unknown,
     currentRoute: ActivatedRouteSnapshot,
     currentState: RouterStateSnapshot
   ): boolean | UrlTree {

@@ -17,6 +17,9 @@ export class ListDatasComponent<T extends Data> implements OnChanges {
   datas: T[] = [];
 
   @Input()
+  hideUnknown = true;
+
+  @Input()
   isMovie!: boolean;
 
   @Input()
@@ -30,7 +33,6 @@ export class ListDatasComponent<T extends Data> implements OnChanges {
   sortChoices: DropDownChoice[] = [];
   sortChosen!: DropDownChoice;
   isSortDesc = true;
-  hideUnknown = true;
   pageSize = 5;
 
   constructor(public translate: TranslateService, library: FaIconLibrary) {
@@ -39,8 +41,10 @@ export class ListDatasComponent<T extends Data> implements OnChanges {
 
   ngOnChanges(changes: {[propKey: string]: SimpleChange}): void {
     for (const field of Object.keys(changes)) {
-      if (field === 'datas') {
-        this.datas = changes[field].currentValue;
+      if (field === 'datas' || field === 'hideUnknown') {
+        this.datas = changes?.datas?.currentValue ?? this.datas;
+        this.hideUnknown =
+          changes?.hideUnknown?.currentValue ?? this.hideUnknown;
         this.initSortProperties();
         this.sortOrSearchChanged();
       }
