@@ -1,4 +1,4 @@
-import {BehaviorSubject, Observable, from} from 'rxjs';
+import {BehaviorSubject, Observable, from, of} from 'rxjs';
 import {Router} from '@angular/router';
 import {Injectable} from '@angular/core';
 import jwt_decode from 'jwt-decode';
@@ -13,7 +13,7 @@ import {Utils} from '../shared/utils';
 import {Dropbox} from '../constant/dropbox';
 import {User} from '../model/user';
 import {Constants} from '../constant/constants';
-import {map, catchError, tap, take} from 'rxjs/operators';
+import {map, catchError, tap, take, switchMap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -69,34 +69,6 @@ export class AuthService {
       }),
       take(1)
     );
-  }
-
-  /**
-   * Checks in db that the user stored in the token is allowed.
-   * @returns Promise the user from the db, undefined if not allowed
-   */
-  isAllowed(): Promise<User> {
-    console.log('isAllowed');
-    const user = AuthService.decodeToken();
-    if (user && user.id) {
-      return this.getUserFile()
-        .then(users => users.find(u => u.id === user.id))
-        .then((found: User) => {
-          if (
-            user.name === found.name &&
-            user.password === found.password &&
-            user.answer === user.answer &&
-            user.id === found.id
-          ) {
-            return user;
-          } else {
-            return undefined;
-          }
-        })
-        .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
-    } else {
-      return undefined;
-    }
   }
 
   login(name: string, password: string): Observable<boolean> {
@@ -220,13 +192,34 @@ export class AuthService {
       .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
   }
 
-  getCurrentUser(): Promise<User> {
-    return this.isAllowed()
-      .then(user => {
-        this.user$.next(user);
-        return user;
-      })
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
+  getCurrentUser(): Observable<User> {
+    return of(AuthService.decodeToken()).pipe(
+      switchMap(user => {
+        if (user?.id !== undefined) {
+          return from(
+            this.getUserFile()
+              .then(users => users.find(u => u.id === user.id))
+              .then((found: User) => {
+                if (
+                  user.name === found.name &&
+                  user.password === found.password &&
+                  user.answer === user.answer &&
+                  user.id === found.id
+                ) {
+                  return user;
+                } else {
+                  return undefined;
+                }
+              })
+          );
+        } else {
+          return of(undefined);
+        }
+      }),
+      tap(user => this.user$.next(user)),
+      switchMap(() => this.user$.asObservable()),
+      catchError(err => this.serviceUtils.handlePromiseError(err, this.toast))
+    );
   }
 
   logout(): void {

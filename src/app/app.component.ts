@@ -33,8 +33,7 @@ export class AppComponent implements OnInit {
         this.tabsService.onNavigation(event);
       });
     this.menuService.event$.subscribe(() => window.scrollTo(0, 0));
-    this.auth.getCurrentUser();
-    this.auth.user$.subscribe(user => {
+    this.auth.getCurrentUser().subscribe(user => {
       if (user) {
         this.myDatasService
           .getAll(true)
