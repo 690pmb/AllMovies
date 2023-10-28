@@ -9,6 +9,7 @@ import {
   map,
   startWith,
 } from 'rxjs/operators';
+import {DetailConfig} from '../model/model';
 
 export abstract class AbstractService<T, ID> {
   private readonly id$ = new BehaviorSubject<ID>(undefined);
@@ -51,8 +52,7 @@ export abstract class AbstractService<T, ID> {
   }
 
   public abstract find(
-    paramMap: Observable<ParamMap>,
-    key: string,
-    ...args: (number | string)[]
+    id$: Observable<number>,
+    ...args: DetailConfig[]
   ): Observable<T>;
 }

@@ -28,16 +28,18 @@ export class SeasonDetailComponent {
   faArrowCircleRight = faArrowCircleRight;
 
   serie$ = this.serieManager
-    .find(this.route.paramMap, 'id')
+    .find(this.serieManager.listenParam(this.route.paramMap, 'id'))
     .pipe(tap(s => this.title.setTitle(s.title)));
 
-  season$ = this.seasonManager.find(this.route.paramMap, 'season').pipe(
-    map(season => {
-      season.images.push(...season.episodes.map(e => e.poster));
-      season.images = season.images.filter(i => Utils.isNotBlank(i));
-      return season;
-    })
-  );
+  season$ = this.seasonManager
+    .find(this.serieManager.listenParam(this.route.paramMap, 'season'))
+    .pipe(
+      map(season => {
+        season.images.push(...season.episodes.map(e => e.poster));
+        season.images = season.images.filter(i => Utils.isNotBlank(i));
+        return season;
+      })
+    );
 
   constructor(
     private serieManager: SerieManager,

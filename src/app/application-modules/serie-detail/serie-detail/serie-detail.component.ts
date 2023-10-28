@@ -33,12 +33,14 @@ export class SerieDetailComponent {
   imageSize = ImageSize;
   protected sc!: string;
 
-  serie$ = this.serieManager.find(this.route.paramMap, 'id').pipe(
-    tap(serie => {
-      this.title.setTitle(serie.title);
-      this.menuService.scrollTo$.next(0);
-    })
-  );
+  serie$ = this.serieManager
+    .find(this.serieManager.listenParam(this.route.paramMap, 'id'))
+    .pipe(
+      tap(serie => {
+        this.title.setTitle(serie.title);
+        this.menuService.scrollTo$.next(0);
+      })
+    );
 
   loading$ = combineLatest([
     this.serieManager.listenParam(this.route.paramMap, 'id'),

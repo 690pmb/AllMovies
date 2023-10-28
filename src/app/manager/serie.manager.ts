@@ -5,7 +5,6 @@ import {SerieService} from '../service/serie.service';
 import {DetailConfig} from '../model/model';
 import {TranslateService} from '@ngx-translate/core';
 import {Observable, combineLatest} from 'rxjs';
-import {ParamMap} from '@angular/router';
 import {switchMap, tap} from 'rxjs/operators';
 
 @Injectable({
@@ -39,8 +38,8 @@ export class SerieManager extends AbstractService<Serie, SerieId> {
     );
   }
 
-  find(paramMap: Observable<ParamMap>, key: string): Observable<Serie> {
-    return combineLatest([this.listenParam(paramMap, key), this.lang$]).pipe(
+  find(id$: Observable<number>): Observable<Serie> {
+    return combineLatest([id$, this.lang$]).pipe(
       tap(([id, lang]) => this.update({id, lang})),
       switchMap(() => this.listen())
     );
