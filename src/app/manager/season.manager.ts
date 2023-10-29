@@ -4,7 +4,6 @@ import {Season, SeasonId} from '../model/season';
 import {TranslateService} from '@ngx-translate/core';
 import {SerieService} from '../service/serie.service';
 import {Observable, combineLatest} from 'rxjs';
-import {ParamMap} from '@angular/router';
 import {switchMap, tap} from 'rxjs/operators';
 import {SerieManager} from './serie.manager';
 
@@ -30,12 +29,8 @@ export class SeasonManager extends AbstractService<Season, SeasonId> {
     );
   }
 
-  find(paramMap: Observable<ParamMap>, key: string): Observable<Season> {
-    return combineLatest([
-      this.listenParam(paramMap, key),
-      this.lang$,
-      this.serieManager.listen(),
-    ]).pipe(
+  find(id$: Observable<number>): Observable<Season> {
+    return combineLatest([id$, this.lang$, this.serieManager.listen()]).pipe(
       tap(([id, lang, serie]) =>
         this.update({id: id, serieId: serie.id, lang: lang})
       ),

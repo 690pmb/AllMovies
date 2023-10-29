@@ -63,7 +63,6 @@
   <div *ngIf="selectedId">
     <app-movie-detail
       [id]="selectedId"
-      [config]="config"
       (loaded)="onLoaded()"
     ></app-movie-detail>
   </div>

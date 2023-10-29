@@ -1,4 +1,4 @@
-import {forkJoin} from 'rxjs';
+import {Observable, forkJoin, iif} from 'rxjs';
 import {Injectable} from '@angular/core';
 
 import {DiscoverCriteria} from '../model/discover-criteria';
@@ -13,6 +13,7 @@ import {OmdbService} from './omdb.service';
 import {ToastService} from './toast.service';
 import {UrlBuilder} from '../shared/urlBuilder';
 import {Utils} from '../shared/utils';
+import {map, mergeMap, catchError} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -57,8 +58,16 @@ export class MovieService {
   }
 
   getMovie(id: number, config: DetailConfig, detail: boolean): Promise<Movie> {
+    return this.getMovie$(id, config, detail).toPromise();
+  }
+
+  getMovie$(
+    id: number,
+    config: DetailConfig,
+    detail: boolean
+  ): Observable<Movie> {
     return this.serviceUtils
-      .getPromise(
+      .getObservable(
         UrlBuilder.detailUrlBuilder(
           true,
           id,
@@ -74,58 +83,57 @@ export class MovieService {
           config.lang
         )
       )
-      .then(response => {
-        const movie = MapMovie.mapForMovie(response, this.mockService);
-        movie.lang_version = config.lang ?? movie.lang_version;
-        if (
-          detail &&
-          (!movie.overview ||
-            ((movie.videos === undefined || movie.videos.length === 0) &&
-              config.video) ||
-            !movie.original_title)
-        ) {
-          return this.serviceUtils
-            .getPromise(
-              UrlBuilder.detailUrlBuilder(
-                true,
-                id,
+      .pipe(
+        map(response => {
+          const movie = MapMovie.mapForMovie(response, this.mockService);
+          movie.lang_version = config.lang ?? movie.lang_version;
+          return movie;
+        }),
+        mergeMap(movie =>
+          iif(
+            () =>
+              detail &&
+              config.lang !== 'en' &&
+              (!movie.overview ||
+                ((movie.videos === undefined || movie.videos.length === 0) &&
+                  config.video) ||
+                !movie.original_title),
+            this.getMovie$(
+              id,
+              new DetailConfig(
+                false,
+                false,
+                false,
+                false,
                 config.video,
-                undefined,
-                undefined,
-                undefined,
-                undefined,
-                undefined,
-                undefined,
-                undefined,
+                false,
+                false,
+                false,
                 false,
                 'en'
-              )
-            )
-            .then(enMovie => {
-              const resp = MapMovie.mapForMovie(enMovie, this.mockService);
-              resp.lang_version = config.lang ?? movie.lang_version;
-              return resp;
-            })
-            .then(enMovie => {
-              movie.overview = Utils.isBlank(movie.overview)
-                ? enMovie.overview
-                : movie.overview;
-              movie.videos =
-                movie.videos && movie.videos.length > 0
-                  ? movie.videos
-                  : enMovie.videos;
-              movie.original_title = Utils.isBlank(movie.original_title)
-                ? enMovie.original_title
-                : movie.original_title;
-              movie.score = enMovie.score;
-              return movie;
-            });
-        } else {
-          return movie;
-        }
-      })
-      .then(movie => this.omdb.getImdbScore(movie).toPromise())
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
+              ),
+              false
+            ).pipe(
+              map(enMovie => {
+                movie.overview = Utils.isBlank(movie.overview)
+                  ? enMovie.overview
+                  : movie.overview;
+                movie.videos =
+                  movie.videos && movie.videos.length > 0
+                    ? movie.videos
+                    : enMovie.videos;
+                movie.original_title = Utils.isBlank(movie.original_title)
+                  ? enMovie.original_title
+                  : movie.original_title;
+                movie.score = enMovie.score;
+                return movie;
+              })
+            ),
+            this.omdb.getImdbScore(movie).toPromise()
+          )
+        ),
+        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+      );
   }
 
   getMoviesByReleaseDates(

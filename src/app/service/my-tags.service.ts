@@ -43,7 +43,10 @@ export class MyTagsService {
   getAll(): void {
     this.getFileName()
       .then((fileName: string) => this.dropboxService.downloadFile(fileName))
-      .then((tags: Tag[]) => this.myTags$.next(tags))
+      .then((tags: Tag[]) => {
+        console.log('tags:', tags);
+        return this.myTags$.next(tags);
+      })
       .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
   }
 

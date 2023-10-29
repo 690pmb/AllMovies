@@ -1,17 +1,14 @@
-import {TranslateService, LangChangeEvent} from '@ngx-translate/core';
+import {TranslateService} from '@ngx-translate/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {ActivatedRoute, Router, Params} from '@angular/router';
 import {
-  Component,
-  OnInit,
-  OnDestroy,
-  Input,
-  OnChanges,
-  SimpleChanges,
-  Output,
-  EventEmitter,
-} from '@angular/core';
-import {ActivatedRoute, Router, ParamMap} from '@angular/router';
-import {filter} from 'rxjs/operators';
-import {combineLatest, Subscription} from 'rxjs';
+  filter,
+  tap,
+  map,
+  switchMap,
+  distinctUntilChanged,
+} from 'rxjs/operators';
+import {combineLatest, merge, ReplaySubject} from 'rxjs';
 import {
   faImage,
   faChevronCircleRight,
@@ -22,32 +19,127 @@ import {
 import {Tag} from './../../../../model/tag';
 import {DuckDuckGo} from './../../../../constant/duck-duck-go';
 import {Movie} from '../../../../model/movie';
-import {Keyword, Genre, DetailConfig} from '../../../../model/model';
-import {MovieService} from '../../../../service/movie.service';
+import {DetailConfig, Id} from '../../../../model/model';
 import {TitleService} from '../../../../service/title.service';
 import {TabsService} from '../../../../service/tabs.service';
 import {MyTagsService} from '../../../../service/my-tags.service';
 import {MyDatasService} from '../../../../service/my-datas.service';
 import {MenuService} from '../../../../service/menu.service';
+import {MovieManager} from '../../../../manager/movie.manager';
 
 @Component({
   selector: 'app-movie-detail',
   styleUrls: ['./movie-detail.component.scss'],
   templateUrl: './movie-detail.component.html',
 })
-export class MovieDetailComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() id!: number;
-  @Input() config!: DetailConfig;
+export class MovieDetailComponent {
+  private readonly id$ = new ReplaySubject<number>(1);
+  private readonly config$ = new ReplaySubject<DetailConfig>(1);
+
+  @Input()
+  set id(value: number) {
+    this.isDetail = false;
+    this.config$.next(
+      new DetailConfig(
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        undefined
+      )
+    );
+    this.loaded.emit(false);
+    this.id$.next(value);
+  }
+
+  ids$ = merge(
+    this.movieManager.listenParam(this.route.paramMap, 'id').pipe(
+      filter(id => id !== 0),
+      tap(() => {
+        this.isDetail = true;
+        this.config$.next(
+          new DetailConfig(
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            false,
+            undefined
+          )
+        );
+      })
+    ),
+    this.id$
+  );
+
+  movie$ = this.config$.pipe(
+    distinctUntilChanged(
+      (prev, curr) =>
+        prev.similar === curr.similar && prev.keywords === curr.keywords
+    ),
+    switchMap(config =>
+      this.movieManager.find(this.ids$, config).pipe(
+        tap(movie => {
+          this.loaded.emit(true);
+          if (this.isDetail) {
+            this.title.setTitle(movie.title);
+            this.menuService.scrollTo$.next(0);
+          }
+        })
+      )
+    )
+  );
+
+  loading$ = combineLatest([this.ids$, this.movie$]).pipe(
+    map(([i, m]) => !m || i !== m.id)
+  );
+
+  tags$ = combineLatest([
+    this.myTagsService.myTags$,
+    this.myDatasService.myMovies$,
+    this.movie$,
+  ]).pipe(
+    filter(
+      ([tags, movies, movie]) =>
+        tags !== undefined &&
+        tags.length > 0 &&
+        movies !== undefined &&
+        movie !== undefined
+    ),
+    map(([tags, movies, movie]) => {
+      this.showTags = false;
+      if (movies.map(m => m.id).includes(movie.id)) {
+        this.showTags = true;
+        return tags.filter(t =>
+          t.datas
+            .filter(d => d.movie)
+            .map(d => d.id)
+            .includes(movie.id)
+        );
+      } else {
+        return [];
+      }
+    })
+  );
+
   @Output() loaded = new EventEmitter<boolean>();
   movie!: Movie;
   tags: Tag[] = [];
   showTags = false;
   isImagesVisible = false;
-  isDetail!: boolean;
+  isDetail: boolean;
   showTitles = false;
-  sc!: string;
+  sc: string;
   Url = DuckDuckGo;
-  subs: Subscription[] = [];
 
   faChevronCircleRight = faChevronCircleRight;
   faImage = faImage;
@@ -55,9 +147,9 @@ export class MovieDetailComponent implements OnInit, OnChanges, OnDestroy {
   faMinus = faMinus;
 
   constructor(
-    private movieService: MovieService,
+    private movieManager: MovieManager,
     private route: ActivatedRoute,
-    private translate: TranslateService,
+    protected translate: TranslateService,
     private title: TitleService,
     private router: Router,
     public tabsService: TabsService,
@@ -66,101 +158,11 @@ export class MovieDetailComponent implements OnInit, OnChanges, OnDestroy {
     private myDatasService: MyDatasService<Movie>
   ) {}
 
-  ngOnInit(): void {
-    this.subs.push(
-      this.route.paramMap.subscribe((params: ParamMap) => {
-        if (params) {
-          const idParam = +params.get('id');
-          if (idParam && idParam !== 0) {
-            this.id = idParam;
-            this.isDetail = true;
-            this.getMovie(this.id);
-          }
-        }
-      })
-    );
-    this.subs.push(
-      this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-        this.config.lang = event.lang;
-        this.getMovie(this.id);
-      })
-    );
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.id) {
-      this.id = changes.id.currentValue ? changes.id.currentValue : this.id;
-      this.isDetail = false;
-    }
-    this.getMovie(this.id);
-  }
-
-  getMovie(id: number): void {
-    if (this.id && this.id !== 0) {
-      this.loaded.emit(false);
-      this.config =
-        this.config === undefined
-          ? new DetailConfig(
-              true,
-              true,
-              true,
-              true,
-              true,
-              true,
-              true,
-              true,
-              false,
-              this.translate.currentLang
-            )
-          : this.config;
-      this.movieService.getMovie(id, this.config, true).then(movie => {
-        this.movie = movie;
-        this.loaded.emit(true);
-        if (this.isDetail) {
-          this.title.setTitle(movie.title);
-          this.menuService.scrollTo$.next(0);
-        }
-      });
-      this.subs.push(
-        combineLatest([
-          this.myTagsService.myTags$,
-          this.myDatasService.myMovies$,
-        ])
-          .pipe(
-            filter(
-              ([tags, movies]) => tags !== undefined && movies !== undefined
-            )
-          )
-          .subscribe(([tags, movies]) => {
-            this.tags = [];
-            this.showTags = false;
-            if (movies.map(m => m.id).includes(this.id)) {
-              this.showTags = true;
-              this.tags = tags.filter(t =>
-                t.datas
-                  .filter(d => d.movie)
-                  .map(m => m.id)
-                  .includes(this.id)
-              );
-            }
-          })
-      );
-    }
-  }
-
-  redirectGenreToDiscover(genre: Genre): void {
+  toDiscover<T extends Id>(item: T, key: string): void {
+    const params: Params = {};
+    params[key] = JSON.stringify([item.id]);
     this.router.navigate(['discover'], {
-      queryParams: {genre: JSON.stringify([genre.id])},
+      queryParams: params,
     });
-  }
-
-  redirectKeywordToDiscover(keyword: Keyword): void {
-    this.router.navigate(['discover'], {
-      queryParams: {keyword: JSON.stringify([keyword.id])},
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.subs.forEach(subscription => subscription.unsubscribe());
   }
 }
