@@ -67,7 +67,7 @@
     "zone.js": "0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.1102.19",
+    "@angular-devkit/build-angular": "~16.2.9",
     "@angular/cli": "~11.2",
     "@angular/language-service": "~11.2",
     "@types/crypto-js": "4.1.3",
