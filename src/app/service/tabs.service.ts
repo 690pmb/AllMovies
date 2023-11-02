@@ -1,6 +1,6 @@
 import {BehaviorSubject} from 'rxjs';
 import {Injectable} from '@angular/core';
-import {Router, NavigationStart} from '@angular/router';
+import {Router, NavigationEnd} from '@angular/router';
 
 import {Link} from '../model/model';
 
@@ -28,7 +28,7 @@ export class TabsService {
     localStorage.setItem('active', JSON.stringify(this.activeLink));
   }
 
-  onNavigation(event: NavigationStart): void {
+  onNavigation(event: NavigationEnd): void {
     if (!event.url.includes('/login/connect')) {
       this.liens[this.liens.map(l => l.url).indexOf(this.activeLink.url)].url =
         event.url;

@@ -62,7 +62,7 @@ export class AuthService {
         if (!user || !user.id) {
           user = AuthService.decodeToken();
           if (!user || !user.id) {
-            this.logout();
+            return undefined;
           }
         }
         return user;

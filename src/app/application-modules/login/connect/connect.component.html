@@ -58,6 +58,7 @@
           {{ 'login.connect.log_in' | translate }}
         </button>
         <button
+          type="button"
           class="btn btn-outline-primary"
           (click)="cancel()"
           *ngIf="cancel$ | async"

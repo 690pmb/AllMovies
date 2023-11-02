@@ -1,5 +1,3 @@
-import {filter} from 'rxjs/operators';
-import {Router, NavigationStart} from '@angular/router';
 import {Component, OnInit} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -17,7 +15,6 @@ import {MenuService} from './service/menu.service';
 })
 export class AppComponent implements OnInit {
   constructor(
-    private router: Router,
     private tabsService: TabsService,
     private auth: AuthService,
     private myDatasService: MyDatasService<Data>,
@@ -27,12 +24,10 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationStart))
-      .subscribe((event: NavigationStart) => {
-        this.tabsService.onNavigation(event);
-      });
-    this.menuService.event$.subscribe(() => window.scrollTo(0, 0));
+    this.menuService.event$.subscribe(event => {
+      this.tabsService.onNavigation(event);
+      window.scrollTo(0, 0);
+    });
     this.auth.getCurrentUser().subscribe(user => {
       if (user) {
         this.myDatasService
