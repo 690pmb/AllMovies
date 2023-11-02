@@ -1,6 +1,12 @@
 /* tslint:disable:no-string-literal */
 import {ActivatedRoute, Router} from '@angular/router';
-import {Component, OnInit, OnDestroy, ElementRef} from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import {forkJoin, BehaviorSubject, Observable, Subscription, from} from 'rxjs';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {Sort} from '@angular/material/sort';
@@ -23,7 +29,7 @@ import * as moment from 'moment-mini-ts';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {NouiFormatter} from 'ng2-nouislider';
 import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
-import {MatPaginatorIntl} from '@angular/material/paginator';
+import {MatPaginator, MatPaginatorIntl} from '@angular/material/paginator';
 
 import {Constants} from '../../../../constant/constants';
 import {Utils} from '../../../../shared/utils';
@@ -76,6 +82,9 @@ import {IconDefinition} from '@fortawesome/fontawesome-svg-core';
   ],
 })
 export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
+
   imageSize = ImageSize;
   init_columns: string[];
   medium_columns: string[];
