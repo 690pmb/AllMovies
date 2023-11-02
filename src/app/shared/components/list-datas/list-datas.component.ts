@@ -1,6 +1,5 @@
 import {TranslateService} from '@ngx-translate/core';
 import {Component, Input, OnChanges, SimpleChange} from '@angular/core';
-import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 import {faTimesCircle} from '@fortawesome/free-regular-svg-icons';
 
 import {Data} from '../../../model/data';
@@ -34,10 +33,9 @@ export class ListDatasComponent<T extends Data> implements OnChanges {
   sortChosen!: DropDownChoice;
   isSortDesc = true;
   pageSize = 5;
+  faTimesCircle = faTimesCircle;
 
-  constructor(public translate: TranslateService, library: FaIconLibrary) {
-    library.addIcons(faTimesCircle);
-  }
+  constructor(public translate: TranslateService) {}
 
   ngOnChanges(changes: {[propKey: string]: SimpleChange}): void {
     for (const field of Object.keys(changes)) {

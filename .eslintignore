@@ -5,3 +5,7 @@ cordova/
 e2e/
 *.spec.ts
 *.conf.js
+node_modules/
+cordova/
+dist/
+e2e/

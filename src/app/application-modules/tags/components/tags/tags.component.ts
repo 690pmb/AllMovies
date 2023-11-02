@@ -20,6 +20,7 @@ import {
 import {ActivatedRoute, Router, Params} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
+import {IconDefinition} from '@fortawesome/fontawesome-svg-core';
 
 import {Utils} from './../../../../shared/utils';
 import {Tag} from './../../../../model/tag';
@@ -66,7 +67,7 @@ export class TagsComponent implements OnInit, OnDestroy {
     private router: Router,
     library: FaIconLibrary
   ) {
-    library.addIcons(faTimesCircle);
+    library.addIcons(faTimesCircle as IconDefinition);
   }
 
   ngOnInit(): void {
