@@ -53,7 +53,7 @@
     "dropbox": "4.0.30",
     "flag-icons": "6.1.1",
     "jquery": "3.6.0",
-    "jsrsasign": "10.5.25",
+    "jsrsasign": "11.0.0",
     "jwt-decode": "3.1.2",
     "moment-mini-ts": "2.20.1",
     "ng2-nouislider": "1.8.3",
