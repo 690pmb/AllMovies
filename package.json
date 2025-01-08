@@ -92,7 +92,7 @@
     "stylelint-order": "4.1.0",
     "ts-node": "10.5.0",
     "typescript": "4.0.8",
-    "webpack-bundle-analyzer": "4.5.0"
+    "webpack-bundle-analyzer": "4.10.2"
   },
   "lint-staged": {
     "*.ts": "eslint --no-ignore --max-warnings 0 --fix",
