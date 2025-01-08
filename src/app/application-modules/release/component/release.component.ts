@@ -31,7 +31,7 @@ const I18N_VALUES: {[key: string]: {weekdays: string[]; months: string[]}} = {
     months: [
       'Jan',
       'Fév',
-      'Mar',
+      'Mars',
       'Avr',
       'Mai',
       'Juin',
@@ -43,11 +43,34 @@ const I18N_VALUES: {[key: string]: {weekdays: string[]; months: string[]}} = {
       'Déc',
     ],
   },
+  en: {
+    weekdays: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+    months: [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'June',
+      'July',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ],
+  },
 };
 
 @Injectable({providedIn: 'root'})
 export class I18n {
-  language = 'fr';
+  language = this.translateService.currentLang;
+
+  constructor(public translateService: TranslateService) {
+    translateService.onLangChange.subscribe(
+      (event: LangChangeEvent) => (this.language = event.lang)
+    );
+  }
 }
 
 @Injectable({providedIn: 'root'})
@@ -60,16 +83,16 @@ export class CustomDatepickerI18n extends NgbDatepickerI18n {
     return date.day + '/' + date.month + '/' + date.year;
   }
 
-  getWeekdayShortName(weekday: number): string {
-    return I18N_VALUES[this._i18n.language].weekdays[weekday - 1];
-  }
-
   getMonthShortName(month: number): string {
     return I18N_VALUES[this._i18n.language].months[month - 1];
   }
 
   getMonthFullName(month: number): string {
     return this.getMonthShortName(month);
+  }
+
+  getWeekdayLabel(weekday: number): string {
+    return I18N_VALUES[this._i18n.language].weekdays[weekday - 1];
   }
 }
 
@@ -178,11 +201,10 @@ export class ReleaseComponent implements OnInit, OnDestroy {
     }
   }
 
-  selectPreviousWednesday(): NgbDateStruct {
+  selectPreviousWednesday(): void {
     const date = now;
     date.setDate(date.getDate() - ((date.getDay() + 4) % 7));
     this.model = this.formatter.dateToNgbDateStruct(date);
-    return this.model;
   }
 
   selectDate(date: string): NgbDateStruct {
@@ -191,6 +213,9 @@ export class ReleaseComponent implements OnInit, OnDestroy {
   }
 
   addDays(days: number): string {
+    if (this.model === null || this.model === undefined) {
+      this.selectPreviousWednesday();
+    }
     return this.formatter.dateToString(
       this.formatter.addNgbDays(this.model, days),
       'dd/MM/yyyy'
