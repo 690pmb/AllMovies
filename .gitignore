@@ -36,17 +36,6 @@ npm-debug.log
 testem.log
 /typings
 
-# cordova
-cordova/AllMovies/node_modules
-cordova/AllMovies/www
-cordova/AllMovies/platforms
-cordova/AllMovies/plugins
-cordova/AllMovies/hooks
-
-# e2e
-/e2e/*.js
-/e2e/*.map
-
 # System Files
 .DS_Store
 Thumbs.db
