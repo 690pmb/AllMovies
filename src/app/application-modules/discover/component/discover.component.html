@@ -215,7 +215,7 @@
     [ngClass]="{selected: data.checked, adult: data.adult}"
   >
     <app-bookmarked [id]="data.id" [isMovie]="isMovie"></app-bookmarked>
-    <img src="{{ data.affiche | image: imageSize.small }}" />
+    <img src="{{ data.affiche | image : imageSize.small }}" />
     <p
       matLine
       appOpenLink
@@ -244,7 +244,7 @@
     <p matLine>
       {{
         (isMovie ? data.date : data.firstAired)
-          | date: 'EEEE dd MMMM yyyy':'':translate.currentLang
+          | date : 'EEEE dd MMMM yyyy' : '' : translate.currentLang
           | capitalizeWord
       }}
     </p>
@@ -252,7 +252,7 @@
       <span>{{ data.vote }} / 10 </span>
       <span>({{ data.vote_count }})</span>
       <span>
-        - {{ data.popularity | number: '1.0-2':translate.currentLang }}</span
+        - {{ data.popularity | number : '1.0-2' : translate.currentLang }}</span
       >
     </p>
     <p matLine *ngIf="genresLoaded$ | async">

@@ -6,13 +6,13 @@
         <div class="season-slide">
           <img
             class="season-poster"
-            [src]="season.poster | image: imageSize.small"
+            [src]="season.poster | image : imageSize.small"
             (click)="setOverview(season)"
             [ngClass]="{pointer: season.overview}"
           />
           <p>
             {{ season.name }} ({{ season.episodeCount }}) -
-            {{ season.airDate | date: 'yyyy' }}
+            {{ season.airDate | date : 'yyyy' }}
             <button
               class="btn btn-outline-primary small-btn"
               [routerLink]="['./', season.seasonNumber]"

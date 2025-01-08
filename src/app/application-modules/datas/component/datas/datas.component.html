@@ -140,7 +140,7 @@
     >
       {{
         (isMovie ? 'movies' : 'series') + '.add_tag'
-          | translate: {tag: selectedTag.label, size: nbChecked}
+          | translate : {tag: selectedTag.label, size: nbChecked}
       }}
     </button>
     <span
@@ -161,7 +161,7 @@
     >
       {{
         (isMovie ? 'movies' : 'series') + '.remove'
-          | translate: {size: nbChecked}
+          | translate : {size: nbChecked}
       }}
       <fa-icon [icon]="faTrash"></fa-icon>
     </button>
@@ -218,7 +218,7 @@
           class="data-poster"
           src="{{
             data.translation?.get(translate.currentLang)?.poster
-              | image: imageSize.medium
+              | image : imageSize.medium
           }}"
         />
       </mat-cell>
@@ -280,7 +280,7 @@
         <fa-icon class="mat-icon" [icon]="faCalendar"></fa-icon>
       </mat-header-cell>
       <mat-cell *matCellDef="let data">
-        {{ data.date | date: 'MM/yyyy' }}
+        {{ data.date | date : 'MM/yyyy' }}
       </mat-cell>
     </ng-container>
 
@@ -295,7 +295,7 @@
         <fa-icon class="mat-icon" [icon]="faCalendar"></fa-icon>
       </mat-header-cell>
       <mat-cell *matCellDef="let data">
-        {{ data.firstAired | date: 'MM/yyyy' }}
+        {{ data.firstAired | date : 'MM/yyyy' }}
       </mat-cell>
     </ng-container>
 
@@ -417,7 +417,7 @@
         <fa-icon class="mat-icon" [icon]="['far', 'clock']"></fa-icon>
       </mat-header-cell>
       <mat-cell *matCellDef="let data">
-        {{ data.time | convertToHHmm: 'true' }}
+        {{ data.time | convertToHHmm : 'true' }}
       </mat-cell>
     </ng-container>
 
@@ -433,7 +433,7 @@
       </mat-header-cell>
       <mat-cell *matCellDef="let data">
         <ng-container *ngIf="data.runtimes && data.runtimes.length > 0">
-          {{ data.runtimes[0] | convertToHHmm: 'true' }}
+          {{ data.runtimes[0] | convertToHHmm : 'true' }}
         </ng-container>
       </mat-cell>
     </ng-container>
@@ -450,7 +450,7 @@
         <fa-icon class="mat-icon" [icon]="['far', 'clock']"></fa-icon>
       </mat-header-cell>
       <mat-cell *matCellDef="let data">
-        {{ data.added | date: 'dd/MM/yy HH:mm:ss' }}
+        {{ data.added | date : 'dd/MM/yy HH:mm:ss' }}
       </mat-cell>
     </ng-container>
 

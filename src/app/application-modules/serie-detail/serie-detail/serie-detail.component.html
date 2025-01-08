@@ -9,13 +9,13 @@
     </app-modal>
     <div class="detail-header">
       <h1 class="detail-title">
-        {{ serie.title }} ({{ serie.firstAired | date: 'yyyy' }})
+        {{ serie.title }} ({{ serie.firstAired | date : 'yyyy' }})
       </h1>
       <!-- Networks -->
       <span class="serie-networks">
         <img
           class="network-img pointer"
-          [src]="network.logo_path | image: imageSize.small"
+          [src]="network.logo_path | image : imageSize.small"
           *ngFor="let network of serie.networks"
           (click)="toDiscover(network, 'network')"
           matTooltip="{{
@@ -127,7 +127,7 @@
             <ng-container *ngIf="serie.firstAired">
               {{
                 serie.firstAired
-                  | date: 'dd MMMM yyyy':'':translate.currentLang
+                  | date : 'dd MMMM yyyy' : '' : translate.currentLang
                   | capitalizeWord
               }}
             </ng-container>
@@ -137,7 +137,7 @@
             <ng-container *ngIf="serie.lastAired">
               {{
                 serie.lastAired
-                  | date: 'dd MMMM yyyy':'':translate.currentLang
+                  | date : 'dd MMMM yyyy' : '' : translate.currentLang
                   | capitalizeWord
               }}
             </ng-container>

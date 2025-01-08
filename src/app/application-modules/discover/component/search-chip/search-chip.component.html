@@ -34,7 +34,7 @@
       <img
         class="align-self-center"
         *ngIf="hasImage"
-        src="{{ item.profile | image: imageSize.small:'true' }}"
+        src="{{ item.profile | image : imageSize.small : 'true' }}"
       />
       <div class="result-body">
         <span>{{ item.name | capitalizeWord }}</span>

@@ -14,7 +14,7 @@
     <img
       class="result-thumbnail"
       *ngIf="person.profile"
-      src="{{ person.profile | image: imageSize.small }}"
+      src="{{ person.profile | image : imageSize.small }}"
     />
     <div class="result-title">{{ person.name | capitalizeWord }}</div>
   </div>

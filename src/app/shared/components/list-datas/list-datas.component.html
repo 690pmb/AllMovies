@@ -76,7 +76,7 @@
           ></app-bookmarked>
           <img
             class="frame center pointer"
-            src="{{ data.affiche | image: imageSize.small }}"
+            src="{{ data.affiche | image : imageSize.small }}"
             alt="{{ data.title | capitalizeWord }}"
             appOpenLink
             [label]="data.title"
@@ -87,16 +87,16 @@
             {{ data.title | capitalizeWord }} -
             <ng-container *ngIf="isMovie; else serie">{{
               data.date
-                | date: 'MMM yyyy':'':translate.currentLang
+                | date : 'MMM yyyy' : '' : translate.currentLang
                 | capitalizeWord
             }}</ng-container>
             <ng-template #serie>{{
               data.firstAired
-                | date: 'yyyy':'':translate.currentLang
+                | date : 'yyyy' : '' : translate.currentLang
                 | capitalizeWord
             }}</ng-template>
             - {{ data.vote }}/10 ({{ data.vote_count }}) -
-            {{ data.popularity | number: '1.0-0':translate.currentLang }}
+            {{ data.popularity | number : '1.0-0' : translate.currentLang }}
           </p>
           <mat-checkbox [(ngModel)]="data.checked"></mat-checkbox>
         </div>

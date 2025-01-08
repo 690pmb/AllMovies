@@ -9,11 +9,11 @@
     </app-modal>
     <div class="detail-header">
       <h1 class="detail-title" [ngClass]="{adult: movie.adult}">
-        {{ movie.title }} ({{ movie.date | date: 'yyyy' }})
+        {{ movie.title }} ({{ movie.date | date : 'yyyy' }})
       </h1>
       <!-- Time -->
       <h3 class="movie-time" *ngIf="movie.time > 0">
-        {{ movie.time | convertToHHmm: 'true' }}
+        {{ movie.time | convertToHHmm : 'true' }}
       </h3>
       <div class="detail-btn">
         <!-- Detail Btn -->
@@ -148,8 +148,11 @@
             {{ 'release_type.' + release.type | translate }}:
             {{
               release.date
-                | date: 'dd MMMM
-          yyyy':'':translate.currentLang
+                | date
+                  : 'dd MMMM
+          yyyy'
+                  : ''
+                  : translate.currentLang
                 | capitalizeWord
             }}
           </div>
@@ -157,7 +160,7 @@
         <ng-template #defaultRelease>
           {{
             movie.date
-              | date: 'EEEE dd MMMM yyyy':'':translate.currentLang
+              | date : 'EEEE dd MMMM yyyy' : '' : translate.currentLang
               | capitalizeWord
           }}
         </ng-template>
@@ -165,12 +168,17 @@
       <!-- Budget -->
       <div *ngIf="movie.budget > 0">
         <label>{{ 'movie.budget' | translate }}: </label
-        >{{ movie.budget | currency: 'USD':'':'1.0-0':translate.currentLang }}
+        >{{
+          movie.budget | currency : 'USD' : '' : '1.0-0' : translate.currentLang
+        }}
       </div>
       <!-- Revenu -->
       <div *ngIf="movie.recette > 0">
         <label>{{ 'movie.revenu' | translate }}: </label
-        >{{ movie.recette | currency: 'USD':'':'1.0-0':translate.currentLang }}
+        >{{
+          movie.recette
+            | currency : 'USD' : '' : '1.0-0' : translate.currentLang
+        }}
       </div>
       <!-- Tags -->
       <div class="movie-tags" *ngIf="tags$ | async as tags">

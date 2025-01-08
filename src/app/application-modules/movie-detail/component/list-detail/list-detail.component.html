@@ -10,11 +10,13 @@
     <p matLine>{{ list.description }}</p>
     <p matLine>{{ list.lang }} - {{ list.country }}</p>
     <p matLine>
-      {{ list.average_rating | number: '1.0-2':translate.currentLang }}/10
+      {{ list.average_rating | number : '1.0-2' : translate.currentLang }}/10
     </p>
-    <p matLine>{{ list.runtime | convertToHHmm: 'false' }}</p>
+    <p matLine>{{ list.runtime | convertToHHmm : 'false' }}</p>
     <p matLine>
-      {{ list.revenue | currency: 'USD':'':'1.0-0':translate.currentLang }}
+      {{
+        list.revenue | currency : 'USD' : '' : '1.0-0' : translate.currentLang
+      }}
     </p>
   </mat-list-item>
 </div>
@@ -74,7 +76,7 @@
     *ngFor="let movie of list.paginate.results"
     [ngClass]="{selected: movie.checked, adult: movie.adult}"
   >
-    <img class="poster" src="{{ movie.affiche | image: imageSize.small }}" />
+    <img class="poster" src="{{ movie.affiche | image : imageSize.small }}" />
     <p
       matLine
       appOpenLink
@@ -86,12 +88,13 @@
     </p>
     <p matLine>{{ movie.original_title }}</p>
     <p matLine>{{ movie.language | uppercase }}</p>
-    <p matLine>{{ movie.date | date: 'dd MMMM yyyy' }}</p>
+    <p matLine>{{ movie.date | date : 'dd MMMM yyyy' }}</p>
     <p matLine>
       <span>{{ movie.vote }} / 10 </span>
       <span>({{ movie.vote_count }})</span>
       <span>
-        - {{ movie.popularity | number: '1.0-2':translate.currentLang }}</span
+        -
+        {{ movie.popularity | number : '1.0-2' : translate.currentLang }}</span
       >
     </p>
     <p matLine *ngIf="genresLoaded$ | async">

@@ -7,7 +7,7 @@
   >
     <pinch-zoom [disableZoomControl]="'disable'">
       <img
-        src="{{ fullScreenImg | image: imageSize.full }}"
+        src="{{ fullScreenImg | image : imageSize.full }}"
         class="fullscreen"
       />
     </pinch-zoom>
@@ -19,7 +19,7 @@
       <swiper [config]="config" [(index)]="index">
         <div *ngFor="let img of images">
           <pinch-zoom [disableZoomControl]="'disable'">
-            <img src="{{ img | image: imageSize.full }}" />
+            <img src="{{ img | image : imageSize.full }}" />
           </pinch-zoom>
         </div>
       </swiper>
@@ -32,7 +32,7 @@
       <swiper [config]="thumbs" [(index)]="index">
         <div *ngFor="let thumb of thumbnails">
           <img
-            src="{{ thumb | image: imageSize.medium }}"
+            src="{{ thumb | image : imageSize.medium }}"
             #img
             [class.portrait]="isPortrait"
           />
@@ -44,7 +44,7 @@
   <ng-container *ngIf="isOnePicture">
     <pinch-zoom class="frame-viewer pointer" [disableZoomControl]="'disable'">
       <img
-        src="{{ thumbnails | image: imageSize.medium }}"
+        src="{{ thumbnails | image : imageSize.medium }}"
         (click)="fullscreen(images)"
       />
     </pinch-zoom>

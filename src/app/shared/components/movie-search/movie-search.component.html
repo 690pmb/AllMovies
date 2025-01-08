@@ -15,17 +15,17 @@
     <img
       class="result-thumbnail"
       *ngIf="movie.affiche"
-      src="{{ movie.affiche | image: imageSize.small }}"
+      src="{{ movie.affiche | image : imageSize.small }}"
     />
     <div class="result-title">
       <div class="result-main">
-        {{ movie.title | capitalizeWord | truncate: 40 }}
+        {{ movie.title | capitalizeWord | truncate : 40 }}
         <ng-container *ngIf="movie.date"
-          >({{ movie.date | date: 'yyyy' }})</ng-container
+          >({{ movie.date | date : 'yyyy' }})</ng-container
         >
       </div>
       <div *ngIf="movie.original_title" class="result-original">
-        {{ movie.original_title | truncate: 40 }}
+        {{ movie.original_title | truncate : 40 }}
       </div>
     </div>
   </div>

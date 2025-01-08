@@ -10,13 +10,13 @@
       >
         <h5>
           {{ movie.title | capitalizeWord }} -
-          {{ movie.date | date: 'dd/MM/yyyy' }} - {{ movie.vote }} / 10 -
-          {{ movie.popularity | number: '1.0-2':translate.currentLang }}
+          {{ movie.date | date : 'dd/MM/yyyy' }} - {{ movie.vote }} / 10 -
+          {{ movie.popularity | number : '1.0-2' : translate.currentLang }}
         </h5>
       </div>
       <img
         class="frame profile"
-        [src]="movie.affiche | image: imageSize.medium"
+        [src]="movie.affiche | image : imageSize.medium"
         *ngIf="movie.affiche"
       />
     </a>
@@ -34,13 +34,13 @@
       >
         <h5>
           {{ serie.title | capitalizeWord }} -
-          {{ serie.firstAired | date: 'dd/MM/yyyy' }} - {{ serie.vote }} / 10 -
-          {{ serie.popularity | number: '1.0-2':translate.currentLang }}
+          {{ serie.firstAired | date : 'dd/MM/yyyy' }} - {{ serie.vote }} / 10 -
+          {{ serie.popularity | number : '1.0-2' : translate.currentLang }}
         </h5>
       </div>
       <img
         class="frame profile"
-        [src]="serie.affiche | image: imageSize.medium"
+        [src]="serie.affiche | image : imageSize.medium"
         *ngIf="serie.affiche"
       />
     </a>
@@ -60,12 +60,12 @@
       >
         <h5>
           {{ person.name | capitalizeWord }} -
-          {{ person.popularity | number: '1.0-2':translate.currentLang }}
+          {{ person.popularity | number : '1.0-2' : translate.currentLang }}
         </h5>
       </div>
       <img
         class="frame profile"
-        [src]="person.profile | image: imageSize.medium"
+        [src]="person.profile | image : imageSize.medium"
         *ngIf="person.profile"
       />
     </a>

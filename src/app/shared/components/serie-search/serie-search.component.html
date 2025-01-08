@@ -10,17 +10,17 @@
     <img
       class="result-thumbnail"
       *ngIf="serie.affiche"
-      src="{{ serie.affiche | image: imageSize.small }}"
+      src="{{ serie.affiche | image : imageSize.small }}"
     />
     <div class="result-title">
       <div class="result-main">
-        {{ serie.title | capitalizeWord | truncate: 40 }}
+        {{ serie.title | capitalizeWord | truncate : 40 }}
         <ng-container *ngIf="serie.firstAired"
-          >({{ serie.firstAired | date: 'yyyy' }})</ng-container
+          >({{ serie.firstAired | date : 'yyyy' }})</ng-container
         >
       </div>
       <div *ngIf="serie.original_title" class="result-original">
-        {{ serie.original_title | truncate: 40 }}
+        {{ serie.original_title | truncate : 40 }}
       </div>
     </div>
   </div>

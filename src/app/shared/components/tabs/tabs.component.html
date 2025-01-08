@@ -6,7 +6,7 @@
       (click)="tabsService.changeTab(link)"
       [active]="tabsService.activeLink.url === link.url"
     >
-      {{ link.label | truncate: 20 }}
+      {{ link.label | truncate : 20 }}
       <span
         (click)="tabsService.closeTab(link)"
         class="closeTab"
