@@ -16,7 +16,7 @@ export type Search = {
 
 export type Site = Search & {url: string};
 
-export class DuckDuckGo {
+export class Meta {
   static readonly SEARCH_BANG_METACRITIC: Search = {
     label: 'metacritic',
     icon: faDatabase,
@@ -43,7 +43,7 @@ export class DuckDuckGo {
     icon: faWikipediaW,
   };
 
-  static readonly DUCKDUCKGO_URL = 'https://api.duckduckgo.com/?q=!';
+  static readonly METACRITIC_SEARCH_URL = 'https://www.metacritic.com/search';
 
   static readonly GOOGLE_SEARCH_URL = 'https://www.google.com/search?q=';
 }

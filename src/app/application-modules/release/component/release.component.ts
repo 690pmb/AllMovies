@@ -18,7 +18,7 @@ import {Subscription} from 'rxjs';
 
 import {Movie} from '../../../model/movie';
 import {MyNgbDate} from '../../../shared/my-ngb-date';
-import {DuckDuckGo} from '../../../constant/duck-duck-go';
+import {Meta} from '../../../constant/meta';
 import {DetailConfig} from '../../../model/model';
 import {MovieService} from '../../../service/movie.service';
 import {TitleService} from '../../../service/title.service';
@@ -94,7 +94,7 @@ export class ReleaseComponent implements OnInit, OnDestroy {
   config!: DetailConfig;
   subs: Subscription[] = [];
 
-  Url = DuckDuckGo;
+  Url = Meta;
 
   constructor(
     private movieService: MovieService,

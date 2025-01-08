@@ -10,7 +10,7 @@ import {
 
 import {Utils} from './../../../utils';
 import {MetaService} from './../service/meta.service';
-import {DuckDuckGo, Search, Site} from '../../../../constant/duck-duck-go';
+import {Meta, Search, Site} from '../../../../constant/meta';
 import {Score} from '../../../../model/score';
 import {Person} from '../../../../model/person';
 import {Data} from '../../../../model/data';
@@ -124,7 +124,7 @@ export class MetaComponent implements OnChanges {
     this.scSearch(
       this.links.find(
         l =>
-          l.label === DuckDuckGo.SEARCH_BANG_SENSCRITIQUE.label &&
+          l.label === Meta.SEARCH_BANG_SENSCRITIQUE.label &&
           (this.isMovie || this.isSerie)
       )?.url
     ).then(() => {

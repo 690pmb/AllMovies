@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import {HttpParams} from '@angular/common/http';
 import {map, catchError} from 'rxjs/operators';
 
-import {DuckDuckGo, Site} from './../../../../constant/duck-duck-go';
+import {Meta, Site} from '../../../../constant/meta';
 import {Constants} from './../../../../constant/constants';
 import {UtilsService} from '../../../../service/utils.service';
 import {ToastService} from '../../../../service/toast.service';
@@ -33,26 +33,25 @@ export class MetaService {
       (userLang === 'fr' &&
         ['gb', 'en'].includes(itemLang) &&
         [
-          DuckDuckGo.SEARCH_BANG_METACRITIC.label,
-          DuckDuckGo.SEARCH_BANG_WIKI_EN.label,
+          Meta.SEARCH_BANG_METACRITIC.label,
+          Meta.SEARCH_BANG_WIKI_EN.label,
         ].includes(site)) ||
       (userLang === 'en' &&
         itemLang === 'fr' &&
         [
-          DuckDuckGo.SEARCH_BANG_SENSCRITIQUE.label,
-          DuckDuckGo.SEARCH_BANG_WIKI_FR.label,
+          Meta.SEARCH_BANG_SENSCRITIQUE.label,
+          Meta.SEARCH_BANG_WIKI_FR.label,
         ].includes(site))
         ? original_title
         : title;
 
     if (
-      [
-        DuckDuckGo.SEARCH_BANG_WIKI_EN.label,
-        DuckDuckGo.SEARCH_BANG_WIKI_FR.label,
-      ].includes(site)
+      [Meta.SEARCH_BANG_WIKI_EN.label, Meta.SEARCH_BANG_WIKI_FR.label].includes(
+        site
+      )
     ) {
       return this.wikisearch(workingTitle, site);
-    } else if (site === DuckDuckGo.SEARCH_BANG_IMDB.label && imdbId) {
+    } else if (site === Meta.SEARCH_BANG_IMDB.label && imdbId) {
       return of(
         Constants.IMDB_URL +
           (isMovie || isSerie
@@ -60,30 +59,17 @@ export class MetaService {
             : Constants.IMDB_PERSON_SUFFIX) +
           imdbId
       );
-    } else if (site === DuckDuckGo.SEARCH_BANG_SENSCRITIQUE.label) {
+    } else if (site === Meta.SEARCH_BANG_SENSCRITIQUE.label) {
       return of(
-        `${DuckDuckGo.GOOGLE_SEARCH_URL}${workingTitle}+site%3Asenscritique.com`
+        `${Meta.GOOGLE_SEARCH_URL}${workingTitle}+site%3Asenscritique.com`
       );
-    } else if (site === DuckDuckGo.SEARCH_BANG_GOOGLE.label) {
-      return of(`${DuckDuckGo.GOOGLE_SEARCH_URL}${workingTitle}`);
+    } else if (site === Meta.SEARCH_BANG_GOOGLE.label) {
+      return of(`${Meta.GOOGLE_SEARCH_URL}${workingTitle}`);
     } else {
-      const url = `${DuckDuckGo.DUCKDUCKGO_URL}${site}+
-        ${UtilsService.encodeQueryUrl(workingTitle)}&format=json&no_redirect=1`;
-      return this.serviceUtils.getObservable(url).pipe(
-        map((data: any) => {
-          let result = <string>data.Redirect;
-          if (site === DuckDuckGo.SEARCH_BANG_METACRITIC.label) {
-            if (isMovie) {
-              result = result.replace('/all/', '/movie/');
-            } else if (isSerie) {
-              result = result.replace('/all/', '/tv/');
-            } else {
-              result = result.replace('/all/', '/person/');
-            }
-          }
-          return result;
-        }),
-        catchError(err => this.serviceUtils.handlePromiseError(err, this.toast))
+      return of(
+        `${Meta.METACRITIC_SEARCH_URL}/${UtilsService.encodeQueryUrl(
+          workingTitle
+        )}/?page=1&category=${isMovie ? '2' : isSerie ? '1' : '3'}`
       );
     }
   }
@@ -95,7 +81,7 @@ export class MetaService {
       .set('format', 'json');
 
     const url = `https://${
-      site === DuckDuckGo.SEARCH_BANG_WIKI_EN.label ? 'en' : 'fr'
+      site === Meta.SEARCH_BANG_WIKI_EN.label ? 'en' : 'fr'
     }.wikipedia.org/w/api.php?${params.toString()}`;
 
     return this.serviceUtils.jsonpObservable(url, 'callback').pipe(

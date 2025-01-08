@@ -13,7 +13,7 @@ import {DropDownChoice, ImageSize} from './../../../model/model';
 import {Person} from '../../../model/person';
 import {Job} from './../../../constant/job';
 import {Url} from '../../../constant/url';
-import {DuckDuckGo} from '../../../constant/duck-duck-go';
+import {Meta} from '../../../constant/meta';
 import {Utils} from '../../../shared/utils';
 import {Data} from '../../../model/data';
 import {PersonService} from '../../../service/person.service';
@@ -34,7 +34,7 @@ export class PersonDetailComponent implements OnInit, OnDestroy {
   subs: Subscription[] = [];
   Url = Url;
   imageSize = ImageSize;
-  DuckDuckGo = DuckDuckGo;
+  Meta = Meta;
   faAtom = faAtom;
   faPlusSquare = faPlusSquare;
   faMinusSquare = faMinusSquare;

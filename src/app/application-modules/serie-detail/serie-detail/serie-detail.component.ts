@@ -10,7 +10,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {TranslateService} from '@ngx-translate/core';
 
-import {DuckDuckGo} from './../../../constant/duck-duck-go';
+import {Meta} from '../../../constant/meta';
 import {Serie} from '../../../model/serie';
 import {TitleService} from '../../../service/title.service';
 import {TabsService} from '../../../service/tabs.service';
@@ -29,7 +29,7 @@ export class SerieDetailComponent {
   showTags = false;
   isImagesVisible = false;
   showTitles = false;
-  Url = DuckDuckGo;
+  Url = Meta;
   imageSize = ImageSize;
   protected sc!: string;
 

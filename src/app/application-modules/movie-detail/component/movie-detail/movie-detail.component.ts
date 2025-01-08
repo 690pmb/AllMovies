@@ -17,7 +17,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import {Tag} from './../../../../model/tag';
-import {DuckDuckGo} from './../../../../constant/duck-duck-go';
+import {Meta} from '../../../../constant/meta';
 import {Movie} from '../../../../model/movie';
 import {DetailConfig, Id} from '../../../../model/model';
 import {TitleService} from '../../../../service/title.service';
@@ -139,7 +139,7 @@ export class MovieDetailComponent {
   isDetail: boolean;
   showTitles = false;
   sc: string;
-  Url = DuckDuckGo;
+  Url = Meta;
 
   faChevronCircleRight = faChevronCircleRight;
   faImage = faImage;

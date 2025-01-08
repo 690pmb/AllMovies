@@ -4,7 +4,7 @@ import {
   faTicketAlt,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
-import {Site} from '../../../constant/duck-duck-go';
+import {Site} from '../../../constant/meta';
 import {MetaService} from '../meta/service/meta.service';
 import {UtilsService} from '../../../service/utils.service';
 import {ToastService} from '../../../service/toast.service';
