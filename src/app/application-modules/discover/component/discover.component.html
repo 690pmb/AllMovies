@@ -12,7 +12,7 @@
   </mat-form-field>
   <!-- Sort direction -->
   <mat-button-toggle-group #sortDir="matButtonToggleGroup">
-    <div class="toogleHeader">{{ 'global.sort_direction' | translate }}:</div>
+    <div class="toogle-header">{{ 'global.sort_direction' | translate }}:</div>
     <mat-button-toggle value="desc">
       {{ 'global.sort_up' | translate }}
     </mat-button-toggle>
@@ -127,7 +127,7 @@
   [(ngModel)]="runtimeRange"
   [format]="formatter"
   [tooltips]="[true, true]"
-  id="runtime-slider"
+  class="runtime-slider"
 ></nouislider>
 <!-- Year range -->
 <nouislider
@@ -151,7 +151,7 @@
     [tooltips]="[true, true]"
     style="margin-top: 4em"
   ></nouislider>
-  <mat-form-field id="voteCount">
+  <mat-form-field class="vote-count">
     <mat-select
       placeholder="{{ 'discover.vote_count_min' | translate }}"
       [(value)]="voteCountMin"

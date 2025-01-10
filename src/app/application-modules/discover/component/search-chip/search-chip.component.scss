@@ -5,15 +5,15 @@
 }
 
 .result-content {
-  display: flex;
   align-items: center;
+  display: flex;
 
-  & img {
+  img {
     padding: 0 5px;
   }
 }
 
 .result-body {
-  white-space: pre-line;
   line-height: 24px !important;
+  white-space: pre-line;
 }

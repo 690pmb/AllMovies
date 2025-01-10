@@ -1,8 +1,8 @@
 @use 'imports' as *;
 
 body {
-  margin-bottom: 50vh;
   font-family: $font-family !important;
+  margin-bottom: 50vh;
 }
 
 h1,
@@ -10,32 +10,32 @@ h2,
 h3,
 h4 {
   box-sizing: border-box !important;
-  position: relative !important;
+  font-family: $font-family !important;
   margin-bottom: 8px !important;
   margin-top: 0 !important;
-  font-family: $font-family !important;
+  position: relative !important;
   text-align: center !important;
 }
 
 label {
+  color: $blue;
   display: inline-block;
+  font-weight: bold;
   margin: 0.5em 0 !important;
   padding-right: 5px !important;
-  font-weight: bold;
-  color: $blue;
 }
 
 .column {
-  display: grid;
   align-content: start;
+  display: grid;
   grid-template-columns: auto;
 }
 
 .icon img {
-  vertical-align: middle;
+  background-color: $white;
   height: 30px;
   padding-bottom: 4px;
-  background-color: $white;
+  vertical-align: middle;
 }
 
 $levels: (
@@ -58,7 +58,7 @@ fa-icon {
 .small-btn {
   padding: 4px 8px;
 
-  & fa-icon {
+  fa-icon {
     display: flex;
   }
 }
@@ -81,43 +81,45 @@ fa-icon {
 }
 
 .title {
-  margin-bottom: 0;
   font-size: 28px;
+  margin-bottom: 0;
   text-align: center;
 }
 
+/* stylelint-disable-next-line selector-no-qualifying-type */
 input[type='checkbox'] {
   width: calc(80% - 8px) !important;
 }
 
 .frame {
-  position: relative;
-  float: left;
-  display: inline-block;
-  vertical-align: bottom;
-  max-width: 90%;
-  margin: 0 30px 10px 10px;
-  border: 3px solid $black;
   @include box-shadow;
 
-  & img {
-    vertical-align: top;
+  border: 3px solid $black;
+  display: inline-block;
+  float: left;
+  margin: 0 30px 10px 10px;
+  max-width: 90%;
+  position: relative;
+  vertical-align: bottom;
+
+  img {
     border: 0;
+    vertical-align: top;
   }
 
-  & + a {
-    margin: 0 8px 0 8px;
+  + a {
+    margin: 0 8px;
   }
 
   &:hover::after {
+    background-color: $black;
+    background-color: rgb(0 0 0 / 50%);
     content: '';
-    position: absolute;
-    top: 0;
     display: block;
     height: 100%;
+    position: absolute;
+    top: 0;
     width: 100%;
-    background-color: $black;
-    background-color: rgba(0, 0, 0, 0.5);
   }
 }
 
@@ -141,19 +143,19 @@ input[type='checkbox'] {
   color: map-get($gender, 'unknown');
 }
 
-.fadeIn {
-  animation: fadeIn 1s both $bezier;
+.fade-in {
+  animation: fade-in 1s both $bezier;
 }
 
-.fadeOut {
-  animation: fadeOut 0.5s both $bezier;
+.fade-out {
+  animation: fade-out 0.5s both $bezier;
 }
 
 .overview {
   width: 80% !important;
 }
 
-.disable_selection {
+.disable-selection {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -171,23 +173,23 @@ input[type='checkbox'] {
 .big-autocomplete {
   min-height: 576px !important;
 
-  & img {
+  img {
     height: 94px;
   }
 
-  & .mat-option {
+  .mat-option {
     min-height: 96px !important;
   }
 }
 
 .tag-color {
-  display: flex;
-  justify-content: center;
   align-items: center;
   align-self: center;
-  width: 40px;
-  height: 40px;
   border-radius: 40px;
+  display: flex;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
 }
 
 @include media(#{$smallscreen}) {
@@ -204,7 +206,7 @@ input[type='checkbox'] {
   }
 
   .overview {
-    @include full_width;
+    @include full-width;
 
     padding: 0 5px;
   }
@@ -214,8 +216,8 @@ input[type='checkbox'] {
   }
 
   .column {
-    display: flex;
     align-items: center;
+    display: flex;
     flex-direction: column;
   }
 
@@ -229,11 +231,11 @@ input[type='checkbox'] {
   .big-autocomplete {
     min-height: 402px !important;
 
-    & img {
+    img {
       height: 64px;
     }
 
-    & .mat-option {
+    .mat-option {
       min-height: 66px !important;
     }
   }

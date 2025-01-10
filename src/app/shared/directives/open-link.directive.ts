@@ -47,7 +47,7 @@ export class OpenLinkDirective {
     private translate: TranslateService,
     private tabsService: TabsService
   ) {
-    this.render.addClass(this.elementRef.nativeElement, 'disable_selection');
+    this.render.addClass(this.elementRef.nativeElement, 'disable-selection');
   }
 
   openDialog(event: MouseEvent): void {

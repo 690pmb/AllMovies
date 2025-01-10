@@ -1,26 +1,25 @@
 @use '/src/app/styles/imports' as *;
 
-/* stylelint-disable selector-pseudo-element-no-unknown */
 :host {
-  position: fixed;
   bottom: 0;
-  left: 50%;
-  z-index: map-get($depth, 'top');
   display: flex;
   justify-content: center;
+  left: 50%;
+  position: fixed;
+  z-index: map-get($depth, 'top');
+}
 
-  & button {
-    height: auto;
+button {
+  height: auto;
 
-    &:focus {
-      outline: 0;
-    }
+  &:focus {
+    outline: 0;
   }
 }
 
 @include media(#{$smallscreen}) {
   :host {
-    right: 0;
     bottom: 0;
+    right: 0;
   }
 }

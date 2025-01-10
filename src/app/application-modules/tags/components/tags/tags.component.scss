@@ -21,13 +21,13 @@
   display: flex;
   justify-content: center;
 
-  & form,
-  & .tags-btn,
-  & .clear-btn,
-  & .btn {
+  form,
+  .tags-btn,
+  .clear-btn,
+  .btn {
+    align-items: center;
     display: flex;
     flex-direction: row;
-    align-items: center;
   }
 }
 
@@ -37,7 +37,7 @@
 }
 
 .mat-row:hover {
-  background-color: $gray_hover !important;
+  background-color: $gray-hover !important;
 }
 
 .mat-header-cell .mat-icon {

@@ -37,7 +37,7 @@
         (click)="onSelect(movie)"
         class="list-group-item list-group-item-action pointer"
         [class.active]="movie.id === selectedId"
-        [ngClass]="{selectedId: last}"
+        [ngClass]="{last: last}"
       >
         <app-bookmarked [id]="movie.id" [isMovie]="true"></app-bookmarked>
         <span *ngIf="movie.language">{{ movie.language | uppercase }} - </span>

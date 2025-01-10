@@ -1,12 +1,12 @@
 @use '/src/app/styles/imports' as *;
 
 :host {
+  align-items: center;
   display: flex;
   flex-flow: row wrap;
-  align-items: center;
   padding: 5px 0;
 
-  & > * {
+  > * {
     padding: 0 5px;
   }
 }

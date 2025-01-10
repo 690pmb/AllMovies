@@ -1,14 +1,12 @@
 @use '/src/app/styles/imports' as *;
-/* stylelint-disable selector-pseudo-element-no-unknown */
-/* stylelint-disable selector-type-no-unknown */
 
 /* THIS MAKES THE HEADER STICKY */
 .mat-header-row,
 .paginator {
+  background: rgb(255 255 255 / 100%);
   position: sticky;
   position: -webkit-sticky;
   z-index: map-get($depth, tooltip);
-  background: rgba(255, 255, 255, 1);
 }
 
 .mat-header-row {
@@ -33,7 +31,7 @@
 }
 
 .mat-row:hover {
-  background-color: $gray_hover !important;
+  background-color: $gray-hover !important;
 }
 
 .mat-row > td {
@@ -53,13 +51,13 @@ mat-row {
 }
 
 .data-poster {
+  box-shadow: 1px 1px 10px #000;
   height: 100px;
   margin: 10px 0;
-  box-shadow: 1px 1px 10px #000;
 }
 
 .btn-detail {
-  & .btn-text {
+  .btn-text {
     display: none;
   }
 }
@@ -70,17 +68,17 @@ mat-row {
 }
 
 .clear-btn {
-  display: flex;
   align-items: center;
+  display: flex;
 }
 
 .ng2-nouislider {
-  width: 80vw;
   margin: auto;
   padding-top: 2em;
+  width: 80vw;
 }
 
-.tag-row td.mat-cell {
+.tag-row .mat-cell {
   border-bottom-style: unset !important;
 }
 
@@ -101,7 +99,7 @@ mat-row {
 .tag-icon {
   padding-bottom: 0;
 
-  & fa-icon {
+  fa-icon {
     position: relative;
     right: -12vw;
     width: 100vw;
@@ -131,8 +129,8 @@ mat-row {
 }
 
 .tags-header {
-  display: flex;
   align-items: center;
+  display: flex;
   margin: 0 !important;
   padding: 0 5px;
 }
@@ -182,13 +180,13 @@ mat-row {
     display: flex;
     flex-direction: column;
 
-    & ::ng-deep.mat-form-field-flex {
+    ::ng-deep.mat-form-field-flex {
       flex-direction: row;
     }
 
-    & .filter-item .mat-form-field {
-      width: 90vw;
+    .filter-item .mat-form-field {
       margin: auto;
+      width: 90vw;
     }
 
     .clear-btn {
@@ -197,8 +195,8 @@ mat-row {
   }
 
   .data-poster {
-    height: 15vw;
     box-shadow: 2px 5px 9px #000;
+    height: 15vw;
   }
 }
 
@@ -209,11 +207,11 @@ mat-row {
   }
 
   .data-poster {
-    display: flex;
-    justify-content: center;
-    height: 25vw;
-    min-height: 100px;
     box-shadow: 3px 3px 8px #000;
+    display: flex;
+    height: 25vw;
+    justify-content: center;
+    min-height: 100px;
   }
 
   /* Reshape table */
@@ -237,26 +235,23 @@ mat-row {
   }
 
   mat-cell {
+    border-style: none !important;
+    min-height: 0;
+
     /* Behave  like a "row" */
     position: relative !important;
-    min-height: 0;
-    border: none !important;
 
     &:first-of-type {
       float: left;
     }
 
-    &.toto {
-      height: 34px;
-    }
-
     &:not(:first-of-type) {
       margin: auto;
 
-      & > .cell-content {
+      > .cell-content {
+        bottom: 6%;
         position: absolute;
         right: -12vw;
-        bottom: 6%;
         width: 100vw;
       }
     }
@@ -267,14 +262,19 @@ mat-row {
     }
 
     &::before {
+      left: 6px !important;
+      padding-right: 10px !important;
+
       /* Now like a table header */
       position: absolute !important;
       top: 6px !important;
-      left: 6px !important;
-      width: 45% !important;
-      padding-right: 10px !important;
       white-space: nowrap !important;
+      width: 45% !important;
     }
+  }
+
+  .toto {
+    height: 34px;
   }
 
   mat-table,
@@ -293,11 +293,11 @@ mat-row {
   }
 
   .btn-detail {
-    & .btn-icon {
+    .btn-icon {
       display: none;
     }
 
-    & .btn-text {
+    .btn-text {
       display: inherit;
     }
   }

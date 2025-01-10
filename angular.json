@@ -33,7 +33,7 @@
               "sourceMap": false,
               "namedChunks": false,
               "aot": true,
-              "extractLicenses": false,
+              "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
               "fileReplacements": [
@@ -43,45 +43,22 @@
                 }
               ]
             },
-            "cordova": {
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": false,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "outputPath": "cordova/AllMovies/www",
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.cordova.ts"
-                }
-              ]
-            }
-          }
+            "development": {}
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "all-movies:build"
-          },
+          "options": {},
           "configurations": {
             "production": {
               "browserTarget": "all-movies:build:production"
             },
-            "cordova": {
-              "browserTarget": "all-movies:build:cordova"
+            "development": {
+              "browserTarget": "all-movies:build:development"
             }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "all-movies:build"
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
@@ -100,13 +77,6 @@
             ],
             "assets": ["src/assets", "src/favicon.ico"]
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**"]
-          }
         }
       }
     }
@@ -115,13 +85,17 @@
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
-      "style": "scss"
+      "style": "scss",
+      "skipTests": true
     },
     "@schematics/angular:directive": {
-      "prefix": "app"
-    }
+      "prefix": "app",
+      "skipTests": true
+    },
+    "@schematics/angular:ng-new": {"skipTests": true}
   },
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "packageManager": "npm"
   }
 }

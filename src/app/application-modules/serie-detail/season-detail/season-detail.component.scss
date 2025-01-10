@@ -12,7 +12,7 @@ label {
   justify-content: center;
   width: 99vw;
 
-  & > * {
+  > * {
     min-width: 60vw;
   }
 }
@@ -25,7 +25,7 @@ label {
   label ~ div {
     display: inline;
 
-    & > span {
+    > span {
       display: table-cell;
     }
   }

@@ -1,8 +1,8 @@
 @use '/src/app/styles/imports' as *;
 
 :host {
-  & button {
-    margin: 5px 0 5px 0;
+  button {
+    margin: 5px 0;
   }
 }
 

@@ -1,8 +1,5 @@
 @use '/src/app/styles/imports' as *;
 
-/* stylelint-disable selector-type-no-unknown */
-/* stylelint-disable selector-pseudo-element-no-unknown */
-
 a {
   text-decoration: none;
 }
@@ -11,15 +8,15 @@ swiper {
   width: 100vw;
 }
 
-#swiper-top {
+.swiper-top {
   z-index: map-get($depth, tooltip);
 }
 
-#swiper-middle {
+.swiper-middle {
   z-index: 49;
 }
 
-#swiper-bottom {
+.swiper-bottom {
   z-index: 1;
 }
 
@@ -30,17 +27,17 @@ swiper {
 }
 
 .module {
-  margin: 5px 5px 10px 5px;
-  padding: 20px;
-  color: $blue;
-  text-align: center;
-  background-color: $true_white;
+  background-color: $true-white;
   border: 1px solid $blue;
   border-radius: 1.5em;
+  color: $blue;
+  margin: 5px 5px 10px;
+  padding: 20px;
+  text-align: center;
 
   &:hover {
-    color: $true_white;
     background-color: $blue;
+    color: $true-white;
     cursor: pointer;
   }
 }
@@ -54,14 +51,15 @@ swiper {
 }
 
 .profile {
-  position: fixed;
-  z-index: map-get($depth, tooltip);
-  display: none;
-  margin: 5px 0 0 4vw;
-  border: 3px solid $black;
   @include box-shadow;
 
-  .myTooltip:hover & {
+  border: 3px solid $black;
+  display: none;
+  margin: 5px 0 0 4vw;
+  position: fixed;
+  z-index: map-get($depth, tooltip);
+
+  .my-tooltip:hover & {
     display: inline-block;
   }
 }
@@ -72,39 +70,39 @@ swiper {
   }
 
   swiper {
-    position: fixed;
     margin: auto !important;
+    position: fixed;
   }
 
-  #swiper-middle {
+  .swiper-middle {
     top: 385px;
   }
 
-  #swiper-bottom {
+  .swiper-bottom {
     top: 580px;
   }
 
   ::ng-deep.swiper-button-next,
   ::ng-deep.swiper-button-prev {
-    #swiper-top &,
-    #swiper-middle & {
+    .swiper-top &,
+    .swiper-middle & {
       top: 54px !important;
     }
 
-    #swiper-bottom & {
+    .swiper-bottom & {
       top: 40px !important;
     }
   }
 
-  .title:not(#movie_title) {
+  .title:not(.movie-title) {
     position: fixed;
     width: 100vw;
 
-    &#person_title {
+    &.person-title {
       top: 490px;
     }
 
-    &#serie_title {
+    &.serie-title {
       top: 300px;
     }
   }

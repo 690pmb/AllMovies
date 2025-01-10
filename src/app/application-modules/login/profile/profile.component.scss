@@ -1,13 +1,13 @@
 @use '/src/app/styles/imports' as *;
 
 :host {
-  position: relative;
   display: flex;
   justify-content: center;
   margin: 5vh auto;
   padding: 25px;
+  position: relative;
 
-  & button {
+  button {
     margin: 5px;
   }
 }
@@ -16,7 +16,7 @@
   display: flex;
   padding-bottom: 0.5em;
 
-  & > * {
+  > * {
     margin: 5px;
   }
 }

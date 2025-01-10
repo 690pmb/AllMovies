@@ -5,8 +5,7 @@
     @media all and (max-width: $width) {
       @content;
     }
-  }
-  @else {
+  } @else {
     @media all and (min-width: $width) {
       @content;
     }
@@ -28,14 +27,14 @@
 }
 
 @mixin thumbnail($height) {
-  height: $height;
-  margin-left: 10px;
   @include border($black);
 
   box-shadow: -3px 1px 6px $black;
+  height: $height;
+  margin-left: 10px;
 }
 
-@keyframes fadeIn {
+@keyframes fade-in {
   0% {
     opacity: 0;
   }
@@ -45,7 +44,7 @@
   }
 }
 
-@keyframes fadeOut {
+@keyframes fade-out {
   0% {
     opacity: 1;
   }
@@ -55,7 +54,7 @@
   }
 }
 
-@mixin full_width {
+@mixin full-width {
   width: 100vw !important;
 }
 

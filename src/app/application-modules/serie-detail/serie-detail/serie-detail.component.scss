@@ -1,24 +1,22 @@
 @use '/src/app/styles/imports' as *;
 @use '/src/app/styles/detail' as *;
 
-.detail-header {
-  & .serie-time,
-  & .serie-time div {
-    display: flex;
-    justify-content: center;
-  }
+.serie-time,
+.serie-time div {
+  display: flex;
+  justify-content: center;
+}
 
-  & .serie-networks {
-    display: flex;
-    justify-content: center;
+.serie-networks {
+  display: flex;
+  justify-content: center;
 
-    & .network-img {
-      margin: 0 0 10px 0;
-      padding: 3px;
-      border: 2px solid $black;
-      border-radius: 5px;
-      box-shadow: 1px 1px 10px $black;
-    }
+  .network-img {
+    border: 2px solid $black;
+    border-radius: 5px;
+    box-shadow: 1px 1px 10px $black;
+    margin: 0 0 10px;
+    padding: 3px;
   }
 }
 
@@ -45,7 +43,7 @@ label {
   label ~ div {
     display: inline;
 
-    & > span:not(.serie-keyword) {
+    > span:not(.serie-keyword) {
       display: table-cell;
     }
   }

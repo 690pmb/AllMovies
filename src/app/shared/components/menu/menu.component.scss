@@ -4,50 +4,65 @@
   display: inline-flex;
   flex-direction: column;
   height: 95%;
-  overflow-y: visible;
   overflow-x: hidden;
+  overflow-y: visible;
 
-  & > * {
-    margin: 0 2px 0 2px;
+  > * {
+    margin: 0 2px;
   }
 
-  & .btn {
+  .btn {
     padding: 10px;
   }
 
-  & .ng-fa-icon {
+  .ng-fa-icon {
     margin-right: 6px;
   }
 }
 
 .toolbar {
-  position: fixed;
-  z-index: map-get($depth, 'toolbar');
   display: flex;
   flex-direction: row;
+  position: fixed;
+  z-index: map-get($depth, 'toolbar');
 
-  & .search-boxes {
+  .search-boxes {
     display: flex;
+    gap: 20px;
     justify-content: space-around;
     padding-left: 2vw;
-    gap: 20px;
 
     &,
-    & > * {
+    > * {
       width: 100%;
     }
   }
 }
 
-/* stylelint-disable selector-type-no-unknown */
+/* stylelint-disable-next-line selector-type-no-unknown */
 mat-toolbar {
+  background-color: $light-blue;
   height: auto !important;
-  background-color: $light_blue;
 }
 
 app-dropdown-language {
   display: flex;
   justify-content: center;
+}
+
+.logo-wrapper {
+  bottom: 0;
+  clear: both;
+  margin-top: 80px;
+
+  ::ng-deep .logo {
+    bottom: 0;
+    height: 50px;
+    left: 20px;
+    margin: 5px;
+    position: absolute;
+    width: auto;
+  }
 }
 
 .mat-drawer-container {
@@ -69,21 +84,21 @@ app-dropdown-language {
 
 @include media(#{$desktop}) {
   .toolbar .search-boxes {
-    min-width: calc(100vw - 56px);
     gap: 0;
+    min-width: calc(100vw - 56px);
     padding-left: 1vw;
   }
 }
 
 @include media(#{$smallscreen}) {
   :host .nav-list {
-    & > * {
+    > * {
       margin: 0;
     }
   }
 
   .toolbar {
-    & .search-boxes {
+    .search-boxes {
       flex-direction: column;
     }
   }
@@ -93,6 +108,6 @@ app-dropdown-language {
   }
 
   .header-buttons {
-    padding: 10px 0 0 0;
+    padding: 10px 0 0;
   }
 }

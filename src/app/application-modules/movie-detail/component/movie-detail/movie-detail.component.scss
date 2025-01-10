@@ -24,8 +24,8 @@ label {
   .fi {
     @include border($blue);
 
-    line-height: initial !important;
     background-size: cover !important;
+    line-height: initial !important;
   }
 }
 
@@ -38,7 +38,7 @@ label {
   label ~ div {
     display: inline;
 
-    & > span:not(.movie-keyword) {
+    > span:not(.movie-keyword) {
       display: table-cell;
     }
   }
