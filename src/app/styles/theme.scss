@@ -1,20 +1,18 @@
 @use './variables' as *;
-@use '~@angular/material/theming' as *;
-@include mat-core();
+@use '~@angular/material' as mat;
+@include mat.core();
 
 .btn {
-  @include mat-elevation(2);
+  @include mat.elevation(2);
 
-  &:hover {
-    fa-icon {
-      color: white;
-    }
+  &:hover fa-icon {
+    color: $true-white;
   }
 }
 
-$palette-primary: mat-palette(
+$palette-primary: mat.define-palette(
   (
-    100: $light_blue,
+    100: $light-blue,
     500: $blue,
     700: $info,
     contrast: (
@@ -25,7 +23,7 @@ $palette-primary: mat-palette(
   )
 );
 
-$theme: mat-light-theme(
+$theme: mat.define-light-theme(
   (
     color: (
       primary: $palette-primary,
@@ -34,8 +32,8 @@ $theme: mat-light-theme(
   )
 );
 
-@include angular-material-theme($theme);
-$typography: mat-typography-config(
+@include mat.all-component-themes($theme);
+$typography: mat.define-typography-config(
   $font-family: $font-family,
 );
-@include angular-material-typography($typography);
+@include mat.all-component-typographies($typography);

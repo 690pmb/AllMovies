@@ -6,14 +6,14 @@
   margin: 0 10px 20px 20px;
 }
 
-label:not(#person-film) {
+label:not(.person-film) {
   display: inline !important;
 }
 
-#person-film {
+.person-film {
   display: flex;
-  width: 100%;
   margin-left: 10px !important;
+  width: 100%;
 }
 
 figure {
@@ -24,22 +24,21 @@ figure {
 .toogle-display {
   display: flex;
   flex-direction: column;
-  width: min-content;
   margin: auto;
   text-align: center;
+  width: min-content;
 }
 
 .center {
   &,
-  & > * {
+  > * {
     text-align: center;
   }
 }
 
 .known-for {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-flow: row wrap;
   justify-content: space-evenly;
 }
 
@@ -48,7 +47,7 @@ figure {
   flex-direction: column;
   flex-grow: 1;
 
-  & > * {
+  > * {
     margin: auto;
   }
 }
@@ -71,10 +70,8 @@ figure {
     margin-right: 10px;
   }
 
-  /* stylelint-disable selector-pseudo-element-no-unknown */
-  /* stylelint-disable selector-type-no-unknown */
   .person-profile ::ng-deep.frame-viewer {
-    margin-top: 20px;
     margin-bottom: 0;
+    margin-top: 20px;
   }
 }

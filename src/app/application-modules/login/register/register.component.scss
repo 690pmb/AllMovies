@@ -1,11 +1,11 @@
 @use '/src/app/styles/imports' as *;
 
 .register-content {
-  position: relative;
   display: flex;
   justify-content: center;
   margin: 5vh auto;
   padding: 25px;
+  position: relative;
 }
 
 .mat-form-field {
@@ -17,7 +17,7 @@
   display: flex;
   padding-top: 1.25em;
 
-  & button {
+  button {
     margin: 5px;
   }
 }

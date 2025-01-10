@@ -1,13 +1,15 @@
 @use '/src/app/styles/imports' as *;
 
+/* stylelint-disable selector-max-compound-selectors */
+
 ::ng-deep .minimized {
   .mat-form-field {
-    width: 100%;
     background-color: $white;
-    border-width: 0 10px 0 10px;
-    border-style: solid;
     border-color: $white;
     border-radius: 1em;
+    border-style: solid;
+    border-width: 0 10px;
+    width: 100%;
 
     &-infix {
       padding-bottom: 0.4rem !important;
@@ -18,8 +20,8 @@
     }
 
     &-label-wrapper {
-      top: -2.375rem !important;
       height: 120% !important;
+      top: -2.375rem !important;
     }
 
     &-underline {
@@ -27,38 +29,38 @@
     }
 
     input {
-      top: -0.625rem !important;
       position: relative;
+      top: -0.625rem !important;
     }
 
     &-prefix {
-      position: relative;
       bottom: 0.6em;
       padding-right: 5px;
+      position: relative;
     }
 
     &-suffix {
-      position: relative;
       bottom: 0.6em;
       cursor: pointer;
+      position: relative;
     }
   }
 }
 
 ::ng-deep .mat-autocomplete-visible {
-  min-height: $result-panel !important;
   height: $result-panel !important;
   max-height: $result-panel !important;
+  min-height: $result-panel !important;
 
   .mat-option,
   .mat-option-text {
     height: $option-height !important;
     padding: 0 !important;
 
-    & > div {
+    > div {
       display: flex;
-      height: $option-height !important;
       font-size: 18px;
+      height: $option-height !important;
     }
   }
 
@@ -76,8 +78,8 @@
 @include between(#{$desktop}, #{$smallscreen}) {
   ::ng-deep .minimized {
     .mat-form-field {
-      max-width: calc(98vw / 3 - 56px / 3);
       font-size: 16px !important;
+      max-width: calc(98vw / 3 - 56px / 3);
     }
 
     ::ng-deep .mat-form-field-label {

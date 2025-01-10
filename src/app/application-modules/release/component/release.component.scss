@@ -1,13 +1,11 @@
 @use '/src/app/styles/imports' as *;
 
-:host {
-  & .release-content {
-    display: inline-flex;
+.release-content {
+  display: inline-flex;
 
-    > div {
-      padding-left: 5px;
-      padding-right: 5px;
-    }
+  > div {
+    padding-left: 5px;
+    padding-right: 5px;
   }
 }
 
@@ -20,18 +18,19 @@
   .list-group,
   .release-content,
   .row {
-    @include full_width;
+    @include full-width;
+  }
+
+  .list-group {
+    margin-bottom: 15px !important;
   }
 
   :host {
-    & .release-content {
+    .release-content {
       display: inherit !important;
 
       > div {
-        padding-left: 0;
-        padding-right: 0;
-        padding-top: 10px;
-        padding-bottom: 10px;
+        padding: 10px 0;
       }
     }
   }
@@ -39,7 +38,7 @@
   ngb-datepicker {
     /* stylelint-disable-line */
     ~ .btn {
-      @include full_width;
+      @include full-width;
     }
   }
 }

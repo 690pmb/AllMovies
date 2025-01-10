@@ -1,7 +1,7 @@
 /* Media */
 $smallscreen: 700px;
 $desktop: 1024px;
-$big_screen: 1500px;
+$big-screen: 1500px;
 
 $toolbar-height: 53px;
 $toolbar-height-desktop: 44px;
@@ -12,14 +12,13 @@ $font-family: arial, 'Helvetica Neue', helvetica, sans-serif;
 
 /* Color */
 $blue: #007fff;
-$light_blue: #75baff;
-$blue_hover: #607d8b;
+$light-blue: #75baff;
+$blue-hover: #607d8b;
 $white: #f6f6f6;
-$dark_gray: #484848;
 $gray: #6c757d;
-$light_gray: #8d8d8d;
-$gray_hover: #cfcfcf;
-$true_white: #fff;
+$light-gray: #8d8d8d;
+$gray-hover: #cfcfcf;
+$true-white: #fff;
 $black: #000;
 $green: #0ad06f;
 $pink: #ff637e;
@@ -35,7 +34,6 @@ $gender: (
 );
 
 $bezier: cubic-bezier(0.86, 0, 0.07, 1);
-$border_radius: 3px;
 
 /* zindex */
 $depth: (
@@ -52,3 +50,6 @@ $top-gap: 5px;
 $option-height: 60px;
 $img-height: $option-height - 2px;
 $result-panel: 6 * $option-height + $top-gap * 2;
+
+$light-primary-text: $white;
+$dark-primary-text: rgb(#000, 0.87);

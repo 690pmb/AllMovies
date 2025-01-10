@@ -1,9 +1,9 @@
 @use '/src/app/styles/imports' as *;
 
 .score {
-  position: relative;
   float: right;
   padding: 0 5px;
+  position: relative;
 
   .mat-cell,
   .mat-header-cell {
@@ -28,7 +28,7 @@
   }
 }
 
-@include media(#{$big_screen}, false) {
+@include media(#{$big-screen}, false) {
   .score {
     width: 25vw;
   }

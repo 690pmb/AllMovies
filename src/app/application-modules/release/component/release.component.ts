@@ -242,7 +242,7 @@ export class ReleaseComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       const selected = this.elemRef.nativeElement;
       if (selected.offsetWidth < 700) {
-        selected.querySelector('.selectedId').scrollIntoView();
+        selected.querySelector('.last').scrollIntoView();
       } else {
         this.elemRef.nativeElement.scrollIntoView();
       }

@@ -6,9 +6,9 @@
   display: flex;
   justify-content: center;
 
-  & .edit {
-    display: block;
+  .edit {
     align-self: center;
+    display: block;
   }
 }
 
@@ -27,14 +27,14 @@
 app-search-data,
 .tag-btn {
   display: flex;
-  justify-content: center;
   gap: 10px;
+  justify-content: center;
 }
 
 .data-poster {
+  box-shadow: 1px 1px 10px #000;
   height: 100px;
   margin: 10px 0;
-  box-shadow: 1px 1px 10px #000;
 }
 
 .movie {
@@ -50,7 +50,7 @@ app-search-data,
     left: 0 !important;
     margin: 0 10px;
 
-    & .arrow.arrow-right {
+    .arrow.arrow-right {
       left: 0 !important;
       margin: 0 100%;
       transform: rotateY(180deg);
@@ -68,8 +68,8 @@ app-search-data,
   }
 
   50% {
-    color: $warning;
     border-color: $warning;
+    color: $warning;
     transform: scale(1.02);
   }
 

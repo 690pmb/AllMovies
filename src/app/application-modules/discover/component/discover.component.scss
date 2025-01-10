@@ -1,24 +1,24 @@
 @use '/src/app/styles/imports' as *;
 
 .mat-line {
-  margin-left: 85px !important;
   margin-bottom: 2px !important;
+  margin-left: 85px !important;
 }
 
 .mat-button-toggle,
-.toogleHeader {
+.toogle-header {
   display: flex;
-  justify-content: center;
   flex-direction: column;
+  justify-content: center;
 }
 
 .params {
   display: flex !important;
-  justify-content: center;
   flex-wrap: wrap;
+  justify-content: center;
 
-  & > *:not(button) {
-    padding: 0 10px 0 10px;
+  > *:not(button) {
+    padding: 0 10px;
   }
 }
 
@@ -28,17 +28,17 @@
 }
 
 .ng2-nouislider {
-  width: 50%;
   margin-left: 25vw;
+  width: 50%;
 }
 
 .mat-slide-toggle {
-  display: flex;
   align-items: center;
   align-self: center;
+  display: flex;
 }
 
-#runtime-slider {
+.runtime-slider {
   margin-top: 4em;
 }
 
@@ -47,37 +47,38 @@
   flex-wrap: wrap;
 }
 
-#voteCount {
+.vote-count {
   margin-left: 50px;
   margin-top: 2.25em;
 }
 
+/* stylelint-disable-next-line selector-class-pattern */
 ::ng-deep .noUi-handle {
   cursor: grab;
 }
 
 .selected {
-  background-color: $light_gray;
+  background-color: $light-gray;
 }
 
 .result-list {
-  width: calc(50vw + 20px);
   margin-left: 25vw;
+  width: calc(50vw + 20px);
 
-  & img {
-    position: absolute;
-    float: left;
-    height: 100px;
+  img {
     border: 3px solid $black;
     box-shadow: 4px 6px 15px #000;
+    float: left;
+    height: 100px;
+    position: absolute;
   }
 }
 
 app-bookmarked {
-  position: absolute;
-  top: 0;
   float: left;
   padding-left: 25px;
+  position: absolute;
+  top: 0;
 }
 
 .result-title {
@@ -96,10 +97,10 @@ app-bookmarked {
 
 @include media(#{$smallscreen}) {
   .result-list {
-    width: 100vw;
     margin-left: 0;
+    width: 100vw;
 
-    & img {
+    img {
       height: 25vw;
       max-height: 100px;
     }
@@ -109,21 +110,20 @@ app-bookmarked {
     margin-bottom: 1vw !important;
   }
 
-  /* stylelint-disable selector-pseudo-element-no-unknown */
   ::ng-deep.mat-list-item-content {
     padding: 0 0 8px 16px !important;
   }
 
-  #runtime-slider {
-    margin-top: 2em;
+  .runtime-slider {
+    margin-top: 2em !important;
   }
 
   .ng2-nouislider {
-    width: 80vw;
     margin: auto;
+    width: 80vw;
   }
 
-  #voteCount {
+  .vote-count {
     margin: auto;
   }
 }

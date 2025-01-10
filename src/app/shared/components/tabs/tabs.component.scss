@@ -1,63 +1,61 @@
 @use '/src/app/styles/imports' as *;
 
 :host {
+  overflow-x: hidden;
   position: absolute;
   top: $toolbar-height;
-  overflow-x: hidden;
 }
 
 .mat-tab-link {
   padding: 0 0 0 10px !important;
 }
 
-/* stylelint-disable selector-pseudo-element-no-unknown */
 ::ng-deep.mat-tab-links {
   display: block !important;
-  width: 100vw;
-  white-space: nowrap;
   overflow: auto;
+  white-space: nowrap;
+  width: 100vw;
 }
 
 .tabs-content {
-  z-index: map-get($depth, content);
   position: relative;
   width: 100vw;
+  z-index: map-get($depth, content);
 }
 
-.closeTab {
+.close-tab {
   padding: 20px;
 
   &:hover {
-    background-color: $light_gray;
+    background-color: $light-gray;
   }
 }
 
 .logo-wrapper {
-  position: relative;
   bottom: 0;
   clear: both;
   margin-top: 80px;
 
-  #logo {
-    position: absolute;
+  ::ng-deep .logo {
     bottom: 0;
-    left: 20px;
-    height: 50px;
-    width: auto;
-    margin: 5px;
     fill: $blue;
+    height: 50px;
+    left: 20px;
+    margin: 5px;
+    position: absolute;
+    width: auto;
   }
 }
 
 .background-color {
+  background-color: $blue;
+  height: 100vh;
+  left: 0;
+  opacity: 0.04;
   position: fixed;
   top: 0;
-  left: 0;
-  z-index: map-get($depth, content) - 1;
   width: 100vw;
-  height: 100vh;
-  background-color: $blue;
-  opacity: 0.04;
+  z-index: map-get($depth, content) - 1;
 }
 
 @include between(#{$desktop}, #{$smallscreen}) {

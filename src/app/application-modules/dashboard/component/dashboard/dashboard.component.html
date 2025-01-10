@@ -1,7 +1,9 @@
-<div class="title" id="movie_title">{{ 'dashboard.movies' | translate }}:</div>
+<div class="title" class="movie-title">
+  {{ 'dashboard.movies' | translate }}:
+</div>
 <div class="wrapper">
-  <swiper [config]="swiperConfig" id="swiper-top" (reachEnd)="nextMovies()">
-    <a *ngFor="let movie of movies" class="movie-link myTooltip">
+  <swiper [config]="swiperConfig" class="swiper-top" (reachEnd)="nextMovies()">
+    <a *ngFor="let movie of movies" class="movie-link my-tooltip">
       <div
         class="module mat-elevation-z4"
         appOpenLink
@@ -22,10 +24,16 @@
     </a>
   </swiper>
 </div>
-<div class="title" id="serie_title">{{ 'dashboard.series' | translate }}:</div>
+<div class="title" class="serie-title">
+  {{ 'dashboard.series' | translate }}:
+</div>
 <div class="wrapper">
-  <swiper [config]="swiperConfig" id="swiper-middle" (reachEnd)="nextSeries()">
-    <a *ngFor="let serie of series" class="movie-link myTooltip">
+  <swiper
+    [config]="swiperConfig"
+    class="swiper-middle"
+    (reachEnd)="nextSeries()"
+  >
+    <a *ngFor="let serie of series" class="movie-link my-tooltip">
       <div
         class="module mat-elevation-z4"
         appOpenLink
@@ -46,12 +54,16 @@
     </a>
   </swiper>
 </div>
-<div class="title" id="person_title">
+<div class="title" class="person-title">
   {{ 'dashboard.persons' | translate }}:
 </div>
 <div class="wrapper">
-  <swiper [config]="swiperConfig" id="swiper-bottom" (reachEnd)="nextPersons()">
-    <a *ngFor="let person of persons" class="movie-link myTooltip">
+  <swiper
+    [config]="swiperConfig"
+    class="swiper-bottom"
+    (reachEnd)="nextPersons()"
+  >
+    <a *ngFor="let person of persons" class="movie-link my-tooltip">
       <div
         class="module mat-elevation-z4"
         appOpenLink

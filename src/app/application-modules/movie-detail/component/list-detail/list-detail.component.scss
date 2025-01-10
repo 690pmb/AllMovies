@@ -4,9 +4,9 @@
 .header {
   max-width: 90vw;
 
-  & .mat-line {
-    margin-left: 0 !important;
+  .mat-line {
     margin-bottom: 2px !important;
+    margin-left: 0 !important;
   }
 
   &::ng-deep.frame-viewer {
@@ -16,19 +16,19 @@
 
 .params {
   display: flex !important;
-  justify-content: center;
   flex-wrap: wrap;
+  justify-content: center;
 
-  & > *:not(button) {
-    padding: 0 10px 0 10px;
+  > *:not(button) {
+    padding: 0 10px;
   }
 }
 
 .mat-button-toggle,
-.toogleHeader {
+.toogle-header {
   display: flex;
-  justify-content: center;
   flex-direction: column;
+  justify-content: center;
 }
 
 .mat-paginator {
@@ -37,25 +37,25 @@
 }
 
 .selected {
-  background-color: $light_gray;
+  background-color: $light-gray;
 }
 
 .result-list {
-  width: calc(50vw + 20px);
   margin-left: 25vw;
+  width: calc(50vw + 20px);
 
-  & .mat-line {
-    margin-left: 85px !important;
+  .mat-line {
     margin-bottom: 2px !important;
+    margin-left: 85px !important;
   }
 }
 
 .poster {
-  position: absolute;
-  float: left;
-  height: 100px;
   border: 3px solid $black;
   box-shadow: 4px 6px 15px #000;
+  float: left;
+  height: 100px;
+  position: absolute;
 }
 
 .result-title {
@@ -74,8 +74,8 @@
 
 @include media(#{$smallscreen}) {
   .result-list {
-    width: 100vw;
     margin-left: 0;
+    width: 100vw;
   }
 
   .poster {

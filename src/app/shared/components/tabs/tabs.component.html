@@ -9,7 +9,7 @@
       {{ link.label | truncate : 20 }}
       <span
         (click)="tabsService.closeTab(link)"
-        class="closeTab"
+        class="close-tab"
         *ngIf="links.length > 1"
       >
         <fa-icon [icon]="faClose"></fa-icon>
@@ -25,7 +25,7 @@
   <div class="logo-wrapper">
     <a href="https://www.themoviedb.org/" target="_blank">
       <svg
-        id="logo"
+        class="logo"
         data-name="Layer 1"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 407.34 160.81"
