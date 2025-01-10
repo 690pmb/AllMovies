@@ -15,3 +15,4 @@ jobs:
       - uses: 69pmb/deploy/workflow/deploy@main
         with:
           url: ${{ secrets.DEPLOY_URL }}
+          force-install: 'true'

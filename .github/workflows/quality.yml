@@ -21,6 +21,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: 69pmb/deploy/workflow/ts-npm-quality@main
+        with:
+          force-install: 'true'
   deploy:
     if: github.ref_name == 'main'
     needs: quality
