@@ -1,3 +1,4 @@
+import {HttpStatusCode} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 
 @Injectable({
@@ -13,7 +14,10 @@ export class MockService<T> {
       xhr.send();
       xhr.onreadystatechange = () => {
         if (xhr.readyState === XMLHttpRequest.DONE) {
-          if (xhr.status === 200 || xhr.status === 201) {
+          if (
+            xhr.status === HttpStatusCode.Ok ||
+            xhr.status === HttpStatusCode.Created
+          ) {
             resolve(JSON.parse(xhr.response));
           } else {
             reject(JSON.parse(xhr.responseText));

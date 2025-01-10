@@ -31,6 +31,7 @@ import {AppComponent} from './app.component';
 import {GlobalErrorHandler} from './service/global-error-handler';
 import {ServerErrorInterceptor} from './service/server-error.interceptor';
 import {MyMissingTranslationHandler} from './shared/my-missing-translation-handler';
+import {Observable} from 'rxjs';
 
 @NgModule({
   imports: [
@@ -64,9 +65,9 @@ import {MyMissingTranslationHandler} from './shared/my-missing-translation-handl
     {
       provide: APP_INITIALIZER,
       useFactory:
-        (translate: TranslateService): (() => Promise<any>) =>
+        (translate: TranslateService): (() => Observable<any>) =>
         () =>
-          translate.use(translate.getBrowserLang()).toPromise(),
+          translate.use(translate.getBrowserLang()),
       deps: [TranslateService],
       multi: true,
     },

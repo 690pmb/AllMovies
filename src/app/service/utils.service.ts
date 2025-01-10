@@ -65,9 +65,7 @@ export class UtilsService {
 
   getObservable<T>(url: string, headers?: HttpHeaders): Observable<T> {
     console.log('URL', url);
-    return headers
-      ? this.http.get<T>(url, {headers: headers})
-      : this.http.get<T>(url);
+    return headers ? this.http.get<T>(url, {headers}) : this.http.get<T>(url);
   }
 
   jsonpObservable<T>(url: string, callback: any): Observable<T> {
