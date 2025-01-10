@@ -3,7 +3,7 @@
 .character {
   z-index: map-get($depth, tooltip);
 
-  .my-tooltip {
+  .my-tooltip & {
     display: contents;
     float: left;
   }
@@ -20,7 +20,7 @@
     border: 3px solid $black;
   }
 
-  .my-tooltip:hover {
+  .my-tooltip:hover & {
     display: block;
     float: left;
   }

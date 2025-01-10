@@ -1,6 +1,4 @@
-<div class="title" class="movie-title">
-  {{ 'dashboard.movies' | translate }}:
-</div>
+<div class="title movie-title">{{ 'dashboard.movies' | translate }}:</div>
 <div class="wrapper">
   <swiper [config]="swiperConfig" class="swiper-top" (reachEnd)="nextMovies()">
     <a *ngFor="let movie of movies" class="movie-link my-tooltip">
@@ -24,9 +22,7 @@
     </a>
   </swiper>
 </div>
-<div class="title" class="serie-title">
-  {{ 'dashboard.series' | translate }}:
-</div>
+<div class="title serie-title">{{ 'dashboard.series' | translate }}:</div>
 <div class="wrapper">
   <swiper
     [config]="swiperConfig"
@@ -54,9 +50,7 @@
     </a>
   </swiper>
 </div>
-<div class="title" class="person-title">
-  {{ 'dashboard.persons' | translate }}:
-</div>
+<div class="title person-title">{{ 'dashboard.persons' | translate }}:</div>
 <div class="wrapper">
   <swiper
     [config]="swiperConfig"

@@ -59,7 +59,7 @@ swiper {
   position: fixed;
   z-index: map-get($depth, tooltip);
 
-  .my-tooltip:hover {
+  .my-tooltip:hover & {
     display: inline-block;
   }
 }
@@ -85,11 +85,11 @@ swiper {
   ::ng-deep.swiper-button-next,
   ::ng-deep.swiper-button-prev {
     .swiper-top &,
-    .swiper-middle {
+    .swiper-middle & {
       top: 54px !important;
     }
 
-    .swiper-bottom {
+    .swiper-bottom & {
       top: 40px !important;
     }
   }

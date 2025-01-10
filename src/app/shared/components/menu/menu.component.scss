@@ -50,6 +50,21 @@ app-dropdown-language {
   justify-content: center;
 }
 
+.logo-wrapper {
+  bottom: 0;
+  clear: both;
+  margin-top: 80px;
+
+  ::ng-deep .logo {
+    bottom: 0;
+    height: 50px;
+    left: 20px;
+    margin: 5px;
+    position: absolute;
+    width: auto;
+  }
+}
+
 .mat-drawer-container {
   background-color: #fff !important;
 }

@@ -31,22 +31,6 @@
   }
 }
 
-.logo-wrapper {
-  bottom: 0;
-  clear: both;
-  margin-top: 80px;
-
-  ::ng-deep .logo {
-    bottom: 0;
-    fill: $blue;
-    height: 50px;
-    left: 20px;
-    margin: 5px;
-    position: absolute;
-    width: auto;
-  }
-}
-
 .background-color {
   background-color: $blue;
   height: 100vh;
