@@ -15,13 +15,30 @@
   <!-- Swiper for gallery of images -->
   <ng-container *ngIf="!isOnePicture">
     <!-- Full size gallery -->
-    <div #galleryTop>
-      <swiper [config]="config" [(index)]="index">
-        <div *ngFor="let img of images">
+    <div #galleryTop class="gallery-top">
+      <swiper
+        *ngIf="images?.length"
+        [slidesPerView]="config.slidesPerView"
+        [keyboard]="config.keyboard"
+        [mousewheel]="config.mousewheel"
+        [navigation]="config.navigation"
+        [pagination]="config.pagination"
+        [scrollbar]="config.scrollbar"
+        [slideToClickedSlide]="config.slideToClickedSlide"
+        [zoom]="config.zoom"
+        [a11y]="config.a11y"
+        [touchEventsTarget]="config.touchEventsTarget"
+        [direction]="config.direction"
+        [spaceBetween]="config.spaceBetween"
+        [touchEventsTarget]="config.touchEventsTarget"
+        [thumbs]="{swiper: thumbsSwiper}"
+        (activeIndexChange)="onActiveIndexChange($event)"
+      >
+        <ng-template swiperSlide *ngFor="let img of images">
           <pinch-zoom [disableZoomControl]="'disable'">
             <img src="{{ img | image : imageSize.full }}" />
           </pinch-zoom>
-        </div>
+        </ng-template>
       </swiper>
       <span (click)="fullscreen()" class="expand" *ngIf="!isFullscreen">
         <fa-icon [icon]="faExpand"></fa-icon>
@@ -29,14 +46,21 @@
     </div>
     <!-- Thumbnails gallery -->
     <div class="gallery-thumbs" #galleryThumbs>
-      <swiper [config]="thumbs" [(index)]="index">
-        <div *ngFor="let thumb of thumbnails">
+      <swiper
+        *ngIf="thumbnails?.length"
+        [slidesPerView]="thumbs.slidesPerView"
+        [mousewheel]="thumbs.mousewheel"
+        [slideToClickedSlide]="thumbs.slideToClickedSlide"
+        [watchSlidesProgress]="true"
+        (swiper)="thumbsSwiper = $event"
+      >
+        <ng-template swiperSlide *ngFor="let thumb of thumbnails">
           <img
             src="{{ thumb | image : imageSize.medium }}"
             #img
             [class.portrait]="isPortrait"
           />
-        </div>
+        </ng-template>
       </swiper>
     </div>
   </ng-container>
@@ -45,7 +69,7 @@
     <pinch-zoom class="frame-viewer pointer" [disableZoomControl]="'disable'">
       <img
         src="{{ thumbnails | image : imageSize.medium }}"
-        (click)="fullscreen(images)"
+        (click)="fullscreen()"
       />
     </pinch-zoom>
   </ng-container>

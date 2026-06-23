@@ -13,7 +13,7 @@ export class MapList {
         return list;
       })
       .filter(
-        (list: List) => list.poster_path && list.description.trim() !== ''
+        (list: List) => list.poster_path || list.description.trim() !== ''
       );
   }
 

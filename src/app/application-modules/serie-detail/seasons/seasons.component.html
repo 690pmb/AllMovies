@@ -1,8 +1,21 @@
 <ng-container *ngIf="seasons$ | async as seasons">
   <label>{{ 'serie.seasons' | translate }}s: </label>
   <div class="wrapper">
-    <swiper [config]="swiperConfig">
-      <div *ngFor="let season of seasons">
+    <swiper
+      *ngIf="swiperReady"
+      [keyboard]="swiperConfig.keyboard"
+      [mousewheel]="swiperConfig.mousewheel"
+      [navigation]="swiperConfig.navigation"
+      [pagination]="swiperConfig.pagination"
+      [scrollbar]="swiperConfig.scrollbar"
+      [centeredSlides]="swiperConfig.centeredSlides"
+      [zoom]="swiperConfig.zoom"
+      [a11y]="swiperConfig.a11y"
+      [touchEventsTarget]="swiperConfig.touchEventsTarget"
+      [slidesPerView]="swiperConfig.slidesPerView"
+      [direction]="swiperConfig.direction"
+    >
+      <ng-template swiperSlide *ngFor="let season of seasons">
         <div class="season-slide">
           <img
             class="season-poster"
@@ -21,7 +34,7 @@
             </button>
           </p>
         </div>
-      </div>
+      </ng-template>
     </swiper>
   </div>
   <ng-container *ngIf="overview">{{ overview }}</ng-container>

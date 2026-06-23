@@ -1,10 +1,10 @@
-import {SwiperModule} from 'ngx-swiper-wrapper';
+import {SwiperModule} from 'swiper/angular';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {RouterTestingModule} from '@angular/router/testing';
 import {BrowserModule} from '@angular/platform-browser/';
 import {FormsModule} from '@angular/forms';
 import {PinchZoomModule} from 'ngx-pinch-zoom';
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed} from '@angular/core/testing';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 
 import {ImageViewerComponent} from './image-viewer.component';

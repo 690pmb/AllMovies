@@ -1,6 +1,6 @@
 @use '/src/app/styles/imports' as *;
 
-pinch-zoom {
+::ng-deep pinch-zoom {
   height: 100%;
   width: auto;
 }
@@ -58,7 +58,7 @@ pinch-zoom {
 }
 
 .gallery-thumbs {
-  .swiper-slide {
+  ::ng-deep .swiper-slide {
     align-items: center;
     box-sizing: border-box;
     display: flex;
@@ -91,5 +91,13 @@ pinch-zoom {
     font-size: 17px;
     right: 10px;
     top: 70px;
+  }
+
+  .gallery-top {
+    ::ng-deep .swiper,
+    ::ng-deep .swiper-wrapper,
+    ::ng-deep .swiper-container {
+      height: 100%;
+    }
   }
 }

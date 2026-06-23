@@ -1,6 +1,6 @@
 @use '/src/app/styles/imports' as *;
 
-.wrapper {
+swiper {
   width: 83vw;
 }
 
@@ -19,16 +19,33 @@ p {
 }
 
 @include media(#{$smallscreen}) {
-  .wrapper {
+  swiper {
     height: 55vh;
   }
 
-  .swiper-slide {
+  ::ng-deep .swiper-slide,
+  .list-slide {
     display: flex;
     flex-direction: column;
   }
 
   .list-slide {
     margin: auto;
+  }
+
+  ::ng-deep .swiper-button-prev {
+    bottom: auto;
+    left: 50%;
+    right: auto;
+    top: 10px;
+    transform: translateX(-50%) rotate(90deg);
+  }
+
+  ::ng-deep .swiper-button-next {
+    bottom: 0;
+    left: 50%;
+    right: auto;
+    top: auto;
+    transform: translateX(-50%) rotate(90deg);
   }
 }

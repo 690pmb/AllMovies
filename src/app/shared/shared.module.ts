@@ -8,7 +8,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {RouterModule} from '@angular/router';
-import {SwiperModule, SWIPER_CONFIG} from 'ngx-swiper-wrapper';
 import {PinchZoomModule} from 'ngx-pinch-zoom';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
@@ -28,6 +27,17 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatMenuModule} from '@angular/material/menu';
+import {SwiperModule} from 'swiper/angular';
+import SwiperCore, {
+  Navigation,
+  Pagination,
+  Mousewheel,
+  Keyboard,
+  A11y,
+  Scrollbar,
+  Zoom,
+  Thumbs,
+} from 'swiper';
 
 import {MetaComponent} from './components/meta/component/meta.component';
 import {GoToTopComponent} from './components/go-to-top/go-to-top.component';
@@ -115,7 +125,6 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     MatMenuModule,
     MatChipsModule,
     MatIconModule,
-    SwiperModule,
     MatDialogModule,
     PinchZoomModule,
     MatTabsModule,
@@ -123,6 +132,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     TranslateModule,
     MatTooltipModule,
     RouterModule.forChild([]),
+    SwiperModule,
   ],
   exports: [
     TranslateModule,
@@ -153,16 +163,26 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     PersonSearchComponent,
     ImageViewerComponent,
     MenuComponent,
-    SwiperModule,
     BookmarkedComponent,
     SearchBoxComponent,
     ShareButtonComponent,
+    SwiperModule,
   ],
 })
 export class SharedModule {
   constructor() {}
 
   static forRoot(): ModuleWithProviders<SharedModule> {
+    SwiperCore.use([
+      Navigation,
+      Pagination,
+      Mousewheel,
+      Keyboard,
+      A11y,
+      Scrollbar,
+      Thumbs,
+      Zoom,
+    ]);
     return {
       ngModule: SharedModule,
       providers: [
@@ -173,10 +193,6 @@ export class SharedModule {
         CapitalizeWordPipe,
         DatePipe,
         ImagePipe,
-        {
-          provide: SWIPER_CONFIG,
-          useValue: {},
-        },
       ],
     };
   }

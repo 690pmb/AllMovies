@@ -1,6 +1,6 @@
-import {forkJoin, Observable, of, merge} from 'rxjs';
 import {Injectable} from '@angular/core';
-import {map, catchError, flatMap, delay} from 'rxjs/operators';
+import {from, Observable, of} from 'rxjs';
+import {map, catchError, mergeMap, toArray} from 'rxjs/operators';
 
 import {Url} from '../constant/url';
 import {Paginate, List, FullList} from '../model/model';
@@ -12,7 +12,7 @@ import {MapList} from '../shared/mapList';
   providedIn: 'root',
 })
 export class ListService {
-  static readonly PAGES_BY = 19;
+  private static readonly MAX_CONCURRENT = 4;
 
   constructor(
     private serviceUtils: UtilsService,
@@ -21,12 +21,12 @@ export class ListService {
 
   getDataLists(dataId: number, language: string): Promise<List[]> {
     const url = `${Url.MOVIE_URl}/${dataId}/${Url.GET_MOVIE_LISTS}?${Url.API_KEY}${Url.LANGUE}${language}`;
-    console.log('url', url);
+
     return this.serviceUtils
-      .getObservable(url, this.serviceUtils.getHeaders())
+      .getObservable<Paginate<List>>(url, this.serviceUtils.getHeaders())
       .pipe(
         map(
-          (resp: any) =>
+          resp =>
             new Paginate(
               resp.page,
               MapList.mapLists(resp.results),
@@ -34,67 +34,46 @@ export class ListService {
               resp.total_results
             )
         ),
-        catchError(err => this.serviceUtils.handlePromiseError(err, this.toast))
-      )
-      .toPromise()
-      .then((lists: Paginate<List>) => {
-        if (lists.total_pages > 1) {
-          const max = Math.floor(lists.total_pages / ListService.PAGES_BY);
-          let obs: Observable<number> = of(0);
-          for (let index = 1; index <= max; index++) {
-            obs = merge(obs, of(index).pipe(delay(10000 * index)));
+        mergeMap(firstPage => {
+          const result: List[] = [...firstPage.results];
+
+          if (firstPage.total_pages <= 1) {
+            return of(result);
           }
 
-          const result: List[] = [];
-          return obs
-            .pipe(
-              flatMap((x: number) => this.getPages(x, lists.total_pages, url)),
-              map(data => {
-                result.push(...data);
-                return result;
-              }),
-              catchError(err =>
-                this.serviceUtils.handlePromiseError(err, this.toast)
-              )
-            )
-            .toPromise();
-        } else {
-          return of([]);
-        }
-      });
+          const pages: number[] = [];
+          for (let page = 2; page <= firstPage.total_pages; page++) {
+            pages.push(page);
+          }
+
+          return from(pages).pipe(
+            mergeMap(
+              page => this.getPage(page, url),
+              ListService.MAX_CONCURRENT
+            ),
+            toArray(),
+            map(pagesArrays => result.concat(...pagesArrays))
+          );
+        }),
+        catchError(err => {
+          this.serviceUtils.handleError(err, this.toast);
+          return of([] as List[]);
+        })
+      )
+      .toPromise()
+      .then(lists => lists ?? []);
   }
 
-  getPages(
-    index: number,
-    total_pages: number,
-    url: string
-  ): Observable<List[]> {
-    const result: List[] = [];
-    const obs = [];
-    for (
-      let page = 1 + index * ListService.PAGES_BY;
-      page <= (index + 1) * ListService.PAGES_BY;
-      page++
-    ) {
-      if (page < total_pages) {
-        obs.push(
-          this.serviceUtils.getPromise(
-            `${url}${Url.PAGE_URL}${page}`,
-            this.serviceUtils.getHeaders()
-          )
-        );
-      }
-    }
-    try {
-      return forkJoin(obs).pipe(
-        map((data: any[]) =>
-          result.concat(...data.map(d => MapList.mapLists(d.results)))
-        )
+  getPage(page: number, url: string): Observable<List[]> {
+    return this.serviceUtils
+      .getObservable<Paginate<List>>(
+        `${url}${Url.PAGE_URL}${page}`,
+        this.serviceUtils.getHeaders()
+      )
+      .pipe(
+        map(resp => MapList.mapLists(resp.results)),
+        catchError(() => of([] as List[]))
       );
-    } catch (err) {
-      console.error(err);
-      return of([]);
-    }
   }
 
   getListDetail(

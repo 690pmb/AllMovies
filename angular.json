@@ -21,6 +21,7 @@
               "node_modules/bootstrap/scss/bootstrap.scss",
               "node_modules/flag-icons/css/flag-icons.css",
               "node_modules/nouislider/dist/nouislider.min.css",
+              "node_modules/swiper/swiper-bundle.min.css",
               "src/app/styles/styles.scss",
               "src/app/styles/theme.scss"
             ],
