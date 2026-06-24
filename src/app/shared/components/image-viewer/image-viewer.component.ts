@@ -1,4 +1,4 @@
-import {SwiperConfigInterface} from 'ngx-swiper-wrapper';
+import SwiperCore, {SwiperOptions} from 'swiper';
 import {
   Component,
   Input,
@@ -33,10 +33,10 @@ export class ImageViewerComponent implements OnChanges, AfterViewInit {
   @Input() thumbnails!: string[] | string;
   index!: number;
   imageSize = ImageSize;
+  thumbsSwiper?: SwiperCore;
   nextBtn!: HTMLButtonElement;
   prevBtn!: HTMLButtonElement;
-  config: SwiperConfigInterface = {
-    observer: true,
+  config: SwiperOptions = {
     direction: 'horizontal',
     slidesPerView: 1,
     keyboard: true,
@@ -53,8 +53,7 @@ export class ImageViewerComponent implements OnChanges, AfterViewInit {
     touchEventsTarget: 'wrapper',
   };
 
-  thumbs: SwiperConfigInterface = {
-    observer: true,
+  thumbs: SwiperOptions = {
     slidesPerView: 4,
     slideToClickedSlide: true,
     mousewheel: true,
@@ -113,6 +112,10 @@ export class ImageViewerComponent implements OnChanges, AfterViewInit {
     this.galleryThumbs.nativeElement.style.height = `${
       window.innerHeight * 0.2
     }px`;
+  }
+
+  onActiveIndexChange(swiper: SwiperCore): void {
+    this.index = swiper.activeIndex;
   }
 
   fullscreen(): void {

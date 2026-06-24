@@ -3,9 +3,9 @@ import {HttpClientModule} from '@angular/common/http';
 import {RouterTestingModule} from '@angular/router/testing';
 import {BrowserModule} from '@angular/platform-browser/';
 import {FormsModule} from '@angular/forms';
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
-import {SwiperModule} from 'ngx-swiper-wrapper';
+import {SwiperModule} from 'swiper/angular';
 
 import {
   SharedModule,

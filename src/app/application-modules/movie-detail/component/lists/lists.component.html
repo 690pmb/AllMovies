@@ -18,8 +18,21 @@
 </button>
 <ng-container *ngIf="showLists && lists">
   <div class="wrapper">
-    <swiper [config]="swiperConfig">
-      <div *ngFor="let list of lists">
+    <swiper
+      *ngIf="swiperReady"
+      [keyboard]="true"
+      [mousewheel]="true"
+      [navigation]="true"
+      [pagination]="false"
+      [scrollbar]="false"
+      [centeredSlides]="false"
+      [zoom]="false"
+      [a11y]="{enabled: true}"
+      touchEventsTarget="wrapper"
+      [slidesPerView]="slidesPerView"
+      [direction]="direction"
+    >
+      <ng-template swiperSlide *ngFor="let list of lists">
         <div class="list-slide">
           <img
             class="list-poster"
@@ -38,7 +51,7 @@
             <fa-icon [icon]="faChevronCircleRight" size="xs"></fa-icon>
           </button>
         </div>
-      </div>
+      </ng-template>
     </swiper>
   </div>
 </ng-container>

@@ -1,18 +1,17 @@
 import {TranslateService} from '@ngx-translate/core';
-import {BreakpointObserver} from '@angular/cdk/layout';
 import {
   faPlus,
   faMinus,
   faChevronCircleRight,
 } from '@fortawesome/free-solid-svg-icons';
+import {BreakpointObserver} from '@angular/cdk/layout';
 import {
-  Component,
   OnInit,
+  Component,
   Input,
   SimpleChanges,
   OnChanges,
 } from '@angular/core';
-import {SwiperConfigInterface} from 'ngx-swiper-wrapper';
 
 import {Constants} from './../../../../constant/constants';
 import {Utils} from './../../../../shared/utils';
@@ -30,22 +29,14 @@ export class ListsComponent implements OnInit, OnChanges {
   overview: string;
   showLists = false;
   lists: List[] = [];
-  swiperConfig: SwiperConfigInterface = {
-    a11y: {enabled: true},
-    keyboard: true,
-    mousewheel: true,
-    scrollbar: false,
-    navigation: true,
-    pagination: false,
-    centeredSlides: false,
-    zoom: false,
-    touchEventsTarget: 'wrapper',
-  };
 
   imageSize = ImageSize;
   faChevronCircleRight = faChevronCircleRight;
   faPlus = faPlus;
   faMinus = faMinus;
+  direction: 'horizontal' | 'vertical' = 'horizontal';
+  slidesPerView: number | 'auto' = 5;
+  swiperReady = true;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -57,23 +48,25 @@ export class ListsComponent implements OnInit, OnChanges {
     this.breakpointObserver
       .observe([Constants.MEDIA_MAX_700, Constants.MEDIA_MAX_1400])
       .subscribe(result => {
-        this.swiperConfig.direction = result.breakpoints[
-          Constants.MEDIA_MAX_700
-        ]
-          ? 'vertical'
-          : 'horizontal';
+        const isMobile = result.breakpoints[Constants.MEDIA_MAX_700];
+        const newDirection = isMobile ? 'vertical' : 'horizontal';
+        if (newDirection !== this.direction) {
+          this.direction = newDirection;
+          this.swiperReady = false;
+          setTimeout(() => (this.swiperReady = true));
+        }
         if (
           result.breakpoints[Constants.MEDIA_MAX_1400] &&
           result.breakpoints[Constants.MEDIA_MAX_700]
         ) {
-          this.swiperConfig.slidesPerView = 1;
+          this.slidesPerView = 1;
         } else if (
           result.breakpoints[Constants.MEDIA_MAX_1400] &&
           !result.breakpoints[Constants.MEDIA_MAX_700]
         ) {
-          this.swiperConfig.slidesPerView = 4;
+          this.slidesPerView = 4;
         } else {
-          this.swiperConfig.slidesPerView = 8;
+          this.slidesPerView = 8;
         }
       });
   }

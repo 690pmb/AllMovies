@@ -6,7 +6,7 @@ import {
   faChevronCircleRight,
 } from '@fortawesome/free-solid-svg-icons';
 import {Component, OnInit} from '@angular/core';
-import {SwiperConfigInterface} from 'ngx-swiper-wrapper';
+import {SwiperOptions} from 'swiper';
 import {map} from 'rxjs/operators';
 
 import {Constants} from './../../../constant/constants';
@@ -23,7 +23,7 @@ import {SerieManager} from '../../../manager/serie.manager';
 export class SeasonsComponent implements OnInit {
   overviewId?: number;
   overview?: string;
-  swiperConfig: SwiperConfigInterface = {
+  swiperConfig: SwiperOptions = {
     a11y: {enabled: true},
     keyboard: true,
     mousewheel: true,
@@ -35,6 +35,8 @@ export class SeasonsComponent implements OnInit {
     touchEventsTarget: 'wrapper',
   };
 
+  direction: 'horizontal' | 'vertical' = 'horizontal';
+  swiperReady = true;
   imageSize = ImageSize;
   faChevronCircleRight = faChevronCircleRight;
   faPlus = faPlus;
@@ -59,11 +61,14 @@ export class SeasonsComponent implements OnInit {
     this.breakpointObserver
       .observe([Constants.MEDIA_MAX_700, Constants.MEDIA_MAX_1400])
       .subscribe(result => {
-        this.swiperConfig.direction = result.breakpoints[
-          Constants.MEDIA_MAX_700
-        ]
+        const newDirection = result.breakpoints[Constants.MEDIA_MAX_700]
           ? 'vertical'
           : 'horizontal';
+        if (newDirection !== this.direction) {
+          this.swiperConfig.direction = newDirection;
+          this.swiperReady = false;
+          setTimeout(() => (this.swiperReady = true));
+        }
         if (
           result.breakpoints[Constants.MEDIA_MAX_1400] &&
           result.breakpoints[Constants.MEDIA_MAX_700]

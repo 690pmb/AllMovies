@@ -43,9 +43,10 @@ swiper {
 }
 
 .movie-link {
-  overflow: visible !important;
+  position: relative;
 
   &:hover {
+    display: block;
     height: 80vh !important;
   }
 }
@@ -54,9 +55,10 @@ swiper {
   @include box-shadow;
 
   border: 3px solid $black;
+  border-radius: 20px;
   display: none;
-  margin: 5px 0 0 4vw;
-  position: fixed;
+  left: 25%;
+  position: absolute;
   z-index: map-get($depth, tooltip);
 
   .my-tooltip:hover & {
@@ -113,16 +115,37 @@ swiper {
     height: 55vh;
   }
 
+  swiper {
+    height: 100%;
+    padding: 25px 0;
+  }
+
+  ::ng-deep .swiper-slide {
+    height: auto !important;
+  }
+
+  ::ng-deep .swiper-button-prev {
+    bottom: auto;
+    left: 50%;
+    right: auto;
+    top: 10px;
+    transform: translateX(-50%) rotate(90deg);
+  }
+
+  ::ng-deep .swiper-button-next {
+    bottom: 0;
+    left: 50%;
+    right: auto;
+    top: auto;
+    transform: translateX(-50%) rotate(90deg);
+  }
+
   .profile {
     display: none !important;
   }
 
-  .movie-link {
+  .movie-link:hover {
     height: auto !important;
-
-    &:hover {
-      height: auto !important;
-    }
   }
 
   .module {

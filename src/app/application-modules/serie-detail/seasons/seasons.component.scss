@@ -1,6 +1,6 @@
 @use '/src/app/styles/imports' as *;
 
-.wrapper {
+swiper {
   width: 83vw;
 }
 
@@ -15,16 +15,31 @@
 }
 
 @include media(#{$smallscreen}) {
-  .wrapper {
-    height: 55vh;
+  swiper {
+    height: 40vh;
   }
 
-  .swiper-slide {
+  ::ng-deep .swiper-slide,
+  .season-slide {
+    align-items: center;
     display: flex;
     flex-direction: column;
+    justify-content: center;
   }
 
-  .season-slide {
-    margin: auto;
+  ::ng-deep .swiper-button-prev {
+    bottom: auto;
+    left: 50%;
+    right: auto;
+    top: 10px;
+    transform: translateX(-50%) rotate(90deg);
+  }
+
+  ::ng-deep .swiper-button-next {
+    bottom: 0;
+    left: 50%;
+    right: auto;
+    top: auto;
+    transform: translateX(-50%) rotate(90deg);
   }
 }

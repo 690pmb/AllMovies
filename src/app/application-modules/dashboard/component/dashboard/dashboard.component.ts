@@ -1,6 +1,6 @@
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {TranslateService, LangChangeEvent} from '@ngx-translate/core';
-import {SwiperConfigInterface} from 'ngx-swiper-wrapper';
+import {SwiperOptions} from 'swiper';
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Subscription} from 'rxjs';
 
@@ -25,7 +25,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   movies: Movie[] = [];
   series: Serie[] = [];
   persons: Person[] = [];
-  swiperConfig: SwiperConfigInterface = {
+
+  // Common config for the 3 swipers
+  swiperConfig: SwiperOptions = {
     a11y: {enabled: true},
     keyboard: true,
     mousewheel: true,
@@ -37,6 +39,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     zoom: false,
     touchEventsTarget: 'wrapper',
   };
+
+  direction: 'horizontal' | 'vertical' = 'horizontal';
+  slidesPerView: number | 'auto' = 5;
+  swiperReady = true;
 
   subs: Subscription[] = [];
   Url = Url;
@@ -68,15 +74,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.getToPersons(event.lang);
       })
     );
-    this.breakpointObserver
-      .observe([Constants.MEDIA_MAX_700])
-      .subscribe(result => {
-        this.swiperConfig.direction = result.breakpoints[
-          Constants.MEDIA_MAX_700
-        ]
-          ? 'vertical'
-          : 'horizontal';
-      });
+    this.subs.push(
+      this.breakpointObserver
+        .observe([Constants.MEDIA_MAX_700])
+        .subscribe(result => {
+          const isMobile = result.breakpoints[Constants.MEDIA_MAX_700];
+          const newDirection = isMobile ? 'vertical' : 'horizontal';
+          if (newDirection !== this.direction) {
+            this.direction = newDirection;
+            this.slidesPerView = isMobile ? 'auto' : 5;
+
+            this.swiperReady = false;
+            setTimeout(() => (this.swiperReady = true));
+          }
+        })
+    );
   }
 
   getTopMovies(language: string): void {
