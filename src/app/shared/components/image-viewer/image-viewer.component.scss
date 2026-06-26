@@ -1,8 +1,18 @@
 @use '/src/app/styles/imports' as *;
 
-::ng-deep pinch-zoom {
+::ng-deep .swiper-zoom-container {
+  align-items: center;
+  display: flex;
   height: 100%;
-  width: auto;
+  justify-content: center;
+  width: 100%;
+
+  img {
+    display: block;
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+  }
 }
 
 .expand {
@@ -24,6 +34,20 @@
   }
 }
 
+.fullscreen-swiper {
+  height: 100%;
+  width: 100%;
+}
+
+.fullscreen {
+  display: block;
+  height: auto;
+  margin: auto;
+  max-height: 100%;
+  max-width: 100%;
+  width: auto;
+}
+
 .frame-viewer {
   @include box-shadow;
 
@@ -31,7 +55,11 @@
   float: left;
   height: 100% !important;
   margin: 20px !important;
-  object-fit: contain;
+
+  img {
+    height: 100%;
+    object-fit: contain;
+  }
 
   &:hover::after {
     background-color: rgb(0 0 0 / 50%);
@@ -42,19 +70,8 @@
   }
 }
 
-.fullscreen {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-
-  img {
-    display: block;
-    height: auto;
-    margin-left: auto;
-    margin-right: auto;
-    max-height: 100%;
-    width: auto;
-  }
+::ng-deep .gallery-top swiper {
+  display: initial !important;
 }
 
 .gallery-thumbs {
@@ -81,8 +98,8 @@
     height: 100%;
   }
 
-  .swiper-slide-active {
-    opacity: 1;
+  ::ng-deep & .swiper-slide-active {
+    opacity: 1 !important;
   }
 }
 
@@ -95,9 +112,15 @@
 
   .gallery-top {
     ::ng-deep .swiper,
-    ::ng-deep .swiper-wrapper,
-    ::ng-deep .swiper-container {
+    ::ng-deep .swiper-wrapper {
       height: 100%;
+    }
+
+    ::ng-deep .swiper-slide {
+      align-items: center;
+      display: flex;
+      height: 100%;
+      justify-content: center;
     }
   }
 }

@@ -23,7 +23,6 @@
           "/^ngb-/",
           "/^fa-icon/",
           "/^mat-/",
-          "/^pinch-zoom/",
           "/^swiper/"
         ]
       }
