@@ -5,12 +5,17 @@
     (update)="closeFullscreen($event)"
     [closeBtn]="closeBtn"
   >
-    <pinch-zoom [disableZoomControl]="'disable'">
-      <img
-        src="{{ fullScreenImg | image : imageSize.full }}"
-        class="fullscreen"
-      />
-    </pinch-zoom>
+    <swiper class="fullscreen-swiper" [zoom]="true" *ngIf="isFullscreen">
+      <ng-template swiperSlide>
+        <div class="swiper-zoom-container">
+          <img
+            src="{{ fullScreenImg | image : imageSize.full }}"
+            class="fullscreen"
+            [alt]="''"
+          />
+        </div>
+      </ng-template>
+    </swiper>
   </app-modal>
   <!-- Swiper for gallery of images -->
   <ng-container *ngIf="!isOnePicture">
@@ -35,9 +40,9 @@
         (activeIndexChange)="onActiveIndexChange($event)"
       >
         <ng-template swiperSlide *ngFor="let img of images">
-          <pinch-zoom [disableZoomControl]="'disable'">
-            <img src="{{ img | image : imageSize.full }}" />
-          </pinch-zoom>
+          <div class="swiper-zoom-container">
+            <img src="{{ img | image : imageSize.full }}" [alt]="''" />
+          </div>
         </ng-template>
       </swiper>
       <span (click)="fullscreen()" class="expand" *ngIf="!isFullscreen">
@@ -51,7 +56,7 @@
         [slidesPerView]="thumbs.slidesPerView"
         [mousewheel]="thumbs.mousewheel"
         [slideToClickedSlide]="thumbs.slideToClickedSlide"
-        [watchSlidesProgress]="true"
+        [watchSlidesProgress]="thumbs.watchSlidesProgress"
         (swiper)="thumbsSwiper = $event"
       >
         <ng-template swiperSlide *ngFor="let thumb of thumbnails">
@@ -59,6 +64,7 @@
             src="{{ thumb | image : imageSize.medium }}"
             #img
             [class.portrait]="isPortrait"
+            [alt]="''"
           />
         </ng-template>
       </swiper>
@@ -66,11 +72,10 @@
   </ng-container>
   <!-- One picture display -->
   <ng-container *ngIf="isOnePicture">
-    <pinch-zoom class="frame-viewer pointer" [disableZoomControl]="'disable'">
+    <div class="frame-viewer pointer" (click)="fullscreen()">
       <img
-        src="{{ thumbnails | image : imageSize.medium }}"
-        (click)="fullscreen()"
+        src="{{ thumbnails | image : imageSize.medium }}" [alt]="''"
       />
-    </pinch-zoom>
+    </div>
   </ng-container>
 </ng-container>

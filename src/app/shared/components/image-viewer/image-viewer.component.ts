@@ -48,7 +48,7 @@ export class ImageViewerComponent implements OnChanges, AfterViewInit {
       type: 'custom',
     },
     spaceBetween: 30,
-    zoom: false,
+    zoom: true,
     slideToClickedSlide: true,
     touchEventsTarget: 'wrapper',
   };
@@ -57,6 +57,7 @@ export class ImageViewerComponent implements OnChanges, AfterViewInit {
     slidesPerView: 4,
     slideToClickedSlide: true,
     mousewheel: true,
+    watchSlidesProgress: true,
   };
 
   isOnePicture!: boolean;
