@@ -1,0 +1,146 @@
+version: 2
+
+updates:
+  # ----------------------------------------------
+  # npm dependencies
+  # ----------------------------------------------
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '07:00'
+      timezone: 'Europe/Paris'
+
+    open-pull-requests-limit: 10
+    rebase-strategy: auto
+
+    labels:
+      - 'dependencies'
+
+    commit-message:
+      prefix: 'deps'
+      prefix-development: 'deps-dev'
+
+    # Packages locked to the Angular 12 ecosystem or to a major version
+    # we don't want bumped automatically (manual upgrade only).
+    ignore:
+      - dependency-name: '@angular/*'
+      - dependency-name: '@angular-devkit/*'
+      - dependency-name: '@schematics/angular'
+      - dependency-name: '@nguniversal/*'
+      # Framework-coupled: only safe within the current major
+      - dependency-name: 'typescript'
+        update-types:
+          ['version-update:semver-major', 'version-update:semver-minor']
+      - dependency-name: 'rxjs'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'zone.js'
+        update-types: ['version-update:semver-major']
+      # swiper/angular only exists in Swiper 6 → never auto-bump major
+      - dependency-name: 'swiper'
+        update-types: ['version-update:semver-major']
+      # ng-bootstrap 10, ngx-color-picker 11, fontawesome-svg-core 1.x
+      # are tied to Angular 12 / API breaks on major
+      - dependency-name: '@ng-bootstrap/ng-bootstrap'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'ngx-color-picker'
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@ngx-translate/*'
+        update-types: ['version-update:semver-major']
+
+    # Group updates into logical, coherent PRs
+    groups:
+      # -- Version updates (weekly, scheduled) --
+
+      # Security fixes: fast-tracked into their own PR, separate from
+      # the weekly version-update batch.
+      security-updates:
+        applies-to: security-updates
+        patterns:
+          - '*'
+
+      # Icons – all FontAwesome packages move together
+      fontawesome:
+        applies-to: version-updates
+        patterns:
+          - '@fortawesome/*'
+
+      # i18n
+      ngx-translate:
+        applies-to: version-updates
+        patterns:
+          - '@ngx-translate/*'
+
+      # Linting & formatting toolchain
+      linting:
+        applies-to: version-updates
+        patterns:
+          - 'eslint'
+          - '@typescript-eslint/*'
+          - 'gts'
+          - 'codelyzer'
+          - 'stylelint*'
+          - 'postcss-sass'
+
+      # Unit testing stack
+      testing:
+        applies-to: version-updates
+        patterns:
+          - 'jasmine*'
+          - 'karma*'
+          - '@types/jasmine*'
+
+      # TypeScript type definitions (excluding those handled elsewhere)
+      types:
+        applies-to: version-updates
+        patterns:
+          - '@types/*'
+        exclude-patterns:
+          - '@types/jasmine*'
+
+      # Build / tooling helpers
+      build-tooling:
+        applies-to: version-updates
+        patterns:
+          - 'husky'
+          - 'lint-staged'
+          - 'npm-run-all2'
+          - 'webpack-bundle-analyzer'
+          - 'ts-node'
+
+      # Catch-all so leftover updates still get grouped (not 1 PR each)
+      production-dependencies:
+        applies-to: version-updates
+        dependency-type: 'production'
+      development-dependencies:
+        applies-to: version-updates
+        dependency-type: 'development'
+
+  # ----------------------------------------------
+  # GitHub Actions
+  # ----------------------------------------------
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+
+    labels:
+      - 'dependencies'
+      - 'github-actions'
+
+    commit-message:
+      prefix: 'ci'
+
+    groups:
+      # Security fixes for actions, in their own PR
+      actions-security:
+        applies-to: security-updates
+        patterns:
+          - '*'
+
+      # Routine version updates for actions
+      github-actions:
+        applies-to: version-updates
+        patterns:
+          - '*'

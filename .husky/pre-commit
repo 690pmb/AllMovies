@@ -7,4 +7,4 @@ if [[ ! $(git config --get user.email) =~ .*gmail.* ]]; then
     exit 1
 fi
 
-npx -s lint-staged -q
+npx lint-staged -q
