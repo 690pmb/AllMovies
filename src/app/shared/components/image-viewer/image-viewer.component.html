@@ -7,7 +7,7 @@
   >
     <pinch-zoom [disableZoomControl]="'disable'">
       <img
-        src="{{ fullScreenImg | image : imageSize.full }}"
+        src="{{ fullScreenImg | image: imageSize.full }}"
         class="fullscreen"
       />
     </pinch-zoom>
@@ -36,7 +36,7 @@
       >
         <ng-template swiperSlide *ngFor="let img of images">
           <pinch-zoom [disableZoomControl]="'disable'">
-            <img src="{{ img | image : imageSize.full }}" />
+            <img src="{{ img | image: imageSize.full }}" />
           </pinch-zoom>
         </ng-template>
       </swiper>
@@ -56,7 +56,7 @@
       >
         <ng-template swiperSlide *ngFor="let thumb of thumbnails">
           <img
-            src="{{ thumb | image : imageSize.medium }}"
+            src="{{ thumb | image: imageSize.medium }}"
             #img
             [class.portrait]="isPortrait"
           />
@@ -68,7 +68,7 @@
   <ng-container *ngIf="isOnePicture">
     <pinch-zoom class="frame-viewer pointer" [disableZoomControl]="'disable'">
       <img
-        src="{{ thumbnails | image : imageSize.medium }}"
+        src="{{ thumbnails | image: imageSize.medium }}"
         (click)="fullscreen()"
       />
     </pinch-zoom>
