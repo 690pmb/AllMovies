@@ -26,7 +26,7 @@ export class SearchBoxComponent<T> implements OnInit {
 
   @Input()
   @HostBinding('class.minimized')
-  minimized: boolean = true;
+  minimized = true;
 
   @Input()
   template!: TemplateRef<unknown>;

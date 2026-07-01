@@ -35,6 +35,8 @@ updates:
           ['version-update:semver-major', 'version-update:semver-minor']
       - dependency-name: 'rxjs'
         update-types: ['version-update:semver-major']
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
       - dependency-name: 'zone.js'
         update-types: ['version-update:semver-major']
       # swiper/angular only exists in Swiper 6 → never auto-bump major
@@ -79,9 +81,7 @@ updates:
           - 'eslint'
           - '@typescript-eslint/*'
           - 'gts'
-          - 'codelyzer'
           - 'stylelint*'
-          - 'postcss-sass'
 
       # Unit testing stack
       testing:
