@@ -1,39 +1,21 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import * as moment from 'moment-mini-ts';
+import {TranslateService} from '@ngx-translate/core';
+import {DateTime} from 'luxon';
 
 @Pipe({name: 'substractDate'})
 export class SubstractDatePipe implements PipeTransform {
-  transform(birthday: number, deathday: number): string {
-    let age = '';
-    if (birthday !== undefined) {
-      const birth = moment(birthday, 'YYYY-MM-DD');
-      let tmp;
-      if (deathday !== undefined) {
-        const death = moment(deathday, 'YYYY-MM-DD');
-        tmp = moment
-          .duration({
-            days: death.date(),
-            months: death.month(),
-            years: death.year(),
-          })
-          .subtract({
-            days: birth.date(),
-            months: birth.month(),
-            years: birth.year(),
-          });
-      } else {
-        const now = moment();
-        tmp = moment
-          .duration({days: now.date(), months: now.month(), years: now.year()})
-          .subtract({
-            days: birth.date(),
-            months: birth.month(),
-            years: birth.year(),
-          });
-      }
-      age =
-        tmp.years() + ' ans ' + tmp.months() + ' mois ' + tmp.days() + ' jours';
+  constructor(private translate: TranslateService) {}
+
+  transform(birthday: string, deathday?: string): string {
+    if (!birthday) {
+      return '';
     }
-    return age;
+    const birth = DateTime.fromISO(birthday);
+    const end = deathday ? DateTime.fromISO(deathday) : DateTime.now();
+    return end
+      .diff(birth, ['years', 'months', 'days'])
+      .set({days: Math.floor(end.diff(birth, 'days').days % 30)}) // to have full day, no decimal
+      .reconfigure({locale: this.translate.currentLang})
+      .toHuman();
   }
 }

@@ -25,7 +25,6 @@ import {
   faAngleDown,
 } from '@fortawesome/free-solid-svg-icons';
 import {faClock, faTimesCircle} from '@fortawesome/free-regular-svg-icons';
-import * as moment from 'moment-mini-ts';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {NouiFormatter} from 'ng2-nouislider';
 import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
@@ -48,6 +47,7 @@ import {ToastService} from '../../../../service/toast.service';
 import {TitleService} from '../../../../service/title.service';
 import {MyPaginator} from '../../../../shared/my-paginator';
 import {IconDefinition} from '@fortawesome/fontawesome-svg-core';
+import {DateTime} from 'luxon';
 
 @Component({
   selector: 'app-my-datas',
@@ -406,7 +406,7 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
    */
   checkAndFixData(datas: Data[], lang: string): void {
     let incomplete: number[] = [];
-    const twoMonthsAgo = moment().add(-2, 'months');
+    const twoMonthsAgo = DateTime.now().minus({months: 2});
     try {
       datas
         .filter(data => {
@@ -422,7 +422,7 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
               translation.category === undefined ||
               data.score === undefined) &&
             (data.updated === undefined ||
-              moment(data.updated).isBefore(twoMonthsAgo))
+              DateTime.fromJSDate(data.updated) < twoMonthsAgo)
           );
         })
         .map(data => data.id);
