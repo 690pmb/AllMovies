@@ -4,6 +4,7 @@ import {SwiperOptions} from 'swiper';
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {Subscription} from 'rxjs';
 
+import {take} from 'rxjs/operators';
 import {Movie} from '../../../../model/movie';
 import {Serie} from './../../../../model/serie';
 import {Person} from '../../../../model/person';
@@ -94,40 +95,46 @@ export class DashboardComponent implements OnInit, OnDestroy {
   getTopMovies(language: string): void {
     this.movieService
       .getPopularMovies(language)
-      .then(movies => (this.movies = movies));
+      .pipe(take(1))
+      .subscribe(movies => (this.movies = movies));
   }
 
   getTopSeries(language: string): void {
     this.serieService
       .getPopularSeries(language)
-      .then(series => (this.series = series));
+      .pipe(take(1))
+      .subscribe(series => (this.series = series));
   }
 
   getToPersons(language: string): void {
     this.personService
       .getPopularPersons(language)
-      .then(persons => (this.persons = persons));
+      .pipe(take(1))
+      .subscribe(persons => (this.persons = persons));
   }
 
   nextMovies(): void {
     this.pageMovies += 1;
     this.movieService
       .getPopularMovies(this.translate.currentLang, this.pageMovies)
-      .then(movies => (this.movies = this.movies.concat(movies)));
+      .pipe(take(1))
+      .subscribe(movies => (this.movies = this.movies.concat(movies)));
   }
 
   nextSeries(): void {
     this.pageSeries += 1;
     this.serieService
       .getPopularSeries(this.translate.currentLang, this.pageSeries)
-      .then(series => (this.series = this.series.concat(series)));
+      .pipe(take(1))
+      .subscribe(series => (this.series = this.series.concat(series)));
   }
 
   nextPersons(): void {
     this.pagePersons += 1;
     this.personService
       .getPopularPersons(this.translate.currentLang, this.pagePersons)
-      .then(persons => (this.persons = this.persons.concat(persons)));
+      .pipe(take(1))
+      .subscribe(persons => (this.persons = this.persons.concat(persons)));
   }
 
   ngOnDestroy(): void {

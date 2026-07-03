@@ -36,7 +36,7 @@ export class RegisterComponent implements OnInit {
     this.title.setTitle('title.login');
     this.message = undefined;
     if (this.name && this.password && this.question && this.answer) {
-      this.auth.isUserExist(this.name).then(resp => {
+      this.auth.isUserExist(this.name).subscribe(resp => {
         if (resp) {
           this.message = 'login.register.already_exist';
         } else {

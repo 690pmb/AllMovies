@@ -48,19 +48,15 @@ export class UtilsService {
     toast.open(Level.error, UtilsService.getErrorMessage(error));
   }
 
-  handlePromiseError(error: any, toast: ToastService): Promise<any> {
-    return this.handleObsError(error, toast).toPromise();
+  handlePromiseError(error: any, toast: ToastService): Observable<any> {
+    return this.handleObsError(error, toast);
   }
 
   handleObsError(error: any, toast: ToastService): Observable<any> {
-    console.log('handlePromiseError');
+    console.log('handleObsError');
     console.error('error', error);
     toast.open(Level.error, UtilsService.getErrorMessage(error));
     return of('');
-  }
-
-  getPromise<T>(url: string, headers?: HttpHeaders): Promise<T> {
-    return this.getObservable<T>(url, headers).toPromise();
   }
 
   getObservable<T>(url: string, headers?: HttpHeaders): Observable<T> {

@@ -3,9 +3,9 @@ import {
   Component,
   Input,
   Output,
-  EventEmitter,
   OnChanges,
   SimpleChanges,
+  EventEmitter,
 } from '@angular/core';
 
 import {Utils} from './../../../utils';
@@ -14,8 +14,8 @@ import {Meta, Search, Site} from '../../../../constant/meta';
 import {Score} from '../../../../model/score';
 import {Person} from '../../../../model/person';
 import {Data} from '../../../../model/data';
-import {switchMap, map} from 'rxjs/operators';
-import {of, forkJoin} from 'rxjs';
+import {switchMap, map, catchError} from 'rxjs/operators';
+import {of, forkJoin, Observable, from} from 'rxjs';
 import {ToastService} from '../../../../service/toast.service';
 import {Level} from '../../../../model/model';
 
@@ -127,27 +127,28 @@ export class MetaComponent implements OnChanges {
           l.label === Meta.SEARCH_BANG_SENSCRITIQUE.label &&
           (this.isMovie || this.isSerie)
       )?.url
-    ).then(() => {
+    ).subscribe(() => {
       this.links.sort((a, b) => Utils.compare(a.label, b.label, false));
       this.metaService.sites.next([...this.links]);
     });
   }
 
-  scSearch(url?: string): Promise<boolean> {
+  scSearch(url?: string): Observable<boolean> {
     if (!url) {
-      return new Promise<boolean>(resolve => resolve(true));
+      return of(true);
     }
-    return fetch(
-      `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`
-    )
-      .then(response => {
+    return from(
+      fetch(
+        `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`
+      ).then(response => {
         if (response.ok) {
           return response.json();
         } else {
           throw new Error('Error fetching url: ' + url);
         }
       })
-      .then(data => {
+    ).pipe(
+      map(data => {
         const score = this.scrapping(
           data.contents,
           /(\d{1,2}\.\d\/10)|(\d{1,2}\/10)/g
@@ -169,7 +170,12 @@ export class MetaComponent implements OnChanges {
           this.toast.open(Level.warning, 'meta.captcha');
         }
         return true;
-      });
+      }),
+      catchError(err => {
+        this.toast.open(Level.error, err.message);
+        return of(false);
+      })
+    );
   }
 
   scrapping(html: string, reg: RegExp): string {

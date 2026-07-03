@@ -30,7 +30,7 @@ export class MovieSearchService {
       .getObservable(url, this.serviceUtils.getHeaders())
       .pipe(
         map(response => MapMovie.mapForSearchMovies(response)),
-        catchError(err => this.serviceUtils.handlePromiseError(err, this.toast))
+        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
       );
   }
 }

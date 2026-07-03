@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
+import {map, mergeMap, tap, catchError} from 'rxjs/operators';
 
 import {Dropbox} from '../constant/dropbox';
 import {DropboxService} from './dropbox.service';
@@ -80,40 +81,38 @@ export class MyDatasService<T extends Data> {
     return new Blob([theJSON], {type: 'text/json'});
   }
 
-  getFileName(isMovie: boolean): Promise<string> {
-    return new Promise(resolve =>
-      resolve(
-        `${isMovie ? Dropbox.DROPBOX_MOVIE_FILE : Dropbox.DROPBOX_SERIE_FILE}${
-          this.auth.user$.getValue().id
-        }${Dropbox.DROPBOX_FILE_SUFFIX}`
-      )
+  getFileName(isMovie: boolean): Observable<string> {
+    return of(
+      `${isMovie ? Dropbox.DROPBOX_MOVIE_FILE : Dropbox.DROPBOX_SERIE_FILE}${
+        this.auth.user$.getValue().id
+      }${Dropbox.DROPBOX_FILE_SUFFIX}`
     );
   }
 
-  getAll(isMovie: boolean): Promise<T[]> {
+  getAll(isMovie: boolean): Observable<T[]> {
     console.log('getAll');
-    return this.getFileName(isMovie)
-      .then((fileName: string) => this.dropboxService.downloadRaw(fileName))
-      .then((datasFromFile: string) => this.fromJson(datasFromFile))
-      .then((datas: T[]) => {
+    return this.getFileName(isMovie).pipe(
+      mergeMap((fileName: string) => this.dropboxService.downloadRaw(fileName)),
+      map((datasFromFile: string) => this.fromJson(datasFromFile)),
+      tap((datas: T[]) => {
         console.log(isMovie ? 'movies' : 'series', datas);
         this.next(datas, isMovie);
-        return datas;
-      })
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
+      }),
+      catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+    );
   }
 
-  add(datasToAdd: T[], isMovie: boolean): Promise<boolean> {
+  add(datasToAdd: T[], isMovie: boolean): Observable<boolean> {
     let tempDataList: T[] = [];
     let tempDatasAdded = [];
     let fileName: string;
     const mapped = this.format(datasToAdd);
-    return this.getFileName(isMovie)
-      .then((file: string) => {
+    return this.getFileName(isMovie).pipe(
+      mergeMap((file: string) => {
         fileName = file;
         return this.dropboxService.downloadRaw(fileName);
-      })
-      .then((datasFromFile: string) => {
+      }),
+      mergeMap((datasFromFile: string) => {
         // parse datas
         let dataList: T[] = [];
         if (datasFromFile && datasFromFile.trim().length > 0) {
@@ -130,22 +129,22 @@ export class MyDatasService<T extends Data> {
             dataList.push(data);
           });
           dataList.sort(Utils.compareObject);
-          return dataList;
+          return of(dataList);
         } else {
           this.toast.open(Level.info, 'toast.already_added');
-          return [];
+          return of([]);
         }
-      })
-      .then((list: T[]) => {
+      }),
+      mergeMap((list: T[]) => {
         if (list && list.length !== 0) {
           tempDataList = list;
           // replace with new array datas
           return this.dropboxService.uploadFile(this.toBlob(list), fileName);
         } else {
-          return undefined;
+          return of(undefined);
         }
-      })
-      .then((res: any) => {
+      }),
+      map((res: any) => {
         console.log(res);
         if (res) {
           // all good, modifies inner data
@@ -158,22 +157,23 @@ export class MyDatasService<T extends Data> {
           );
         }
         return true;
-      })
-      .catch(err => {
+      }),
+      catchError(err => {
         this.serviceUtils.handleError(err, this.toast);
-        return false;
-      });
+        return of(false);
+      })
+    );
   }
 
-  remove(idToRemove: number[], isMovie: boolean): Promise<boolean> {
+  remove(idToRemove: number[], isMovie: boolean): Observable<boolean> {
     let tempDataList: T[] = [];
     let fileName: string;
-    return this.getFileName(isMovie)
-      .then((file: string) => {
+    return this.getFileName(isMovie).pipe(
+      mergeMap((file: string) => {
         fileName = file;
         return this.dropboxService.downloadRaw(fileName);
-      })
-      .then(datasFromFile => {
+      }),
+      mergeMap(datasFromFile => {
         // parse them
         let dataList = this.fromJson(datasFromFile);
         if (idToRemove.length > 0) {
@@ -189,10 +189,10 @@ export class MyDatasService<T extends Data> {
             fileName
           );
         } else {
-          return undefined;
+          return of(undefined);
         }
-      })
-      .then((res: any) => {
+      }),
+      map((res: any) => {
         console.log(res);
         if (res) {
           // if ok, emit new array and toast
@@ -204,11 +204,12 @@ export class MyDatasService<T extends Data> {
           );
         }
         return true;
+      }),
+      catchError(err => {
+        this.serviceUtils.handleObsError(err, this.toast);
+        return of(false);
       })
-      .catch(err => {
-        this.serviceUtils.handlePromiseError(err, this.toast);
-        return false;
-      });
+    );
   }
 
   /**
@@ -216,19 +217,19 @@ export class MyDatasService<T extends Data> {
    * @param  {T[]} datasToUpdate the datas replacing
    * @returns void
    */
-  update(datasToUpdate: T[], isMovie: boolean): Promise<T[]> {
+  update(datasToUpdate: T[], isMovie: boolean): Observable<T[]> {
     let tempDataList: T[] = [];
     let fileName: string;
     let mapped = datasToUpdate;
     if (datasToUpdate.every(m => m.translation === undefined)) {
       mapped = this.format(datasToUpdate);
     }
-    return this.getFileName(isMovie)
-      .then((file: string) => {
+    return this.getFileName(isMovie).pipe(
+      mergeMap((file: string) => {
         fileName = file;
         return this.dropboxService.downloadRaw(fileName);
-      })
-      .then(file => {
+      }),
+      mergeMap(file => {
         let dataList = this.fromJson(file);
         // Keeps added date field from being replaced
         const idList = dataList.map(m => m.id);
@@ -248,8 +249,8 @@ export class MyDatasService<T extends Data> {
         dataList.sort(Utils.compareObject);
         tempDataList = dataList;
         return this.dropboxService.uploadFile(this.toBlob(dataList), fileName);
-      })
-      .then((res: any) => {
+      }),
+      map((res: any) => {
         console.log(res);
         this.next(tempDataList, isMovie);
         this.toast.open(
@@ -258,14 +259,15 @@ export class MyDatasService<T extends Data> {
           {size: mapped.length}
         );
         return mapped;
-      })
-      .catch(err => {
+      }),
+      catchError(err => {
         this.serviceUtils.handleError(err, this.toast);
-        return [];
-      });
+        return of([]);
+      })
+    );
   }
 
-  removeDuplicate(data: T[], isMovie: boolean): Promise<T[]> {
+  removeDuplicate(data: T[], isMovie: boolean): Observable<T[]> {
     const groupById = Utils.groupBy(data, 'id');
     const duplication = groupById.filter(g => g.items.length > 1);
     if (duplication.length > 1) {
@@ -287,7 +289,7 @@ export class MyDatasService<T extends Data> {
         isMovie
       );
     } else {
-      return new Promise(resolve => resolve(data));
+      return of(data);
     }
   }
 

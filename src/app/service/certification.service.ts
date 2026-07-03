@@ -23,7 +23,7 @@ export class CertificationService {
       .getObservable(url, this.serviceUtils.getHeaders())
       .pipe(
         map((response: any) => this.mapCertification(response)),
-        catchError(err => this.serviceUtils.handlePromiseError(err, this.toast))
+        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
       );
   }
 

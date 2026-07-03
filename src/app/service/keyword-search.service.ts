@@ -28,7 +28,7 @@ export class KeywordSearchService implements SearchService<Keyword> {
             .slice(0, 10)
             .map((r: any) => <Keyword>{id: r.id, name: r.name})
         ),
-        catchError(err => this.serviceUtils.handlePromiseError(err, this.toast))
+        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
       );
   }
 
@@ -40,7 +40,7 @@ export class KeywordSearchService implements SearchService<Keyword> {
       )
       .pipe(
         map((response: any) => <Keyword>{id: response.id, name: response.name}),
-        catchError(err => this.serviceUtils.handlePromiseError(err, this.toast))
+        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
       );
   }
 }

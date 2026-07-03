@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
+import {mergeMap} from 'rxjs/operators';
 
 import {Data} from './model/data';
 import {TabsService} from './service/tabs.service';
@@ -32,10 +33,12 @@ export class AppComponent implements OnInit {
       if (user) {
         this.myDatasService
           .getAll(true)
-          .then(d => this.myDatasService.removeDuplicate(d, true));
+          .pipe(mergeMap(d => this.myDatasService.removeDuplicate(d, true)))
+          .subscribe();
         this.myDatasService
           .getAll(false)
-          .then(d => this.myDatasService.removeDuplicate(d, false));
+          .pipe(mergeMap(d => this.myDatasService.removeDuplicate(d, false)))
+          .subscribe();
         this.myTagsService.getAll();
         this.translate.use(user.lang.code);
       } else {

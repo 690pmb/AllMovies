@@ -1,4 +1,4 @@
-import {BehaviorSubject, Observable, from, of} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {Router} from '@angular/router';
 import {Injectable} from '@angular/core';
 import jwt_decode from 'jwt-decode';
@@ -13,7 +13,7 @@ import {Utils} from '../shared/utils';
 import {Dropbox} from '../constant/dropbox';
 import {User} from '../model/user';
 import {Constants} from '../constant/constants';
-import {map, catchError, tap, take, switchMap} from 'rxjs/operators';
+import {map, catchError, tap, take, switchMap, mergeMap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -72,7 +72,7 @@ export class AuthService {
   }
 
   login(name: string, password: string): Observable<boolean> {
-    return from(this.getUserFile()).pipe(
+    return this.getUserFile().pipe(
       map((users: User[]) =>
         users.find(
           (user: User) => user.name === name && user.password === password
@@ -88,99 +88,101 @@ export class AuthService {
       }),
       map(u => !!u),
       take(1),
-      catchError(err => this.serviceUtils.handlePromiseError(err, this.toast))
+      catchError(err => this.serviceUtils.handleObsError(err, this.toast))
     );
   }
 
-  checkAnswer(name: string, answer: string): Promise<boolean> {
-    return this.getUserByName(name)
-      .then((user: User) => user.name === name && user.answer === answer)
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
+  checkAnswer(name: string, answer: string): Observable<boolean> {
+    return this.getUserByName(name).pipe(
+      map((user: User) => user && user.name === name && user.answer === answer),
+      catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+    );
   }
 
-  getUserByName(name: string): Promise<User> {
-    return this.getUserFile()
-      .then((users: User[]) => users.find((user: User) => user.name === name))
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
+  getUserByName(name: string): Observable<User> {
+    return this.getUserFile().pipe(
+      map((users: User[]) => users.find((user: User) => user.name === name)),
+      catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+    );
   }
 
-  isUserExist(name: string): Promise<boolean> {
-    return this.getUserFile()
-      .then(users => users.find(user => user.name === name) !== undefined)
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
+  isUserExist(name: string): Observable<boolean> {
+    return this.getUserFile().pipe(
+      map(users => users.find(user => user.name === name) !== undefined),
+      catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+    );
   }
 
-  private getUserFile(): Promise<User[]> {
+  private getUserFile(): Observable<User[]> {
     return this.dropbox
       .downloadFile(Dropbox.DROPBOX_USER_FILE)
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
+      .pipe(
+        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+      );
   }
 
   register(user: User): void {
     let addedUser: User;
     this.dropbox
       .downloadFile(Dropbox.DROPBOX_USER_FILE)
-      .then((users: User[]) => {
-        const idMax = Math.max(...users.map(item => item.id));
-        user.id = idMax + 1;
-        addedUser = user;
-        users.push(user);
-        users.sort(Utils.compareObject);
-        return users;
-      })
-      .then(users =>
-        this.dropbox.uploadFile(
-          AuthService.usersToBlob(users),
-          Dropbox.DROPBOX_USER_FILE
+      .pipe(
+        mergeMap((users: User[]) => {
+          const idMax =
+            users.length > 0 ? Math.max(...users.map(item => item.id)) : 0;
+          user.id = idMax + 1;
+          addedUser = user;
+          users.push(user);
+          users.sort(Utils.compareObject);
+          return this.dropbox.uploadFile(
+            AuthService.usersToBlob(users),
+            Dropbox.DROPBOX_USER_FILE
+          );
+        }),
+        mergeMap(() =>
+          this.dropbox.uploadNewFile(
+            '[]',
+            `${Dropbox.DROPBOX_TAG_FILE}${addedUser.id}${Dropbox.DROPBOX_FILE_SUFFIX}`
+          )
+        ),
+        mergeMap(() =>
+          this.dropbox.uploadNewFile(
+            '[]',
+            `${Dropbox.DROPBOX_MOVIE_FILE}${addedUser.id}${Dropbox.DROPBOX_FILE_SUFFIX}`
+          )
+        ),
+        mergeMap(() =>
+          this.dropbox.uploadNewFile(
+            '[]',
+            `${Dropbox.DROPBOX_SERIE_FILE}${addedUser.id}${Dropbox.DROPBOX_FILE_SUFFIX}`
+          )
         )
       )
-      .then(() =>
-        this.dropbox.uploadNewFile(
-          '[]',
-          `${Dropbox.DROPBOX_TAG_FILE}${addedUser.id}${Dropbox.DROPBOX_FILE_SUFFIX}`
-        )
-      )
-      .then(() =>
-        this.dropbox.uploadNewFile(
-          '[]',
-          `${Dropbox.DROPBOX_MOVIE_FILE}${addedUser.id}${Dropbox.DROPBOX_FILE_SUFFIX}`
-        )
-      )
-      .then(() =>
-        this.dropbox.uploadNewFile(
-          '[]',
-          `${Dropbox.DROPBOX_SERIE_FILE}${addedUser.id}${Dropbox.DROPBOX_FILE_SUFFIX}`
-        )
-      )
-      .then(() => {
-        AuthService.setToken(AuthService.createToken(addedUser));
-        this.user$.next(addedUser);
-        this.router.navigate(['/']);
-        this.toast.open(
-          Level.success,
-          this.translate.instant('toast.user_added')
-        );
-      })
-      .catch(err => this.serviceUtils.handleError(err, this.toast));
+      .subscribe({
+        next: () => {
+          AuthService.setToken(AuthService.createToken(addedUser));
+          this.user$.next(addedUser);
+          this.router.navigate(['/']);
+          this.toast.open(
+            Level.success,
+            this.translate.instant('toast.user_added')
+          );
+        },
+        error: err => this.serviceUtils.handleError(err, this.toast),
+      });
   }
 
-  updateUser(user: User): Promise<User> {
-    return this.dropbox
-      .downloadFile(Dropbox.DROPBOX_USER_FILE)
-      .then((users: User[]) => {
-        users = users.filter(item => item.name !== user.name);
-        users.push(user);
-        users.sort(Utils.compareObject);
-        return users;
-      })
-      .then(users =>
-        this.dropbox.uploadFile(
-          AuthService.usersToBlob(users),
+  updateUser(user: User): Observable<User> {
+    return this.dropbox.downloadFile(Dropbox.DROPBOX_USER_FILE).pipe(
+      mergeMap((users: User[]) => {
+        const filteredUsers = users.filter(item => item.name !== user.name);
+        filteredUsers.push(user);
+        filteredUsers.sort(Utils.compareObject);
+        return this.dropbox.uploadFile(
+          AuthService.usersToBlob(filteredUsers),
           Dropbox.DROPBOX_USER_FILE
-        )
-      )
-      .then((res: any) => {
-        console.log(res);
+        );
+      }),
+      map(() => {
         AuthService.setToken(AuthService.createToken(user));
         this.toast.open(
           Level.success,
@@ -188,29 +190,30 @@ export class AuthService {
         );
         this.user$.next(user);
         return user;
-      })
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
+      }),
+      catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+    );
   }
 
   getCurrentUser(): Observable<User> {
     return of(AuthService.decodeToken()).pipe(
       switchMap(user => {
         if (user?.id !== undefined) {
-          return from(
-            this.getUserFile()
-              .then(users => users.find(u => u.id === user.id))
-              .then((found: User) => {
-                if (
-                  user.name === found.name &&
-                  user.password === found.password &&
-                  user.answer === user.answer &&
-                  user.id === found.id
-                ) {
-                  return user;
-                } else {
-                  return undefined;
-                }
-              })
+          return this.getUserFile().pipe(
+            map(users => users.find(u => u.id === user.id)),
+            map((found: User) => {
+              if (
+                found &&
+                user.name === found.name &&
+                user.password === found.password &&
+                user.answer === found.answer &&
+                user.id === found.id
+              ) {
+                return user;
+              } else {
+                return undefined;
+              }
+            })
           );
         } else {
           return of(undefined);
@@ -218,7 +221,7 @@ export class AuthService {
       }),
       tap(user => this.user$.next(user)),
       switchMap(() => this.user$.asObservable()),
-      catchError(err => this.serviceUtils.handlePromiseError(err, this.toast))
+      catchError(err => this.serviceUtils.handleObsError(err, this.toast))
     );
   }
 

@@ -17,8 +17,8 @@ export class OmdbService {
     private toast: ToastService
   ) {}
 
-  getScore(id: string): Promise<Score> {
-    return this.getScore$(id).toPromise();
+  getScore(id: string): Observable<Score> {
+    return this.getScore$(id);
   }
 
   getScore$(id: string): Observable<Score> {

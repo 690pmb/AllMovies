@@ -47,7 +47,7 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
       this.user.password = crypto.SHA512(this.pass1).toString();
       this.auth
         .updateUser(this.user)
-        .then(() => this.router.navigate(['/login/profile']));
+        .subscribe(() => this.router.navigate(['/login/profile']));
     }
   }
 

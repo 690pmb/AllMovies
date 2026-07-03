@@ -1,5 +1,6 @@
-import {HttpStatusCode} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {HttpStatusCode} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -7,8 +8,8 @@ import {Injectable} from '@angular/core';
 export class MockService<T> {
   constructor() {}
 
-  getAll(file: string): Promise<T[]> {
-    return new Promise<T[]>((resolve, reject) => {
+  getAll(file: string): Observable<T[]> {
+    return new Observable<T[]>(observer => {
       const xhr = new XMLHttpRequest();
       xhr.open('GET', './assets/' + file);
       xhr.send();
@@ -18,9 +19,10 @@ export class MockService<T> {
             xhr.status === HttpStatusCode.Ok ||
             xhr.status === HttpStatusCode.Created
           ) {
-            resolve(JSON.parse(xhr.response));
+            observer.next(JSON.parse(xhr.response));
+            observer.complete();
           } else {
-            reject(JSON.parse(xhr.responseText));
+            observer.error(JSON.parse(xhr.responseText));
           }
         }
       };

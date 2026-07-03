@@ -26,7 +26,7 @@ export class GenreService {
         map((response: any) =>
           response.genres.map((r: any) => <Genre>{id: r.id, name: r.name})
         ),
-        catchError(err => this.serviceUtils.handlePromiseError(err, this.toast))
+        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
       );
   }
 }

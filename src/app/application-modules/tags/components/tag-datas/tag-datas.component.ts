@@ -18,7 +18,8 @@ import {
   OnDestroy,
 } from '@angular/core';
 import {faSave} from '@fortawesome/free-regular-svg-icons';
-import {Subscription} from 'rxjs';
+import {Observable, of, Subscription} from 'rxjs';
+import {mergeMap} from 'rxjs/operators';
 
 import {Utils} from './../../../../shared/utils';
 import {Data} from './../../../../model/data';
@@ -233,30 +234,29 @@ export class TagDatasComponent implements OnInit, OnChanges, OnDestroy {
     allDatas: Data[],
     datasToAdd: Data[],
     isMovie: boolean
-  ): Promise<boolean> {
-    return new Promise(resolve => {
-      const toAdd = datasToAdd.filter(
-        movie => !allDatas.map(m => m.id).includes(movie.id)
-      );
-      if (toAdd && toAdd.length > 0) {
-        this.myDatasService.add(toAdd, isMovie).then(() => {
-          resolve(true);
-        });
-      } else {
-        resolve(true);
-      }
-    });
+  ): Observable<boolean> {
+    const toAdd = datasToAdd.filter(
+      movie => !allDatas.map(m => m.id).includes(movie.id)
+    );
+    if (toAdd && toAdd.length > 0) {
+      return this.myDatasService.add(toAdd, isMovie);
+    } else {
+      return of(true);
+    }
   }
 
   save(): void {
     this.edited = false;
     this.saveData(this.allMovies, this.moviesToAdd, true)
-      .then(() => this.saveData(this.allSeries, this.seriesToAdd, false))
-      .then(() => {
-        this.moviesToAdd = [];
-        this.seriesToAdd = [];
-        this.myTagsService.updateTag(this.tag);
-      });
+      .pipe(
+        mergeMap(() => this.saveData(this.allSeries, this.seriesToAdd, false)),
+        mergeMap(() => {
+          this.moviesToAdd = [];
+          this.seriesToAdd = [];
+          return this.myTagsService.updateTag(this.tag);
+        })
+      )
+      .subscribe();
   }
 
   toogleEdit(): void {

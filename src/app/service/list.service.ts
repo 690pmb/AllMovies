@@ -19,7 +19,7 @@ export class ListService {
     private toast: ToastService
   ) {}
 
-  getDataLists(dataId: number, language: string): Promise<List[]> {
+  getDataLists(dataId: number, language: string): Observable<List[]> {
     const url = `${Url.MOVIE_URl}/${dataId}/${Url.GET_MOVIE_LISTS}?${Url.API_KEY}${Url.LANGUE}${language}`;
 
     return this.serviceUtils
@@ -55,13 +55,12 @@ export class ListService {
             map(pagesArrays => result.concat(...pagesArrays))
           );
         }),
+        map(lists => lists ?? []),
         catchError(err => {
           this.serviceUtils.handleError(err, this.toast);
           return of([] as List[]);
         })
-      )
-      .toPromise()
-      .then(lists => lists ?? []);
+      );
   }
 
   getPage(page: number, url: string): Observable<List[]> {
@@ -81,12 +80,14 @@ export class ListService {
     language: string,
     sort: string,
     page = 1
-  ): Promise<FullList> {
+  ): Observable<FullList> {
     return this.serviceUtils
-      .getPromise(
+      .getObservable(
         `${Url.GET_LISTS_DETAILS}${id}?${Url.API_KEY}${Url.LANGUE}${language}${Url.PAGE_URL}${page}${Url.SORT_BY_URL}${sort}`
       )
-      .then((response: any) => MapList.mapFullList(response))
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
+      .pipe(
+        map((response: any) => MapList.mapFullList(response)),
+        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+      );
   }
 }

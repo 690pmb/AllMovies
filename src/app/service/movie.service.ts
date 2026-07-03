@@ -26,18 +26,20 @@ export class MovieService {
     private mockService: MockService<Flag>
   ) {}
 
-  getPopularMovies(language: string, page = 1): Promise<Movie[]> {
+  getPopularMovies(language: string, page = 1): Observable<Movie[]> {
     return this.serviceUtils
-      .getPromise(
+      .getObservable(
         `${Url.MOST_POPULAR_MOVIE_URL}${Url.LANGUE}${language}${Url.PAGE_URL}${page}`
       )
-      .then(response => MapMovie.mapForPopularMovies(response))
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
+      .pipe(
+        map(response => MapMovie.mapForPopularMovies(response)),
+        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+      );
   }
 
-  getMovies(ids: number[], language: string): Promise<Movie[]> {
+  getMovies(ids: number[], language: string): Observable<Movie[]> {
     const obs = ids.map(id =>
-      this.getMovie(
+      this.getMovie$(
         id,
         new DetailConfig(
           true,
@@ -54,11 +56,15 @@ export class MovieService {
         false
       )
     );
-    return forkJoin(obs).toPromise();
+    return forkJoin(obs);
   }
 
-  getMovie(id: number, config: DetailConfig, detail: boolean): Promise<Movie> {
-    return this.getMovie$(id, config, detail).toPromise();
+  getMovie(
+    id: number,
+    config: DetailConfig,
+    detail: boolean
+  ): Observable<Movie> {
+    return this.getMovie$(id, config, detail);
   }
 
   getMovie$(
@@ -129,7 +135,7 @@ export class MovieService {
                 return movie;
               })
             ),
-            this.omdb.getImdbScore(movie).toPromise()
+            this.omdb.getImdbScore(movie)
           )
         ),
         catchError(err => this.serviceUtils.handleObsError(err, this.toast))
@@ -140,7 +146,7 @@ export class MovieService {
     debut: string,
     fin: string,
     language: string
-  ): Promise<Movie[]> {
+  ): Observable<Movie[]> {
     const criteria = new DiscoverCriteria();
     criteria.language = language;
     criteria.region = 'fr';
@@ -155,10 +161,10 @@ export class MovieService {
       undefined,
       undefined
     );
-    return this.serviceUtils
-      .getPromise(url)
-      .then(response => MapMovie.mapForMoviesByReleaseDates(response))
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
+    return this.serviceUtils.getObservable(url).pipe(
+      map(response => MapMovie.mapForMoviesByReleaseDates(response)),
+      catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+    );
   }
 
   getMoviesDiscover(
@@ -168,9 +174,9 @@ export class MovieService {
     keyword: number[],
     isWithoutGenre: boolean,
     isWithoutKeyword: boolean
-  ): Promise<Discover> {
+  ): Observable<Discover> {
     return this.serviceUtils
-      .getPromise(
+      .getObservable(
         UrlBuilder.discoverUrlBuilder(
           true,
           criteria,
@@ -182,18 +188,24 @@ export class MovieService {
           isWithoutKeyword
         )
       )
-      .then((response: any) => {
-        const discover = MapMovie.mapForDiscover(response);
-        // discover.movies.forEach((movie) => this.omdb.getMovie(movie.imdb_id).then(score => movie.score = score));
-        return discover;
-      })
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
+      .pipe(
+        map((response: any) => {
+          const discover = MapMovie.mapForDiscover(response);
+          return discover;
+        }),
+        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+      );
   }
 
-  getMoviesPlaying(criteria: DiscoverCriteria): Promise<string[]> {
+  getMoviesPlaying(criteria: DiscoverCriteria): Observable<string[]> {
     return this.serviceUtils
-      .getPromise(UrlBuilder.playingUrlBuilder(criteria))
-      .then((response: any) => [response.dates.minimum, response.dates.maximum])
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
+      .getObservable(UrlBuilder.playingUrlBuilder(criteria))
+      .pipe(
+        map((response: any) => [
+          response.dates.minimum,
+          response.dates.maximum,
+        ]),
+        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+      );
   }
 }

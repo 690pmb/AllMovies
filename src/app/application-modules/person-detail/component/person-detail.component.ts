@@ -32,6 +32,7 @@ export class PersonDetailComponent implements OnInit, OnDestroy {
   knownFor: Data[] = [];
 
   subs: Subscription[] = [];
+  personSub!: Subscription;
   Url = Url;
   imageSize = ImageSize;
   Meta = Meta;
@@ -62,129 +63,138 @@ export class PersonDetailComponent implements OnInit, OnDestroy {
   }
 
   getPerson(id: number, language: string): void {
-    this.personService.getPerson(id, language, true).then(person => {
-      this.person = person;
-      const actor = new DropDownChoice(
-        Job.actor,
-        this.groupByType(person.asActor)
-      );
-      const director = new DropDownChoice(
-        Job.director,
-        this.groupByType(person.asDirector)
-      );
-      const producer = new DropDownChoice(
-        Job.producer[0],
-        this.groupByType(person.asProducer)
-      );
-      const screenplay = new DropDownChoice(
-        Job.screenwriter[0],
-        this.groupByType(person.asScreenplay)
-      );
-      const compositor = new DropDownChoice(
-        Job.compositor[0],
-        this.groupByType(person.asCompositors)
-      );
-      const novel = new DropDownChoice(
-        Job.novelist[0],
-        this.groupByType(person.asNovel)
-      );
-      const other = new DropDownChoice(
-        Job.other,
-        this.groupByType(person.asOther)
-      );
-      const clonedActor = {...actor};
-      switch (person.knownFor) {
-        case 'Acting': {
-          clonedActor.value.set('show', ['both']);
-          this.listMoviesOrder = [
-            clonedActor,
-            director,
-            producer,
-            screenplay,
-            novel,
-            compositor,
-            other,
-          ];
-          this.getKnownFor(person.asActor, true);
-          break;
+    if (this.personSub) {
+      this.personSub.unsubscribe();
+    }
+    this.personSub = this.personService
+      .getPerson(id, language, true)
+      .subscribe(person => {
+        this.person = person;
+        const actor = new DropDownChoice(
+          Job.actor,
+          this.groupByType(person.asActor)
+        );
+        const director = new DropDownChoice(
+          Job.director,
+          this.groupByType(person.asDirector)
+        );
+        const producer = new DropDownChoice(
+          Job.producer[0],
+          this.groupByType(person.asProducer)
+        );
+        const screenplay = new DropDownChoice(
+          Job.screenwriter[0],
+          this.groupByType(person.asScreenplay)
+        );
+        const compositor = new DropDownChoice(
+          Job.compositor[0],
+          this.groupByType(person.asCompositors)
+        );
+        const novel = new DropDownChoice(
+          Job.novelist[0],
+          this.groupByType(person.asNovel)
+        );
+        const other = new DropDownChoice(
+          Job.other,
+          this.groupByType(person.asOther)
+        );
+        const clonedActor = {...actor};
+        switch (person.knownFor) {
+          case 'Acting': {
+            clonedActor.value.set('show', ['both']);
+            this.listMoviesOrder = [
+              clonedActor,
+              director,
+              producer,
+              screenplay,
+              novel,
+              compositor,
+              other,
+            ];
+            this.getKnownFor(person.asActor, true);
+            break;
+          }
+          case 'Directing': {
+            const clonedDirector = {...director};
+            clonedDirector.value.set('show', ['both']);
+            this.listMoviesOrder = [
+              clonedDirector,
+              producer,
+              actor,
+              screenplay,
+              novel,
+              compositor,
+              other,
+            ];
+
+            this.getKnownFor(person.asDirector, false);
+            break;
+          }
+          case 'Sound': {
+            const clonedCompositor = {...compositor};
+            clonedCompositor.value.set('show', ['both']);
+            this.listMoviesOrder = [
+              clonedCompositor,
+              actor,
+              director,
+              producer,
+              screenplay,
+              novel,
+              other,
+            ];
+            this.getKnownFor(person.asCompositors, false);
+            break;
+          }
+          case 'Writing': {
+            const clonedScreenplay = {...screenplay};
+            clonedScreenplay.value.set('show', ['both']);
+            this.listMoviesOrder = [
+              clonedScreenplay,
+              novel,
+              director,
+              producer,
+              actor,
+              compositor,
+              other,
+            ];
+            this.getKnownFor(
+              [...person.asScreenplay, ...person.asNovel],
+              false
+            );
+            break;
+          }
+          case 'Production': {
+            const clonedProducer = {...producer};
+            clonedProducer.value.set('show', ['both']);
+            this.listMoviesOrder = [
+              clonedProducer,
+              director,
+              actor,
+              screenplay,
+              novel,
+              compositor,
+              other,
+            ];
+            this.getKnownFor(person.asProducer, false);
+            break;
+          }
+          default: {
+            console.log('default', person.knownFor);
+            this.listMoviesOrder = [
+              clonedActor,
+              director,
+              producer,
+              screenplay,
+              novel,
+              compositor,
+              other,
+            ];
+            this.getKnownFor(person.asOther, false);
+            break;
+          }
         }
-        case 'Directing': {
-          const clonedDirector = {...director};
-          clonedDirector.value.set('show', ['both']);
-          this.listMoviesOrder = [
-            clonedDirector,
-            producer,
-            actor,
-            screenplay,
-            novel,
-            compositor,
-            other,
-          ];
-          this.getKnownFor(person.asDirector, false);
-          break;
-        }
-        case 'Sound': {
-          const clonedCompositor = {...compositor};
-          clonedCompositor.value.set('show', ['both']);
-          this.listMoviesOrder = [
-            clonedCompositor,
-            actor,
-            director,
-            producer,
-            screenplay,
-            novel,
-            other,
-          ];
-          this.getKnownFor(person.asCompositors, false);
-          break;
-        }
-        case 'Writing': {
-          const clonedScreenplay = {...screenplay};
-          clonedScreenplay.value.set('show', ['both']);
-          this.listMoviesOrder = [
-            clonedScreenplay,
-            novel,
-            director,
-            producer,
-            actor,
-            compositor,
-            other,
-          ];
-          this.getKnownFor([...person.asScreenplay, ...person.asNovel], false);
-          break;
-        }
-        case 'Production': {
-          const clonedProducer = {...producer};
-          clonedProducer.value.set('show', ['both']);
-          this.listMoviesOrder = [
-            clonedProducer,
-            director,
-            actor,
-            screenplay,
-            novel,
-            compositor,
-            other,
-          ];
-          this.getKnownFor(person.asProducer, false);
-          break;
-        }
-        default: {
-          console.log('default', person.knownFor);
-          this.listMoviesOrder = [
-            clonedActor,
-            director,
-            producer,
-            screenplay,
-            novel,
-            compositor,
-            other,
-          ];
-          this.getKnownFor(person.asOther, false);
-          break;
-        }
-      }
-      this.title.setTitle(person.name);
-    });
+        this.title.setTitle(person.name);
+      });
   }
 
   groupByType(credits: any[]): Map<string, any[]> {

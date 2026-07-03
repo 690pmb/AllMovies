@@ -28,7 +28,7 @@ export class PersonSearchService implements SearchService<Person> {
       .getObservable(url, this.serviceUtils.getHeaders())
       .pipe(
         map(response => MapPerson.mapForSearchPersons(response)),
-        catchError(err => this.serviceUtils.handlePromiseError(err, this.toast))
+        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
       );
   }
 
@@ -40,7 +40,7 @@ export class PersonSearchService implements SearchService<Person> {
       )
       .pipe(
         map((response: any) => MapPerson.mapForPerson(response)),
-        catchError(err => this.serviceUtils.handlePromiseError(err, this.toast))
+        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
       );
   }
 }

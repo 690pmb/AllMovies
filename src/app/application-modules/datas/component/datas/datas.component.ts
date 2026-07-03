@@ -7,7 +7,7 @@ import {
   ElementRef,
   ViewChild,
 } from '@angular/core';
-import {forkJoin, BehaviorSubject, Observable, Subscription, from} from 'rxjs';
+import {forkJoin, BehaviorSubject, Observable, Subscription} from 'rxjs';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {Sort} from '@angular/material/sort';
 import {TranslateService, LangChangeEvent} from '@ngx-translate/core';
@@ -462,7 +462,7 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
               m.score = {};
             }
           });
-          this.myDatasService.update(datas, this.isMovie).then(updated => {
+          this.myDatasService.update(datas, this.isMovie).subscribe(updated => {
             updated.forEach(up => {
               const index = this.allDatas.map(a => a.id).indexOf(up.id);
               up.added = this.allDatas[index].added;
@@ -507,11 +507,11 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
     );
     toDownload.forEach((id: number) => {
       if (this.isMovie) {
-        obs.push(from(this.movieService.getMovie(id, conf1, false)));
-        obs.push(from(this.movieService.getMovie(id, conf2, false)));
+        obs.push(this.movieService.getMovie(id, conf1, false));
+        obs.push(this.movieService.getMovie(id, conf2, false));
       } else {
-        obs.push(from(this.serieService.getSerie(id, conf1, false)));
-        obs.push(from(this.serieService.getSerie(id, conf2, false)));
+        obs.push(this.serieService.getSerie(id, conf1, false));
+        obs.push(this.serieService.getSerie(id, conf2, false));
       }
     });
     return obs;
@@ -534,11 +534,11 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
             !datasToRemove.includes(data.id) || data.movie !== this.isMovie
         ))
     );
-    this.myDatasService.remove(datasToRemove, this.isMovie).then(() => {
+    this.myDatasService.remove(datasToRemove, this.isMovie).subscribe(() => {
       this.allDatas = this.allDatas.filter(data => !data.checked);
       this.paginate(this.refreshData());
       if (tagsToReplace && tagsToReplace.length > 0) {
-        this.myTagsService.replaceTags(tagsToReplace);
+        this.myTagsService.replaceTags(tagsToReplace).subscribe();
       }
     });
     this.nbChecked = 0;
@@ -580,7 +580,7 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
           )
         )
       );
-      this.myTagsService.updateTag(this.selectedTag).then(() => {
+      this.myTagsService.updateTag(this.selectedTag).subscribe(() => {
         this.nbChecked = 0;
         this.selectedTag = undefined;
         this.allDatas.forEach(m => (m.checked = false));

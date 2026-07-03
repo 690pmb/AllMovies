@@ -28,7 +28,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   updateUser(): void {
-    this.auth.updateUser(this.user);
+    this.auth.updateUser(this.user).subscribe();
   }
 
   ngOnDestroy(): void {

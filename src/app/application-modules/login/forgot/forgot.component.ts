@@ -56,9 +56,8 @@ export class ForgotComponent implements OnInit, OnDestroy {
 
   loadQuestion(): void {
     this.question = '';
-    this.auth
-      .getUserByName(this.name)
-      .then(user => {
+    this.auth.getUserByName(this.name).subscribe({
+      next: user => {
         if (user) {
           this.question = user.question;
           this.nameNext.nativeElement.click();
@@ -68,22 +67,25 @@ export class ForgotComponent implements OnInit, OnDestroy {
           this.messageName = 'login.forgot.wrong_name';
           this.user = undefined;
         }
-      })
-      .catch(err => this.serviceUtils.handleError(err, this.toast));
+      },
+      error: err => this.serviceUtils.handleError(err, this.toast),
+    });
   }
 
   forgot(): void {
     this.messageAnswer = undefined;
     this.auth
       .checkAnswer(this.name, crypto.SHA512(this.answer).toString())
-      .then(correct => {
-        if (correct) {
-          this.answerNext.nativeElement.click();
-        } else {
-          this.messageAnswer = 'login.wrong_answer';
-        }
-      })
-      .catch(err => this.serviceUtils.handleError(err, this.toast));
+      .subscribe({
+        next: correct => {
+          if (correct) {
+            this.answerNext.nativeElement.click();
+          } else {
+            this.messageAnswer = 'login.wrong_answer';
+          }
+        },
+        error: err => this.serviceUtils.handleError(err, this.toast),
+      });
   }
 
   changePassword(): void {
@@ -91,7 +93,7 @@ export class ForgotComponent implements OnInit, OnDestroy {
       this.messagePassword = 'login.error_password';
     } else if (this.user) {
       this.user.password = crypto.SHA512(this.password1).toString();
-      this.auth.updateUser(this.user);
+      this.auth.updateUser(this.user).subscribe();
       this.passwordNext.nativeElement.click();
     }
   }

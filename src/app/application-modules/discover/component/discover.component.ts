@@ -1,4 +1,4 @@
-import {BehaviorSubject, Subscription} from 'rxjs';
+import {BehaviorSubject, Subscription, Observable} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PageEvent} from '@angular/material/paginator';
 import {TranslateService} from '@ngx-translate/core';
@@ -347,7 +347,7 @@ export class DiscoverComponent implements OnInit, OnDestroy {
     const crit = new DiscoverCriteria();
     crit.region = 'FR';
     crit.language = this.translate.currentLang;
-    this.movieService.getMoviesPlaying(crit).then(dates => {
+    this.movieService.getMoviesPlaying(crit).subscribe(dates => {
       this.playingDate = dates;
     });
   }
@@ -362,29 +362,24 @@ export class DiscoverComponent implements OnInit, OnDestroy {
       criteria.yearMin = this.playingDate[0];
       criteria.yearMax = this.playingDate[1];
     }
-    new Promise(resolve =>
-      this.isMovie
-        ? resolve(
-            this.movieService.getMoviesDiscover(
-              criteria,
-              this.people,
-              this.selectedGenres,
-              this.keyword,
-              this.isWithoutGenre,
-              this.isWithoutKeyword
-            )
-          )
-        : resolve(
-            this.serieService.getSeriesDiscover(
-              criteria,
-              this.selectedGenres,
-              this.keyword,
-              this.networks,
-              this.isWithoutGenre,
-              this.isWithoutKeyword
-            )
-          )
-    ).then(result => {
+    const search$: Observable<Discover> = this.isMovie
+      ? this.movieService.getMoviesDiscover(
+          criteria,
+          this.people,
+          this.selectedGenres,
+          this.keyword,
+          this.isWithoutGenre,
+          this.isWithoutKeyword
+        )
+      : this.serieService.getSeriesDiscover(
+          criteria,
+          this.selectedGenres,
+          this.keyword,
+          this.networks,
+          this.isWithoutGenre,
+          this.isWithoutKeyword
+        );
+    search$.subscribe(result => {
       this.discover = result;
       // this.elemRef.nativeElement.querySelector('#searchBtn').scrollIntoView();
     });

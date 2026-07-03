@@ -4,6 +4,8 @@ import {Movie} from './../model/movie';
 import {Discover} from '../model/discover';
 import {ReleaseDate} from '../model/model';
 import {MockService} from '../service/mock.service';
+import {Observable, of} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 export class MapMovie {
   private static flags: Flag[] = [];
@@ -147,7 +149,7 @@ export class MapMovie {
     if (r.spoken_languages) {
       movie.spokenLangs = r.spoken_languages.map(spoken => {
         const lang = new Lang();
-        MapMovie.convertLangToCountry(spoken.iso_639_1, mockService).then(
+        MapMovie.convertLangToCountry(spoken.iso_639_1, mockService).subscribe(
           code => (lang.code = code)
         );
         lang.label = spoken.english_name;
@@ -160,6 +162,7 @@ export class MapMovie {
         .filter(
           title => title.title.toLowerCase() !== movie.title.toLowerCase()
         )
+
         .map(title => new AlternativeTitle(title.iso_3166_1, title.title));
     }
     movie.id = r.id;
@@ -173,7 +176,7 @@ export class MapMovie {
     movie.vote_count = r.vote_count;
     movie.budget = r.budget;
     movie.recette = r.revenue;
-    MapMovie.convertLangToCountry(r.original_language, mockService).then(
+    MapMovie.convertLangToCountry(r.original_language, mockService).subscribe(
       code => (movie.language = code)
     );
     movie.imdb_id = r.imdb_id;
@@ -187,14 +190,16 @@ export class MapMovie {
   static convertLangToCountry(
     code: string,
     mockService: MockService<Flag>
-  ): Promise<string> {
+  ): Observable<string> {
     if (!MapMovie.flags || MapMovie.flags.length === 0) {
-      return mockService.getAll('flags.json').then(flags => {
-        MapMovie.flags = flags;
-        return MapMovie.getFlag(code);
-      });
+      return mockService.getAll('flags.json').pipe(
+        map(flags => {
+          MapMovie.flags = flags;
+          return MapMovie.getFlag(code);
+        })
+      );
     } else {
-      return new Promise(resolve => resolve(MapMovie.getFlag(code)));
+      return of(MapMovie.getFlag(code));
     }
   }
 

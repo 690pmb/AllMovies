@@ -13,6 +13,7 @@ import {
   OnChanges,
 } from '@angular/core';
 
+import {take} from 'rxjs/operators';
 import {Constants} from './../../../../constant/constants';
 import {Utils} from './../../../../shared/utils';
 import {List, ImageSize} from './../../../../model/model';
@@ -75,7 +76,8 @@ export class ListsComponent implements OnInit, OnChanges {
     this.showLists = false;
     this.listService
       .getDataLists(this.id, this.translate.currentLang)
-      .then((lists: List[]) => {
+      .pipe(take(1))
+      .subscribe((lists: List[]) => {
         this.showLists = true;
         console.log('list', lists);
         this.lists = lists.sort((a, b) => Utils.compare(a.id, b.id, true));

@@ -1,4 +1,5 @@
 import {Sort} from '@angular/material/sort';
+import {Observable} from 'rxjs';
 
 import {GroupBy} from './../model/model';
 import {Tag} from './../model/tag';
@@ -364,11 +365,17 @@ export class Utils {
   static imageExists(
     id: number,
     url: string
-  ): Promise<{id: number; result: boolean}> {
-    const img = new Image();
-    return new Promise(resolve => {
-      img.onload = () => resolve({id: id, result: true});
-      img.onerror = () => resolve({id: id, result: false});
+  ): Observable<{id: number; result: boolean}> {
+    return new Observable(observer => {
+      const img = new Image();
+      img.onload = () => {
+        observer.next({id: id, result: true});
+        observer.complete();
+      };
+      img.onerror = () => {
+        observer.next({id: id, result: false});
+        observer.complete();
+      };
       img.src = url;
     });
   }

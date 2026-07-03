@@ -44,23 +44,25 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
         const dropbox = this.injector.get(DropboxService);
         dropbox
           .downloadRaw(Dropbox.DROPBOX_TRANSLATION_FILE)
-          .then((file: string) => {
+          .subscribe((file: string) => {
             if (file.split('\r\n').every(line => !line.endsWith(params.key))) {
-              dropbox.uploadFile(
-                new Blob(
-                  [
-                    file.concat(
-                      '\r\n' +
-                        (defaultTrad
-                          ? params.translateService.currentLang + ': '
-                          : '') +
-                        params.key
-                    ),
-                  ],
-                  {type: 'text/plain;charset=utf-8'}
-                ),
-                Dropbox.DROPBOX_TRANSLATION_FILE
-              );
+              dropbox
+                .uploadFile(
+                  new Blob(
+                    [
+                      file.concat(
+                        '\r\n' +
+                          (defaultTrad
+                            ? params.translateService.currentLang + ': '
+                            : '') +
+                          params.key
+                      ),
+                    ],
+                    {type: 'text/plain;charset=utf-8'}
+                  ),
+                  Dropbox.DROPBOX_TRANSLATION_FILE
+                )
+                .subscribe();
             }
           });
       }

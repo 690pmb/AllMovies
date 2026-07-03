@@ -33,7 +33,7 @@ export class DropdownLanguageComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    this.mockService.getAll('langs.json').then(langs => {
+    this.mockService.getAll('langs.json').subscribe(langs => {
       this.langList = langs;
       this.updateLang(
         this.userLang ? this.userLang.code : this.translate.getBrowserLang()

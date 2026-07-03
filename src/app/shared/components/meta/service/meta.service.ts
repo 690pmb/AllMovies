@@ -86,7 +86,7 @@ export class MetaService {
 
     return this.serviceUtils.jsonpObservable(url, 'callback').pipe(
       map(response => response[3][0]),
-      catchError(err => this.serviceUtils.handlePromiseError(err, this.toast))
+      catchError(err => this.serviceUtils.handleObsError(err, this.toast))
     );
   }
 }
