@@ -49,7 +49,7 @@ export class MyTagsService {
           console.log('tags:', tags);
           this.myTags$.next(tags);
         }),
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+        catchError(this.serviceUtils.handleObsError)
       )
       .subscribe();
   }
@@ -76,7 +76,7 @@ export class MyTagsService {
       mergeMap((list: Tag[]) => {
         if (list && list.length !== 0) {
           tempTagList = list;
-          return this.dropboxService.uploadFile(
+          return this.dropboxService.overwriteFile(
             MyTagsService.tagsToBlob(list),
             fileName
           );
@@ -94,7 +94,7 @@ export class MyTagsService {
         return toAdd;
       }),
       catchError(err => {
-        this.serviceUtils.handleError(err, this.toast);
+        this.serviceUtils.handleError(err);
         return of(undefined);
       })
     );
@@ -116,7 +116,7 @@ export class MyTagsService {
                 (tagList = tagList.filter((tag: Tag) => tag.id !== id))
             );
             tempTagList = tagList;
-            return this.dropboxService.uploadFile(
+            return this.dropboxService.overwriteFile(
               MyTagsService.tagsToBlob(tagList),
               fileName
             );
@@ -133,7 +133,7 @@ export class MyTagsService {
             });
           }
         }),
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+        catchError(this.serviceUtils.handleObsError)
       )
       .subscribe();
   }
@@ -156,7 +156,7 @@ export class MyTagsService {
         toUpdate.datas.sort(Utils.compareObject);
         tagList.splice(tagList.map(t => t.id).indexOf(tag.id), 1, tag);
         tempTagList = tagList;
-        return this.dropboxService.uploadFile(
+        return this.dropboxService.overwriteFile(
           MyTagsService.tagsToBlob(tagList),
           fileName
         );
@@ -168,7 +168,7 @@ export class MyTagsService {
         return true;
       }),
       catchError(err => {
-        this.serviceUtils.handleError(err, this.toast);
+        this.serviceUtils.handleError(err);
         return of(false);
       })
     );
@@ -189,7 +189,7 @@ export class MyTagsService {
         tagList.push(...tagsToReplace);
         tagList.sort(Utils.compareObject);
         tempTagList = tagList;
-        return this.dropboxService.uploadFile(
+        return this.dropboxService.overwriteFile(
           MyTagsService.tagsToBlob(tagList),
           fileName
         );
@@ -203,7 +203,7 @@ export class MyTagsService {
         return true;
       }),
       catchError(err => {
-        this.serviceUtils.handleError(err, this.toast);
+        this.serviceUtils.handleError(err);
         return of(false);
       })
     );

@@ -47,7 +47,7 @@ export class MyMissingTranslationHandler implements MissingTranslationHandler {
           .subscribe((file: string) => {
             if (file.split('\r\n').every(line => !line.endsWith(params.key))) {
               dropbox
-                .uploadFile(
+                .overwriteFile(
                   new Blob(
                     [
                       file.concat(

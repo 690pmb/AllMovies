@@ -3,7 +3,6 @@ import {Injectable} from '@angular/core';
 import {map, catchError} from 'rxjs/operators';
 
 import {SearchService} from './search.service';
-import {ToastService} from './toast.service';
 import {UtilsService} from './utils.service';
 import {LangDb} from '../model/model';
 import {Url} from '../constant/url';
@@ -17,10 +16,7 @@ type Lang = {iso_639_1: string; english_name: string};
 export class LangService implements SearchService<LangDb> {
   langs: LangDb[] = [];
 
-  constructor(
-    private serviceUtils: UtilsService,
-    private toast: ToastService
-  ) {}
+  constructor(private serviceUtils: UtilsService) {}
 
   getAll(): Observable<LangDb[]> {
     if (this.langs && this.langs.length > 0) {
@@ -34,7 +30,7 @@ export class LangService implements SearchService<LangDb> {
           this.langs = this.mapLang(response);
           return this.langs;
         }),
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+        catchError(this.serviceUtils.handleObsError)
       );
   }
 

@@ -4,7 +4,6 @@ import {map, catchError, mergeMap, toArray} from 'rxjs/operators';
 
 import {Url} from '../constant/url';
 import {Paginate, List, FullList} from '../model/model';
-import {ToastService} from './toast.service';
 import {UtilsService} from './utils.service';
 import {MapList} from '../shared/mapList';
 
@@ -14,10 +13,7 @@ import {MapList} from '../shared/mapList';
 export class ListService {
   private static readonly MAX_CONCURRENT = 4;
 
-  constructor(
-    private serviceUtils: UtilsService,
-    private toast: ToastService
-  ) {}
+  constructor(private serviceUtils: UtilsService) {}
 
   getDataLists(dataId: number, language: string): Observable<List[]> {
     const url = `${Url.MOVIE_URl}/${dataId}/${Url.GET_MOVIE_LISTS}?${Url.API_KEY}${Url.LANGUE}${language}`;
@@ -57,7 +53,7 @@ export class ListService {
         }),
         map(lists => lists ?? []),
         catchError(err => {
-          this.serviceUtils.handleError(err, this.toast);
+          this.serviceUtils.handleError(err);
           return of([] as List[]);
         })
       );
@@ -87,7 +83,7 @@ export class ListService {
       )
       .pipe(
         map((response: any) => MapList.mapFullList(response)),
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+        catchError(this.serviceUtils.handleObsError)
       );
   }
 }

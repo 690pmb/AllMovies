@@ -98,7 +98,7 @@ export class MyDatasService<T extends Data> {
         console.log(isMovie ? 'movies' : 'series', datas);
         this.next(datas, isMovie);
       }),
-      catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+      catchError(this.serviceUtils.handleObsError)
     );
   }
 
@@ -139,7 +139,7 @@ export class MyDatasService<T extends Data> {
         if (list && list.length !== 0) {
           tempDataList = list;
           // replace with new array datas
-          return this.dropboxService.uploadFile(this.toBlob(list), fileName);
+          return this.dropboxService.overwriteFile(this.toBlob(list), fileName);
         } else {
           return of(undefined);
         }
@@ -159,7 +159,7 @@ export class MyDatasService<T extends Data> {
         return true;
       }),
       catchError(err => {
-        this.serviceUtils.handleError(err, this.toast);
+        this.serviceUtils.handleError(err);
         return of(false);
       })
     );
@@ -184,7 +184,7 @@ export class MyDatasService<T extends Data> {
           );
           tempDataList = dataList;
           // replace file with new data array
-          return this.dropboxService.uploadFile(
+          return this.dropboxService.overwriteFile(
             this.toBlob(dataList),
             fileName
           );
@@ -206,7 +206,7 @@ export class MyDatasService<T extends Data> {
         return true;
       }),
       catchError(err => {
-        this.serviceUtils.handleObsError(err, this.toast);
+        this.serviceUtils.handleObsError(err);
         return of(false);
       })
     );
@@ -248,7 +248,10 @@ export class MyDatasService<T extends Data> {
         mapped.forEach((data: T) => dataList.push(data));
         dataList.sort(Utils.compareObject);
         tempDataList = dataList;
-        return this.dropboxService.uploadFile(this.toBlob(dataList), fileName);
+        return this.dropboxService.overwriteFile(
+          this.toBlob(dataList),
+          fileName
+        );
       }),
       map((res: any) => {
         console.log(res);
@@ -261,7 +264,7 @@ export class MyDatasService<T extends Data> {
         return mapped;
       }),
       catchError(err => {
-        this.serviceUtils.handleError(err, this.toast);
+        this.serviceUtils.handleError(err);
         return of([]);
       })
     );

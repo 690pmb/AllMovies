@@ -1,6 +1,6 @@
-import {Observable, of} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 import {Injectable} from '@angular/core';
-import {HttpHeaders, HttpClient} from '@angular/common/http';
+import {HttpHeaders, HttpClient, HttpErrorResponse} from '@angular/common/http';
 
 import {ToastService} from './toast.service';
 import {Level} from '../model/model';
@@ -9,22 +9,50 @@ import {Level} from '../model/model';
   providedIn: 'root',
 })
 export class UtilsService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private toast: ToastService) {}
 
-  static getErrorMessage(error: any): string {
-    let message;
-    if (error.response) {
-      message = error.response.error;
-    } else if (error.error && error.error.errors) {
-      message = 'Status ' + error.status + ': ' + error.error.errors.join(', ');
-    } else if (error.error) {
-      message = error.error;
-    } else if (error.message) {
-      message = error.message;
-    } else {
-      message = 'Unknown Error';
+  static getErrorMessage(error: unknown): string {
+    if (error instanceof HttpErrorResponse) {
+      if (
+        error.error &&
+        typeof error.error === 'object' &&
+        'errors' in error.error &&
+        Array.isArray(error.error.errors)
+      ) {
+        return `Status ${error.status}: ${error.error.errors.join(', ')}`;
+      }
+      if (typeof error.error === 'string') {
+        return error.error;
+      }
+      if (error.message) {
+        return error.message;
+      }
+      return `Status ${error.status}`;
     }
-    return message;
+    if (error instanceof Error) {
+      return error.message;
+    }
+    if (typeof error === 'string') {
+      return error;
+    }
+    if (this.hasResponseError(error)) {
+      return error.response.error;
+    }
+    return 'Unknown error';
+  }
+
+  private static hasResponseError(
+    error: unknown
+  ): error is {response: {error: string}} {
+    return (
+      typeof error === 'object' &&
+      error !== null &&
+      'response' in error &&
+      typeof (error as {response: unknown}).response === 'object' &&
+      (error as {response: {error?: unknown}}).response !== null &&
+      'error' in (error as {response: object}).response &&
+      typeof (error as {response: {error: unknown}}).response.error === 'string'
+    );
   }
 
   static encodeQueryUrl(query: string): string {
@@ -35,28 +63,18 @@ export class UtilsService {
   }
 
   getHeaders(): HttpHeaders {
-    const headers = new HttpHeaders({'Content-Type': 'application/json'});
-    // headers.append('Accept', 'application/json');
-    return headers;
+    return new HttpHeaders({'Content-Type': 'application/json'});
   }
 
-  handleSuccess(): void {}
-
-  handleError(error: any, toast: ToastService): void {
-    console.log('handleError');
-    console.error('error', error);
-    toast.open(Level.error, UtilsService.getErrorMessage(error));
+  handleError(error: unknown): void {
+    console.error('handleError', error);
+    this.toast.open(Level.error, UtilsService.getErrorMessage(error));
   }
 
-  handlePromiseError(error: any, toast: ToastService): Observable<any> {
-    return this.handleObsError(error, toast);
-  }
-
-  handleObsError(error: any, toast: ToastService): Observable<any> {
-    console.log('handleObsError');
-    console.error('error', error);
-    toast.open(Level.error, UtilsService.getErrorMessage(error));
-    return of('');
+  handleObsError(error: unknown): Observable<never> {
+    console.error('handleObsError', error);
+    this.toast.open(Level.error, UtilsService.getErrorMessage(error));
+    return throwError(() => error);
   }
 
   getObservable<T>(url: string, headers?: HttpHeaders): Observable<T> {
@@ -64,7 +82,7 @@ export class UtilsService {
     return headers ? this.http.get<T>(url, {headers}) : this.http.get<T>(url);
   }
 
-  jsonpObservable<T>(url: string, callback: any): Observable<T> {
+  jsonpObservable<T>(url: string, callback: string): Observable<T> {
     return this.http.jsonp<T>(url, callback);
   }
 }

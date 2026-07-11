@@ -7,17 +7,13 @@ import {MapPerson} from '../shared/mapPerson';
 import {UtilsService} from './utils.service';
 import {Url} from '../constant/url';
 import {Person} from '../model/person';
-import {ToastService} from './toast.service';
 import {UrlBuilder} from '../shared/urlBuilder';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PersonService {
-  constructor(
-    private serviceUtils: UtilsService,
-    private toast: ToastService
-  ) {}
+  constructor(private serviceUtils: UtilsService) {}
 
   getPerson(id: number, language: string, detail: boolean): Observable<Person> {
     return this.serviceUtils
@@ -38,7 +34,7 @@ export class PersonService {
             return of(person);
           }
         }),
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+        catchError(this.serviceUtils.handleObsError)
       );
   }
 
@@ -51,7 +47,7 @@ export class PersonService {
         map((response: any) =>
           response.results.map(res => MapPerson.mapForPerson(res))
         ),
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+        catchError(this.serviceUtils.handleObsError)
       );
   }
 }

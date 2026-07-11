@@ -88,37 +88,35 @@ export class AuthService {
       }),
       map(u => !!u),
       take(1),
-      catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+      catchError(err => this.serviceUtils.handleObsError(err))
     );
   }
 
   checkAnswer(name: string, answer: string): Observable<boolean> {
     return this.getUserByName(name).pipe(
       map((user: User) => user && user.name === name && user.answer === answer),
-      catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+      catchError(err => this.serviceUtils.handleObsError(err))
     );
   }
 
   getUserByName(name: string): Observable<User> {
     return this.getUserFile().pipe(
       map((users: User[]) => users.find((user: User) => user.name === name)),
-      catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+      catchError(err => this.serviceUtils.handleObsError(err))
     );
   }
 
   isUserExist(name: string): Observable<boolean> {
     return this.getUserFile().pipe(
       map(users => users.find(user => user.name === name) !== undefined),
-      catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+      catchError(err => this.serviceUtils.handleObsError(err))
     );
   }
 
   private getUserFile(): Observable<User[]> {
     return this.dropbox
       .downloadFile(Dropbox.DROPBOX_USER_FILE)
-      .pipe(
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
-      );
+      .pipe(catchError(err => this.serviceUtils.handleObsError(err)));
   }
 
   register(user: User): void {
@@ -133,25 +131,25 @@ export class AuthService {
           addedUser = user;
           users.push(user);
           users.sort(Utils.compareObject);
-          return this.dropbox.uploadFile(
+          return this.dropbox.overwriteFile(
             AuthService.usersToBlob(users),
             Dropbox.DROPBOX_USER_FILE
           );
         }),
         mergeMap(() =>
-          this.dropbox.uploadNewFile(
+          this.dropbox.createFile(
             '[]',
             `${Dropbox.DROPBOX_TAG_FILE}${addedUser.id}${Dropbox.DROPBOX_FILE_SUFFIX}`
           )
         ),
         mergeMap(() =>
-          this.dropbox.uploadNewFile(
+          this.dropbox.createFile(
             '[]',
             `${Dropbox.DROPBOX_MOVIE_FILE}${addedUser.id}${Dropbox.DROPBOX_FILE_SUFFIX}`
           )
         ),
         mergeMap(() =>
-          this.dropbox.uploadNewFile(
+          this.dropbox.createFile(
             '[]',
             `${Dropbox.DROPBOX_SERIE_FILE}${addedUser.id}${Dropbox.DROPBOX_FILE_SUFFIX}`
           )
@@ -167,7 +165,7 @@ export class AuthService {
             this.translate.instant('toast.user_added')
           );
         },
-        error: err => this.serviceUtils.handleError(err, this.toast),
+        error: err => this.serviceUtils.handleError(err),
       });
   }
 
@@ -177,7 +175,7 @@ export class AuthService {
         const filteredUsers = users.filter(item => item.name !== user.name);
         filteredUsers.push(user);
         filteredUsers.sort(Utils.compareObject);
-        return this.dropbox.uploadFile(
+        return this.dropbox.overwriteFile(
           AuthService.usersToBlob(filteredUsers),
           Dropbox.DROPBOX_USER_FILE
         );
@@ -191,7 +189,7 @@ export class AuthService {
         this.user$.next(user);
         return user;
       }),
-      catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+      catchError(err => this.serviceUtils.handleObsError(err))
     );
   }
 
@@ -221,7 +219,7 @@ export class AuthService {
       }),
       tap(user => this.user$.next(user)),
       switchMap(() => this.user$.asObservable()),
-      catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+      catchError(err => this.serviceUtils.handleObsError(err))
     );
   }
 

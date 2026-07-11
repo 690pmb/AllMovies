@@ -5,17 +5,13 @@ import {map, catchError} from 'rxjs/operators';
 import {Url} from '../constant/url';
 import {Keyword} from '../model/model';
 import {UtilsService} from './utils.service';
-import {ToastService} from './toast.service';
 import {SearchService} from './search.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class KeywordSearchService implements SearchService<Keyword> {
-  constructor(
-    private serviceUtils: UtilsService,
-    private toast: ToastService
-  ) {}
+  constructor(private serviceUtils: UtilsService) {}
 
   search(term: string): Observable<Keyword[]> {
     let url = Url.KEYWORD_SEARCH_URL + Url.API_KEY;
@@ -28,7 +24,7 @@ export class KeywordSearchService implements SearchService<Keyword> {
             .slice(0, 10)
             .map((r: any) => <Keyword>{id: r.id, name: r.name})
         ),
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+        catchError(this.serviceUtils.handleObsError)
       );
   }
 
@@ -40,7 +36,7 @@ export class KeywordSearchService implements SearchService<Keyword> {
       )
       .pipe(
         map((response: any) => <Keyword>{id: response.id, name: response.name}),
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+        catchError(this.serviceUtils.handleObsError)
       );
   }
 }

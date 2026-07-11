@@ -13,7 +13,6 @@ import {Subscription} from 'rxjs';
 import {User} from './../../../model/user';
 import {AuthService} from '../../../service/auth.service';
 import {UtilsService} from '../../../service/utils.service';
-import {ToastService} from '../../../service/toast.service';
 import {TitleService} from '../../../service/title.service';
 
 @Component({
@@ -40,7 +39,6 @@ export class ForgotComponent implements OnInit, OnDestroy {
   constructor(
     private auth: AuthService,
     private serviceUtils: UtilsService,
-    private toast: ToastService,
     private route: ActivatedRoute,
     private title: TitleService
   ) {}
@@ -68,7 +66,7 @@ export class ForgotComponent implements OnInit, OnDestroy {
           this.user = undefined;
         }
       },
-      error: err => this.serviceUtils.handleError(err, this.toast),
+      error: err => this.serviceUtils.handleError(err),
     });
   }
 
@@ -84,7 +82,7 @@ export class ForgotComponent implements OnInit, OnDestroy {
             this.messageAnswer = 'login.wrong_answer';
           }
         },
-        error: err => this.serviceUtils.handleError(err, this.toast),
+        error: err => this.serviceUtils.handleError(err),
       });
   }
 

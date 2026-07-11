@@ -10,7 +10,6 @@ import {Movie} from '../model/movie';
 import {DetailConfig, Flag} from '../model/model';
 import {Url} from '../constant/url';
 import {OmdbService} from './omdb.service';
-import {ToastService} from './toast.service';
 import {UrlBuilder} from '../shared/urlBuilder';
 import {Utils} from '../shared/utils';
 import {map, mergeMap, catchError} from 'rxjs/operators';
@@ -22,7 +21,6 @@ export class MovieService {
   constructor(
     private serviceUtils: UtilsService,
     private omdb: OmdbService,
-    private toast: ToastService,
     private mockService: MockService<Flag>
   ) {}
 
@@ -33,7 +31,7 @@ export class MovieService {
       )
       .pipe(
         map(response => MapMovie.mapForPopularMovies(response)),
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+        catchError(err => this.serviceUtils.handleObsError(err))
       );
   }
 
@@ -138,7 +136,7 @@ export class MovieService {
             this.omdb.getImdbScore(movie)
           )
         ),
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+        catchError(err => this.serviceUtils.handleObsError(err))
       );
   }
 
@@ -163,7 +161,7 @@ export class MovieService {
     );
     return this.serviceUtils.getObservable(url).pipe(
       map(response => MapMovie.mapForMoviesByReleaseDates(response)),
-      catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+      catchError(err => this.serviceUtils.handleObsError(err))
     );
   }
 
@@ -193,7 +191,7 @@ export class MovieService {
           const discover = MapMovie.mapForDiscover(response);
           return discover;
         }),
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+        catchError(err => this.serviceUtils.handleObsError(err))
       );
   }
 
@@ -205,7 +203,7 @@ export class MovieService {
           response.dates.minimum,
           response.dates.maximum,
         ]),
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+        catchError(err => this.serviceUtils.handleObsError(err))
       );
   }
 }

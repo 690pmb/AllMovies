@@ -12,7 +12,6 @@ import {MapSeason} from '../shared/mapSeason';
 import {Season} from '../model/season';
 import {DetailConfig} from '../model/model';
 import {Serie} from '../model/serie';
-import {ToastService} from './toast.service';
 import {UtilsService} from './utils.service';
 import {OmdbService} from './omdb.service';
 
@@ -20,11 +19,7 @@ import {OmdbService} from './omdb.service';
   providedIn: 'root',
 })
 export class SerieService {
-  constructor(
-    private omdb: OmdbService,
-    private serviceUtils: UtilsService,
-    private toast: ToastService
-  ) {}
+  constructor(private omdb: OmdbService, private serviceUtils: UtilsService) {}
 
   getPopularSeries(language: string, page = 1): Observable<Serie[]> {
     return this.serviceUtils
@@ -33,7 +28,7 @@ export class SerieService {
       )
       .pipe(
         map(response => MapSerie.mapForPopularSeries(response)),
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+        catchError(this.serviceUtils.handleObsError)
       );
   }
 
@@ -115,7 +110,7 @@ export class SerieService {
             this.omdb.getImdbScore(serie)
           )
         ),
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+        catchError(this.serviceUtils.handleObsError)
       );
   }
 
@@ -159,7 +154,7 @@ export class SerieService {
             of(season)
           )
         ),
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+        catchError(this.serviceUtils.handleObsError)
       );
   }
 
@@ -171,7 +166,7 @@ export class SerieService {
       .getObservable(url, this.serviceUtils.getHeaders())
       .pipe(
         map(response => MapSerie.mapForSearchSeries(response)),
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+        catchError(this.serviceUtils.handleObsError)
       );
   }
 
@@ -201,7 +196,7 @@ export class SerieService {
           const discover = MapSerie.mapForDiscover(response);
           return discover;
         }),
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+        catchError(this.serviceUtils.handleObsError)
       );
   }
 }

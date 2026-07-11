@@ -4,17 +4,13 @@ import {map, catchError} from 'rxjs/operators';
 
 import {Url} from '../constant/url';
 import {Genre} from '../model/model';
-import {ToastService} from './toast.service';
 import {UtilsService} from './utils.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GenreService {
-  constructor(
-    private serviceUtils: UtilsService,
-    private toast: ToastService
-  ) {}
+  constructor(private serviceUtils: UtilsService) {}
 
   getAllGenre(isMovie: boolean, language: string): Observable<Genre[]> {
     const url = `${
@@ -26,7 +22,7 @@ export class GenreService {
         map((response: any) =>
           response.genres.map((r: any) => <Genre>{id: r.id, name: r.name})
         ),
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+        catchError(this.serviceUtils.handleObsError)
       );
   }
 }

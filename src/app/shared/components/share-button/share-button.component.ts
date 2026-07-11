@@ -94,7 +94,7 @@ export class ShareButtonComponent implements OnInit {
           url: url,
         })
       ).subscribe({
-        error: err => this.utils.handleError(err, this.toast),
+        error: err => this.utils.handleError(err),
       });
     } else {
       const ref = this.dialog.open(this.shareDialog, {

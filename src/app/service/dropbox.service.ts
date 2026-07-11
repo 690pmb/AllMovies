@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
 import * as Dropbox from 'dropbox';
 import {Observable, from} from 'rxjs';
-import {map, mergeMap, catchError} from 'rxjs/operators';
+import {map, catchError, switchMap} from 'rxjs/operators';
 
-import {ToastService} from './toast.service';
 import {UtilsService} from './utils.service';
 import {Dropbox as DropboxConstante} from '../constant/dropbox';
 import {Utils} from '../shared/utils';
@@ -12,76 +11,58 @@ import {Utils} from '../shared/utils';
   providedIn: 'root',
 })
 export class DropboxService<T> {
-  constructor(
-    private toast: ToastService,
-    private serviceUtils: UtilsService
-  ) {}
+  constructor(private serviceUtils: UtilsService) {}
 
-  static getDbx(): Dropbox.Dropbox {
-    return new Dropbox.Dropbox({accessToken: DropboxConstante.DROPBOX_TOKEN});
-  }
+  private readonly dbx = new Dropbox.Dropbox({
+    accessToken: DropboxConstante.DROPBOX_TOKEN,
+  });
 
-  static getPath(fileName: string): string {
+  private getPath(fileName: string): string {
     return DropboxConstante.DROPBOX_FOLDER + fileName;
   }
 
-  uploadFile(
+  overwriteFile(
     fichier: Blob,
     fileName: string
   ): Observable<Dropbox.files.FileMetadata> {
-    const pathFile = DropboxService.getPath(fileName);
-    return from(DropboxService.getDbx().filesDeleteV2({path: pathFile})).pipe(
-      mergeMap(() =>
-        from(
-          DropboxService.getDbx().filesUpload({
-            path: pathFile,
-            contents: fichier,
-          })
-        )
-      ),
-      catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+    return from(
+      this.dbx.filesUpload({
+        path: this.getPath(fileName),
+        contents: fichier,
+        mode: {
+          '.tag': 'overwrite',
+        },
+      })
+    ).pipe(
+      map(r => r.result),
+      catchError(this.serviceUtils.handleObsError)
     );
   }
 
-  uploadNewFile(fichier: any, fileName: string): Observable<void> {
-    const pathFile = DropboxService.getPath(fileName);
+  createFile(fichier: Object, fileName: string): Observable<void> {
     return from(
-      DropboxService.getDbx().filesUpload({path: pathFile, contents: fichier})
+      this.dbx.filesUpload({path: this.getPath(fileName), contents: fichier})
     ).pipe(
       map(() => {}),
-      catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+      catchError(this.serviceUtils.handleObsError)
     );
   }
 
-  downloadFile(filename: string): Observable<T[]> {
-    console.log('downloadFile', filename);
-    return this.downloadRaw(filename).pipe(
+  downloadFile(fileName: string): Observable<T[]> {
+    return this.downloadRaw(fileName).pipe(
       map(content => <T[]>Utils.parseJson(content, []))
     );
   }
 
-  downloadRaw(fileName: string): Observable<any> {
+  downloadRaw(fileName: string): Observable<string> {
     return from(
-      DropboxService.getDbx().filesDownload({
-        path: DropboxService.getPath(fileName),
+      this.dbx.filesDownload({
+        path: this.getPath(fileName),
       })
     ).pipe(
-      mergeMap(
-        (response: any) =>
-          new Observable<string>(observer => {
-            const fileReader = new FileReader();
-            fileReader.onerror = () => {
-              fileReader.abort();
-              observer.error(new DOMException('Problem parsing input file.'));
-            };
-            fileReader.onload = () => {
-              observer.next(fileReader.result.toString());
-              observer.complete();
-            };
-            fileReader.readAsText(response.fileBlob);
-          })
-      ),
-      catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+      // Dropxbox doesn't provide a correct typing on this
+      switchMap((response: any) => (<File>response.result.fileBlob).text()),
+      catchError(this.serviceUtils.handleObsError)
     );
   }
 }

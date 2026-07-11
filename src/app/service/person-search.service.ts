@@ -6,17 +6,13 @@ import {MapPerson} from '../shared/mapPerson';
 import {Person} from '../model/person';
 import {Url} from '../constant/url';
 import {UtilsService} from './utils.service';
-import {ToastService} from './toast.service';
 import {SearchService} from './search.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PersonSearchService implements SearchService<Person> {
-  constructor(
-    private serviceUtils: UtilsService,
-    private toast: ToastService
-  ) {}
+  constructor(private serviceUtils: UtilsService) {}
 
   search(term: string, adult: boolean): Observable<Person[]> {
     let url = Url.PERSON_SEARCH_URL + Url.API_KEY;
@@ -28,7 +24,7 @@ export class PersonSearchService implements SearchService<Person> {
       .getObservable(url, this.serviceUtils.getHeaders())
       .pipe(
         map(response => MapPerson.mapForSearchPersons(response)),
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+        catchError(this.serviceUtils.handleObsError)
       );
   }
 
@@ -40,7 +36,7 @@ export class PersonSearchService implements SearchService<Person> {
       )
       .pipe(
         map((response: any) => MapPerson.mapForPerson(response)),
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+        catchError(this.serviceUtils.handleObsError)
       );
   }
 }

@@ -152,7 +152,12 @@ export class Utils {
     if (!json || json === undefined || json === '' || json === 'undefined') {
       return defaultValue;
     } else {
-      return JSON.parse(json);
+      try {
+        return JSON.parse(json);
+      } catch {
+        console.error('Error parsing json', json);
+        return defaultValue;
+      }
     }
   }
 
