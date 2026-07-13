@@ -32,10 +32,11 @@ export class MyTagsService {
   }
 
   getFileName(): Observable<string> {
-    return of(
-      `${Dropbox.DROPBOX_TAG_FILE}${this.auth.user$.getValue().id}${
-        Dropbox.DROPBOX_FILE_SUFFIX
-      }`
+    return this.auth.user$.pipe(
+      map(
+        user =>
+          `${Dropbox.DROPBOX_TAG_FILE}${user.id}${Dropbox.DROPBOX_FILE_SUFFIX}`
+      )
     );
   }
 

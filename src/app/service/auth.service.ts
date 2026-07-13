@@ -1,9 +1,10 @@
-import {BehaviorSubject, Observable, of} from 'rxjs';
+import {BehaviorSubject, Observable, of, OperatorFunction} from 'rxjs';
 import {Router} from '@angular/router';
 import {Injectable} from '@angular/core';
 import jwt_decode from 'jwt-decode';
 import * as KJUR from 'jsrsasign';
 import {TranslateService} from '@ngx-translate/core';
+import {map, catchError, tap, take, switchMap, concatMap} from 'rxjs/operators';
 
 import {DropboxService} from './dropbox.service';
 import {ToastService} from './toast.service';
@@ -13,15 +14,24 @@ import {Utils} from '../shared/utils';
 import {Dropbox} from '../constant/dropbox';
 import {User} from '../model/user';
 import {Constants} from '../constant/constants';
-import {map, catchError, tap, take, switchMap, mergeMap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  user$: BehaviorSubject<User | undefined> = new BehaviorSubject<
-    User | undefined
-  >(undefined);
+  private readonly userSubject = new BehaviorSubject<User | undefined>(
+    this.decodeToken(localStorage.getItem('token'))
+  );
+
+  readonly user$ = this.userSubject.asObservable();
+  private createFileOperator = (
+    fileName: string
+  ): OperatorFunction<User, User> =>
+    concatMap((user: User) =>
+      this.dropbox
+        .createFile('[]', `${fileName}${user.id}${Dropbox.DROPBOX_FILE_SUFFIX}`)
+        .pipe(map(() => user))
+    );
 
   constructor(
     private dropbox: DropboxService<User>,
@@ -31,12 +41,16 @@ export class AuthService {
     private translate: TranslateService
   ) {}
 
-  private static usersToBlob(user: User[]): Blob {
-    return new Blob([JSON.stringify(user)], {type: 'text/json'});
+  private setUser(user: User): void {
+    localStorage.setItem('token', this.createToken(user));
+    this.userSubject.next(user);
   }
 
-  private static decodeToken(): User | undefined {
-    const token = localStorage.getItem('token');
+  private usersToBlob(users: User[]): Blob {
+    return new Blob([JSON.stringify(users)], {type: 'text/json'});
+  }
+
+  private decodeToken(token: string): User | undefined {
     if (token && token.trim() !== '') {
       return jwt_decode(token);
     } else {
@@ -44,35 +58,27 @@ export class AuthService {
     }
   }
 
-  private static setToken(token: string): void {
-    localStorage.removeItem('token');
-    localStorage.setItem('token', token);
-  }
-
-  private static createToken(user: User): string {
+  private createToken(user: User): string {
     const oHeader = {alg: 'HS256', typ: 'JWT'};
     const sHeader = JSON.stringify(oHeader);
     return KJUR.jws.JWS.sign('HS256', sHeader, JSON.stringify(user), 'secret');
   }
 
-  isAuthenticated(): Observable<User> {
+  isAuthenticated(): Observable<boolean> {
     console.log('isAuthenticated');
     return this.user$.pipe(
       map(user => {
         if (!user || !user.id) {
-          user = AuthService.decodeToken();
-          if (!user || !user.id) {
-            return undefined;
-          }
+          return false;
         }
-        return user;
+        return true;
       }),
       take(1)
     );
   }
 
   login(name: string, password: string): Observable<boolean> {
-    return this.getUserFile().pipe(
+    return this.loadUsers().pipe(
       map((users: User[]) =>
         users.find(
           (user: User) => user.name === name && user.password === password
@@ -80,85 +86,60 @@ export class AuthService {
       ),
       tap(user => {
         if (user) {
-          AuthService.setToken(AuthService.createToken(user));
-          this.user$.next(user);
+          this.setUser(user);
         } else {
           this.logout();
         }
       }),
       map(u => !!u),
-      take(1),
-      catchError(err => this.serviceUtils.handleObsError(err))
+      catchError(this.serviceUtils.handleObsError)
     );
   }
 
   checkAnswer(name: string, answer: string): Observable<boolean> {
     return this.getUserByName(name).pipe(
       map((user: User) => user && user.name === name && user.answer === answer),
-      catchError(err => this.serviceUtils.handleObsError(err))
+      catchError(this.serviceUtils.handleObsError)
     );
   }
 
   getUserByName(name: string): Observable<User> {
-    return this.getUserFile().pipe(
+    return this.loadUsers().pipe(
       map((users: User[]) => users.find((user: User) => user.name === name)),
-      catchError(err => this.serviceUtils.handleObsError(err))
+      catchError(this.serviceUtils.handleObsError)
     );
   }
 
   isUserExist(name: string): Observable<boolean> {
-    return this.getUserFile().pipe(
+    return this.loadUsers().pipe(
       map(users => users.find(user => user.name === name) !== undefined),
-      catchError(err => this.serviceUtils.handleObsError(err))
+      catchError(this.serviceUtils.handleObsError)
     );
   }
 
-  private getUserFile(): Observable<User[]> {
-    return this.dropbox
-      .downloadFile(Dropbox.DROPBOX_USER_FILE)
-      .pipe(catchError(err => this.serviceUtils.handleObsError(err)));
-  }
-
   register(user: User): void {
-    let addedUser: User;
-    this.dropbox
-      .downloadFile(Dropbox.DROPBOX_USER_FILE)
+    this.loadUsers()
       .pipe(
-        mergeMap((users: User[]) => {
+        concatMap((users: User[]) => {
           const idMax =
             users.length > 0 ? Math.max(...users.map(item => item.id)) : 0;
-          user.id = idMax + 1;
-          addedUser = user;
-          users.push(user);
+          const addedUser = {
+            ...user,
+            id: idMax + 1,
+          };
+          users.push(addedUser);
           users.sort(Utils.compareObject);
-          return this.dropbox.overwriteFile(
-            AuthService.usersToBlob(users),
-            Dropbox.DROPBOX_USER_FILE
-          );
+          return this.dropbox
+            .overwriteFile(this.usersToBlob(users), Dropbox.DROPBOX_USER_FILE)
+            .pipe(map(() => addedUser));
         }),
-        mergeMap(() =>
-          this.dropbox.createFile(
-            '[]',
-            `${Dropbox.DROPBOX_TAG_FILE}${addedUser.id}${Dropbox.DROPBOX_FILE_SUFFIX}`
-          )
-        ),
-        mergeMap(() =>
-          this.dropbox.createFile(
-            '[]',
-            `${Dropbox.DROPBOX_MOVIE_FILE}${addedUser.id}${Dropbox.DROPBOX_FILE_SUFFIX}`
-          )
-        ),
-        mergeMap(() =>
-          this.dropbox.createFile(
-            '[]',
-            `${Dropbox.DROPBOX_SERIE_FILE}${addedUser.id}${Dropbox.DROPBOX_FILE_SUFFIX}`
-          )
-        )
+        this.createFileOperator(Dropbox.DROPBOX_TAG_FILE),
+        this.createFileOperator(Dropbox.DROPBOX_MOVIE_FILE),
+        this.createFileOperator(Dropbox.DROPBOX_SERIE_FILE)
       )
       .subscribe({
-        next: () => {
-          AuthService.setToken(AuthService.createToken(addedUser));
-          this.user$.next(addedUser);
+        next: user => {
+          this.setUser(user);
           this.router.navigate(['/']);
           this.toast.open(
             Level.success,
@@ -170,34 +151,33 @@ export class AuthService {
   }
 
   updateUser(user: User): Observable<User> {
-    return this.dropbox.downloadFile(Dropbox.DROPBOX_USER_FILE).pipe(
-      mergeMap((users: User[]) => {
+    return this.loadUsers().pipe(
+      concatMap((users: User[]) => {
         const filteredUsers = users.filter(item => item.name !== user.name);
         filteredUsers.push(user);
         filteredUsers.sort(Utils.compareObject);
         return this.dropbox.overwriteFile(
-          AuthService.usersToBlob(filteredUsers),
+          this.usersToBlob(filteredUsers),
           Dropbox.DROPBOX_USER_FILE
         );
       }),
       map(() => {
-        AuthService.setToken(AuthService.createToken(user));
+        this.setUser(user);
         this.toast.open(
           Level.success,
           this.translate.instant('toast.user_changed')
         );
-        this.user$.next(user);
         return user;
       }),
-      catchError(err => this.serviceUtils.handleObsError(err))
+      catchError(this.serviceUtils.handleObsError)
     );
   }
 
   getCurrentUser(): Observable<User> {
-    return of(AuthService.decodeToken()).pipe(
+    return this.user$.pipe(
       switchMap(user => {
         if (user?.id !== undefined) {
-          return this.getUserFile().pipe(
+          return this.loadUsers().pipe(
             map(users => users.find(u => u.id === user.id)),
             map((found: User) => {
               if (
@@ -217,24 +197,28 @@ export class AuthService {
           return of(undefined);
         }
       }),
-      tap(user => this.user$.next(user)),
-      switchMap(() => this.user$.asObservable()),
-      catchError(err => this.serviceUtils.handleObsError(err))
+      catchError(this.serviceUtils.handleObsError)
     );
   }
 
   logout(): void {
     localStorage.removeItem('token');
-    this.user$.next(undefined);
+    this.userSubject.next(undefined);
   }
 
   redirectToLogin(feature: boolean): void {
     localStorage.removeItem('token');
-    const param = {};
-    param[Constants.LOGIN_CANCEL] = true;
-    param[Constants.LOGIN_FEATURE] = feature;
+    const queryParams = {};
+    queryParams[Constants.LOGIN_CANCEL] = true;
+    queryParams[Constants.LOGIN_FEATURE] = feature;
     this.router.navigate(['/login/connect'], {
-      queryParams: param,
+      queryParams,
     });
+  }
+
+  private loadUsers(): Observable<User[]> {
+    return this.dropbox
+      .downloadFile(Dropbox.DROPBOX_USER_FILE)
+      .pipe(catchError(this.serviceUtils.handleObsError));
   }
 }

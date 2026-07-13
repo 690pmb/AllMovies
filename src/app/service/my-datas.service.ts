@@ -82,10 +82,13 @@ export class MyDatasService<T extends Data> {
   }
 
   getFileName(isMovie: boolean): Observable<string> {
-    return of(
-      `${isMovie ? Dropbox.DROPBOX_MOVIE_FILE : Dropbox.DROPBOX_SERIE_FILE}${
-        this.auth.user$.getValue().id
-      }${Dropbox.DROPBOX_FILE_SUFFIX}`
+    return this.auth.user$.pipe(
+      map(
+        user =>
+          `${
+            isMovie ? Dropbox.DROPBOX_MOVIE_FILE : Dropbox.DROPBOX_SERIE_FILE
+          }${user.id}${Dropbox.DROPBOX_FILE_SUFFIX}`
+      )
     );
   }
 
