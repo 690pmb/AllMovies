@@ -481,30 +481,30 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
   download(toDownload: number[], lang: string): Observable<Data>[] {
     const obs: Observable<Data>[] = [];
     const otherLang = lang === 'fr' ? 'en' : 'fr';
-    const conf1 = new DetailConfig(
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      !this.isMovie,
-      lang
-    );
-    const conf2 = new DetailConfig(
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      !this.isMovie,
-      otherLang
-    );
+    const conf1: DetailConfig = {
+      img: false,
+      credit: false,
+      similar: false,
+      keywords: false,
+      video: false,
+      reco: false,
+      release: false,
+      titles: false,
+      external: !this.isMovie,
+      lang: lang,
+    };
+    const conf2: DetailConfig = {
+      img: false,
+      credit: false,
+      similar: false,
+      keywords: false,
+      video: false,
+      reco: false,
+      release: false,
+      titles: false,
+      external: !this.isMovie,
+      lang: otherLang,
+    };
     toDownload.forEach((id: number) => {
       if (this.isMovie) {
         obs.push(this.movieService.getMovie(id, conf1, false));

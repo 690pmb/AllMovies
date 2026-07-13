@@ -48,18 +48,18 @@ export class SearchDataComponent<T extends Data> implements OnInit {
   }
 
   fetchData(id: number, lang: string, isMovie: boolean): Observable<T> {
-    const config = new DetailConfig(
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      !isMovie,
-      lang
-    );
+    const config: DetailConfig = {
+      img: false,
+      credit: false,
+      similar: false,
+      keywords: false,
+      video: false,
+      reco: false,
+      release: false,
+      titles: false,
+      external: !isMovie,
+      lang: 'en',
+    };
     let result: Observable<Data>;
     if (this.isMovie) {
       result = this.movieService.getMovie(id, config, false);

@@ -1,5 +1,6 @@
 import {Observable, forkJoin, iif} from 'rxjs';
 import {Injectable} from '@angular/core';
+import {map, switchMap, catchError} from 'rxjs/operators';
 
 import {DiscoverCriteria} from '../model/discover-criteria';
 import {Discover} from '../model/discover';
@@ -12,7 +13,6 @@ import {Url} from '../constant/url';
 import {OmdbService} from './omdb.service';
 import {UrlBuilder} from '../shared/urlBuilder';
 import {Utils} from '../shared/utils';
-import {map, mergeMap, catchError} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -30,31 +30,32 @@ export class MovieService {
         `${Url.MOST_POPULAR_MOVIE_URL}${Url.LANGUE}${language}${Url.PAGE_URL}${page}`
       )
       .pipe(
-        map(response => MapMovie.mapForPopularMovies(response)),
-        catchError(err => this.serviceUtils.handleObsError(err))
+        map(MapMovie.mapForPopularMovies),
+        catchError(this.serviceUtils.handleObsError)
       );
   }
 
   getMovies(ids: number[], language: string): Observable<Movie[]> {
-    const obs = ids.map(id =>
-      this.getMovie$(
-        id,
-        new DetailConfig(
-          true,
-          true,
-          true,
-          true,
-          true,
-          true,
-          true,
-          true,
-          false,
-          language
-        ),
-        false
+    return forkJoin(
+      ids.map(id =>
+        this.getMovie(
+          id,
+          {
+            img: true,
+            credit: true,
+            similar: true,
+            keywords: true,
+            video: true,
+            reco: true,
+            release: true,
+            titles: true,
+            external: false,
+            lang: language,
+          },
+          false
+        )
       )
     );
-    return forkJoin(obs);
   }
 
   getMovie(
@@ -62,30 +63,9 @@ export class MovieService {
     config: DetailConfig,
     detail: boolean
   ): Observable<Movie> {
-    return this.getMovie$(id, config, detail);
-  }
-
-  getMovie$(
-    id: number,
-    config: DetailConfig,
-    detail: boolean
-  ): Observable<Movie> {
     return this.serviceUtils
       .getObservable(
-        UrlBuilder.detailUrlBuilder(
-          true,
-          id,
-          config.video,
-          config.credit,
-          config.reco,
-          config.release,
-          config.keywords,
-          config.similar,
-          config.img,
-          config.titles,
-          false,
-          config.lang
-        )
+        UrlBuilder.detailUrlBuilder(true, id, {...config, external: false})
       )
       .pipe(
         map(response => {
@@ -93,7 +73,7 @@ export class MovieService {
           movie.lang_version = config.lang ?? movie.lang_version;
           return movie;
         }),
-        mergeMap(movie =>
+        switchMap(movie =>
           iif(
             () =>
               detail &&
@@ -102,20 +82,20 @@ export class MovieService {
                 ((movie.videos === undefined || movie.videos.length === 0) &&
                   config.video) ||
                 !movie.original_title),
-            this.getMovie$(
+            this.getMovie(
               id,
-              new DetailConfig(
-                false,
-                false,
-                false,
-                false,
-                config.video,
-                false,
-                false,
-                false,
-                false,
-                'en'
-              ),
+              {
+                img: false,
+                credit: false,
+                similar: false,
+                keywords: false,
+                video: config.video,
+                reco: false,
+                release: false,
+                titles: false,
+                external: false,
+                lang: 'en',
+              },
               false
             ).pipe(
               map(enMovie => {
@@ -136,7 +116,7 @@ export class MovieService {
             this.omdb.getImdbScore(movie)
           )
         ),
-        catchError(err => this.serviceUtils.handleObsError(err))
+        catchError(this.serviceUtils.handleObsError)
       );
   }
 
@@ -159,10 +139,12 @@ export class MovieService {
       undefined,
       undefined
     );
-    return this.serviceUtils.getObservable(url).pipe(
-      map(response => MapMovie.mapForMoviesByReleaseDates(response)),
-      catchError(err => this.serviceUtils.handleObsError(err))
-    );
+    return this.serviceUtils
+      .getObservable(url)
+      .pipe(
+        map(MapMovie.mapForMoviesByReleaseDates),
+        catchError(this.serviceUtils.handleObsError)
+      );
   }
 
   getMoviesDiscover(
@@ -187,11 +169,8 @@ export class MovieService {
         )
       )
       .pipe(
-        map((response: any) => {
-          const discover = MapMovie.mapForDiscover(response);
-          return discover;
-        }),
-        catchError(err => this.serviceUtils.handleObsError(err))
+        map(MapMovie.mapForDiscover),
+        catchError(this.serviceUtils.handleObsError)
       );
   }
 
@@ -203,7 +182,7 @@ export class MovieService {
           response.dates.minimum,
           response.dates.maximum,
         ]),
-        catchError(err => this.serviceUtils.handleObsError(err))
+        catchError(this.serviceUtils.handleObsError)
       );
   }
 }

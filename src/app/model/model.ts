@@ -128,17 +128,15 @@ export class AlternativeTitle {
   constructor(public lang: string, public title: string) {}
 }
 
-export class DetailConfig {
-  constructor(
-    public img = false,
-    public credit = false,
-    public similar = false,
-    public keywords = false,
-    public video = false,
-    public reco = false,
-    public release = false,
-    public titles = false,
-    public external = false,
-    public lang?: string
-  ) {}
-}
+export type DetailConfig = Record<
+  | 'img'
+  | 'credit'
+  | 'similar'
+  | 'keywords'
+  | 'video'
+  | 'reco'
+  | 'release'
+  | 'titles'
+  | 'external',
+  boolean
+> & {lang?: string};

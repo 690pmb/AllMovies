@@ -46,22 +46,7 @@ export class SerieService {
     detail: boolean
   ): Observable<Serie> {
     return this.serviceUtils
-      .getObservable(
-        UrlBuilder.detailUrlBuilder(
-          false,
-          id,
-          config.video,
-          config.credit,
-          config.reco,
-          config.release,
-          config.keywords,
-          config.similar,
-          config.img,
-          config.titles,
-          config.external,
-          config.lang
-        )
-      )
+      .getObservable(UrlBuilder.detailUrlBuilder(false, id, config))
       .pipe(
         map(response => {
           const serie = MapSerie.mapForSerie(response);
@@ -78,18 +63,18 @@ export class SerieService {
                 !serie.original_title),
             this.getSerie$(
               id,
-              new DetailConfig(
-                false,
-                false,
-                false,
-                false,
-                config.video,
-                false,
-                false,
-                false,
-                false,
-                'en'
-              ),
+              {
+                img: false,
+                credit: false,
+                similar: false,
+                keywords: false,
+                video: config.video,
+                reco: false,
+                release: false,
+                titles: false,
+                external: false,
+                lang: 'en',
+              },
               false
             ).pipe(
               map(enSerie => {

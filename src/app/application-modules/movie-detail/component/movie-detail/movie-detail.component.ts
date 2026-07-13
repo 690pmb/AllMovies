@@ -39,20 +39,18 @@ export class MovieDetailComponent {
   @Input()
   set id(value: number) {
     this.isDetail = false;
-    this.config$.next(
-      new DetailConfig(
-        true,
-        true,
-        false,
-        false,
-        false,
-        false,
-        true,
-        false,
-        false,
-        undefined
-      )
-    );
+    this.config$.next({
+      img: true,
+      credit: true,
+      similar: false,
+      keywords: false,
+      video: false,
+      reco: false,
+      release: true,
+      titles: false,
+      external: false,
+      lang: undefined,
+    });
     this.loaded.emit(false);
     this.id$.next(value);
   }
@@ -62,20 +60,18 @@ export class MovieDetailComponent {
       filter(id => id !== 0),
       tap(() => {
         this.isDetail = true;
-        this.config$.next(
-          new DetailConfig(
-            true,
-            true,
-            true,
-            true,
-            true,
-            true,
-            true,
-            true,
-            false,
-            undefined
-          )
-        );
+        this.config$.next({
+          img: true,
+          credit: true,
+          similar: true,
+          keywords: true,
+          video: true,
+          reco: true,
+          release: true,
+          titles: true,
+          external: false,
+          lang: undefined,
+        });
       })
     ),
     this.id$

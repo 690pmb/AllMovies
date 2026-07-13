@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {AbstractService} from './abstract.manager';
 import {Serie, SerieId} from '../model/serie';
 import {SerieService} from '../service/serie.service';
-import {DetailConfig} from '../model/model';
 import {TranslateService} from '@ngx-translate/core';
 import {Observable, combineLatest} from 'rxjs';
 import {switchMap, tap} from 'rxjs/operators';
@@ -19,18 +18,18 @@ export class SerieManager extends AbstractService<Serie, SerieId> {
       serieId =>
         this.serieService.getSerie$(
           serieId.id,
-          new DetailConfig(
-            true,
-            true,
-            true,
-            true,
-            true,
-            true,
-            true,
-            true,
-            true,
-            serieId.lang
-          ),
+          {
+            img: true,
+            credit: true,
+            similar: true,
+            keywords: true,
+            video: true,
+            reco: true,
+            release: true,
+            titles: true,
+            external: true,
+            lang: serieId.lang,
+          },
           true
         ),
       (prev, curr) => prev.id === curr.id && prev.lang === curr.lang,

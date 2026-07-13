@@ -198,30 +198,30 @@ export class AddCollectionDirective<T extends Data>
   }
 
   addDatas(datasToAdd: T[]): void {
-    const confFr = new DetailConfig(
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      !this.isMovie,
-      'fr'
-    );
-    const confEn = new DetailConfig(
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      !this.isMovie,
-      'en'
-    );
+    const confFr: DetailConfig = {
+      img: false,
+      credit: false,
+      similar: false,
+      keywords: false,
+      video: false,
+      reco: false,
+      release: false,
+      titles: false,
+      external: !this.isMovie,
+      lang: 'fr',
+    };
+    const confEn: DetailConfig = {
+      img: false,
+      credit: false,
+      similar: false,
+      keywords: false,
+      video: false,
+      reco: false,
+      release: false,
+      titles: false,
+      external: !this.isMovie,
+      lang: 'en',
+    };
     const obs: Observable<Data>[] = [];
     datasToAdd.forEach(data => {
       if (this.isMovie) {

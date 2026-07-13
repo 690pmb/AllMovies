@@ -1,5 +1,6 @@
 import {DiscoverCriteria} from './../model/discover-criteria';
 import {Url} from './../constant/url';
+import {DetailConfig} from '../model/model';
 
 export class UrlBuilder {
   static personUrlBuilder(
@@ -54,44 +55,35 @@ export class UrlBuilder {
   static detailUrlBuilder(
     isMovie: boolean,
     id: number,
-    video: boolean,
-    credit: boolean,
-    reco: boolean,
-    release: boolean,
-    keywords: boolean,
-    similar: boolean,
-    image: boolean,
-    titles: boolean,
-    external: boolean,
-    language?: string
+    config: DetailConfig
   ): string {
     let url = isMovie ? Url.MOVIE_URl : Url.SERIE_URl;
     url += `/${id}?${Url.API_KEY}`;
-    if (video || credit || reco || image) {
+    if (config.video || config.credit || config.reco || config.img) {
       url += `${Url.APPEND}`;
       const parametres = [];
-      if (video) {
+      if (config.video) {
         parametres.push(`${Url.APPEND_VIDEOS}`);
       }
-      if (credit) {
+      if (config.credit) {
         parametres.push(`${Url.APPEND_CREDITS}`);
       }
-      if (reco) {
+      if (config.reco) {
         parametres.push(`${Url.APPEND_RECOMMENDATIONS}`);
       }
-      if (release) {
+      if (config.release) {
         parametres.push(`${Url.APPEND_RELEASE_DATE}`);
       }
-      if (keywords) {
+      if (config.keywords) {
         parametres.push(`${Url.APPEND_KEYWORDS}`);
       }
-      if (titles) {
+      if (config.titles) {
         parametres.push(`${Url.APPEND_ALTERNATIVE_TITLES}`);
       }
-      if (similar) {
+      if (config.similar) {
         parametres.push(`${Url.APPEND_SIMILARS}`);
       }
-      if (image) {
+      if (config.img) {
         parametres.push(`${Url.APPEND_IMAGES}`);
       }
       if (external) {
@@ -99,7 +91,7 @@ export class UrlBuilder {
       }
       url += parametres.join(',');
     }
-    url = UrlBuilder.langUrlBuilder(url, language);
+    url = UrlBuilder.langUrlBuilder(url, config.lang);
     return url;
   }
 
