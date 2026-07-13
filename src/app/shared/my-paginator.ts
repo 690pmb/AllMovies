@@ -30,7 +30,11 @@ export class MyPaginator extends MatPaginatorIntl {
     this.changes.next();
   }
 
-  getRangeLabel = (page: number, pageSize: number, length: number): string => {
+  override getRangeLabel = (
+    page: number,
+    pageSize: number,
+    length: number
+  ): string => {
     if (length === 0 || pageSize === 0) {
       return this.translate.instant('global.mat-table.no_result');
     }

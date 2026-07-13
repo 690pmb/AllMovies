@@ -598,11 +598,11 @@ export class DatasComponent<T extends Data> implements OnInit, OnDestroy {
   }
 
   movie(d: Data): d is Movie {
-    return this.isMovie;
+    return d && this.isMovie;
   }
 
   serie(d: Data): d is Serie {
-    return !this.isMovie;
+    return d && !this.isMovie;
   }
 
   ngOnDestroy(): void {

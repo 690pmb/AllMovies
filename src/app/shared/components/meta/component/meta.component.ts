@@ -187,6 +187,6 @@ export class MetaComponent implements OnChanges {
   }
 
   isPerson(data: Datas): data is Person {
-    return !this.isMovie && !this.isSerie;
+    return data && !this.isMovie && !this.isSerie;
   }
 }
