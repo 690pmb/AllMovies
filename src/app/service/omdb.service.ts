@@ -5,20 +5,16 @@ import {Observable, of} from 'rxjs';
 import {Score} from '../model/score';
 import {UtilsService} from './utils.service';
 import {Constants} from '../constant/constants';
-import {ToastService} from './toast.service';
 import {Data} from '../model/data';
 
 @Injectable({
   providedIn: 'root',
 })
 export class OmdbService {
-  constructor(
-    private serviceUtils: UtilsService,
-    private toast: ToastService
-  ) {}
+  constructor(private serviceUtils: UtilsService) {}
 
-  getScore(id: string): Promise<Score> {
-    return this.getScore$(id).toPromise();
+  getScore(id: string): Observable<Score> {
+    return this.getScore$(id);
   }
 
   getScore$(id: string): Observable<Score> {
@@ -42,7 +38,7 @@ export class OmdbService {
         }
       }),
       catchError(err => {
-        this.serviceUtils.handleObsError(err, this.toast);
+        this.serviceUtils.handleObsError(err);
         return undefined;
       })
     );

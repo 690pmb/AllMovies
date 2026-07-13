@@ -83,7 +83,7 @@ export class ListDetailComponent implements OnInit, OnDestroy {
         this.sortChosen.value + '.' + this.sortDir.value,
         +this.page.pageIndex + 1
       )
-      .then(result => {
+      .subscribe(result => {
         this.list = result;
         this.title.setTitle(this.list.name);
       });

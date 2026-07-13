@@ -4,12 +4,18 @@
     "rootDir": ".",
     "lib": ["dom"],
     "outDir": "build",
-    "target": "es5",
+    "target": "es2021",
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "noUnusedLocals": true,
     "skipLibCheck": true,
-    "strict": false
+    "noUnusedParameters": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "strict": false,
+    "paths": {
+      "crypto": ["./node_modules/crypto-browserify"]
+    }
   },
   "files": ["src/main.ts", "src/polyfills.ts"],
   "include": ["src/**/*.ts", "test/**/*.ts"],

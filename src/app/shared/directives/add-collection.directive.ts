@@ -1,6 +1,6 @@
 import {TranslateService} from '@ngx-translate/core';
 import {faBookmark, faStar, faTrash} from '@fortawesome/free-solid-svg-icons';
-import {forkJoin, Subscription} from 'rxjs';
+import {forkJoin, Subscription, Observable} from 'rxjs';
 import {
   Directive,
   Input,
@@ -191,47 +191,49 @@ export class AddCollectionDirective<T extends Data>
       );
       this.myDatasService
         .remove([dataRemoved], this.isMovie)
-        .then(() => this.myTagsService.replaceTags(tagsToReplace));
+        .subscribe(() =>
+          this.myTagsService.replaceTags(tagsToReplace).subscribe()
+        );
     }
   }
 
   addDatas(datasToAdd: T[]): void {
-    const confFr = new DetailConfig(
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      !this.isMovie,
-      'fr'
-    );
-    const confEn = new DetailConfig(
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      !this.isMovie,
-      'en'
-    );
-    const prom: Promise<Data>[] = [];
+    const confFr: DetailConfig = {
+      img: false,
+      credit: false,
+      similar: false,
+      keywords: false,
+      video: false,
+      reco: false,
+      release: false,
+      titles: false,
+      external: !this.isMovie,
+      lang: 'fr',
+    };
+    const confEn: DetailConfig = {
+      img: false,
+      credit: false,
+      similar: false,
+      keywords: false,
+      video: false,
+      reco: false,
+      release: false,
+      titles: false,
+      external: !this.isMovie,
+      lang: 'en',
+    };
+    const obs: Observable<Data>[] = [];
     datasToAdd.forEach(data => {
       if (this.isMovie) {
-        prom.push(this.movieService.getMovie(data.id, confFr, false));
-        prom.push(this.movieService.getMovie(data.id, confEn, false));
+        obs.push(this.movieService.getMovie(data.id, confFr, false));
+        obs.push(this.movieService.getMovie(data.id, confEn, false));
       } else {
-        prom.push(this.serieService.getSerie(data.id, confFr, false));
-        prom.push(this.serieService.getSerie(data.id, confEn, false));
+        obs.push(this.serieService.getSerie(data.id, confFr, false));
+        obs.push(this.serieService.getSerie(data.id, confEn, false));
       }
     });
-    forkJoin(prom).subscribe((datas: T[]) => {
-      this.myDatasService.add(datas, this.isMovie);
+    forkJoin(obs).subscribe((datas: T[]) => {
+      this.myDatasService.add(datas, this.isMovie).subscribe();
       this.datas.forEach(data => (data.checked = false));
     });
   }

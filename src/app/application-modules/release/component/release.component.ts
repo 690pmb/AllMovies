@@ -15,6 +15,7 @@ import {
   NgbDatepicker,
 } from '@ng-bootstrap/ng-bootstrap';
 import {Subscription} from 'rxjs';
+import {take} from 'rxjs/operators';
 
 import {Movie} from '../../../model/movie';
 import {MyNgbDate} from '../../../shared/my-ngb-date';
@@ -139,18 +140,18 @@ export class ReleaseComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.title.setTitle('title.release');
     this.language = this.translate.currentLang;
-    this.config = new DetailConfig(
-      true,
-      true,
-      false,
-      false,
-      false,
-      false,
-      true,
-      false,
-      false,
-      this.language
-    );
+    this.config = {
+      img: true,
+      credit: true,
+      similar: false,
+      keywords: false,
+      video: false,
+      reco: false,
+      release: true,
+      titles: false,
+      external: false,
+      lang: this.language,
+    };
     this.subs.push(
       this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
         this.language = event.lang;
@@ -197,7 +198,8 @@ export class ReleaseComponent implements OnInit, OnDestroy {
           this.formatter.dateToString(this.sunday, 'yyyy-MM-dd'),
           this.language
         )
-        .then(movies => (this.movies = movies));
+        .pipe(take(1))
+        .subscribe(movies => (this.movies = movies));
     }
   }
 

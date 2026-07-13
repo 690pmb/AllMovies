@@ -19,7 +19,7 @@ export class MovieManager extends AbstractService<
     translate: TranslateService
   ) {
     super(
-      movieId => this.movieService.getMovie$(movieId.id, movieId.config, true),
+      movieId => this.movieService.getMovie(movieId.id, movieId.config, true),
       (prev, curr) =>
         prev.id === curr.id &&
         prev.config.lang === curr.config.lang &&

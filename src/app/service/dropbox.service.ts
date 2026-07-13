@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import * as Dropbox from 'dropbox';
+import {Observable, from} from 'rxjs';
+import {map, catchError, switchMap} from 'rxjs/operators';
 
-import {ToastService} from './toast.service';
 import {UtilsService} from './utils.service';
 import {Dropbox as DropboxConstante} from '../constant/dropbox';
 import {Utils} from '../shared/utils';
@@ -10,67 +11,58 @@ import {Utils} from '../shared/utils';
   providedIn: 'root',
 })
 export class DropboxService<T> {
-  constructor(
-    private toast: ToastService,
-    private serviceUtils: UtilsService
-  ) {}
+  constructor(private serviceUtils: UtilsService) {}
 
-  static getDbx(): Dropbox.Dropbox {
-    return new Dropbox.Dropbox({accessToken: DropboxConstante.DROPBOX_TOKEN});
-  }
+  private readonly dbx = new Dropbox.Dropbox({
+    accessToken: DropboxConstante.DROPBOX_TOKEN,
+  });
 
-  static getPath(fileName: string): string {
+  private getPath(fileName: string): string {
     return DropboxConstante.DROPBOX_FOLDER + fileName;
   }
 
-  uploadFile(
+  overwriteFile(
     fichier: Blob,
     fileName: string
-  ): Promise<Dropbox.files.FileMetadata> {
-    const pathFile = DropboxService.getPath(fileName);
-    return DropboxService.getDbx()
-      .filesDeleteV2({path: pathFile})
-      .then(() =>
-        DropboxService.getDbx().filesUpload({
-          path: pathFile,
-          contents: fichier,
-        })
-      )
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
-  }
-
-  uploadNewFile(
-    fichier: any,
-    fileName: string
-  ): Promise<Dropbox.files.FileMetadata> {
-    const pathFile = DropboxService.getPath(fileName);
-    return DropboxService.getDbx()
-      .filesUpload({path: pathFile, contents: fichier})
-      .then(() => new Promise<void>(resolve => resolve()))
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
-  }
-
-  downloadFile(filename: string): Promise<T[]> {
-    console.log('downloadFile', filename);
-    return this.downloadRaw(filename).then(
-      content => <T[]>Utils.parseJson(content, [])
+  ): Observable<Dropbox.files.FileMetadata> {
+    return from(
+      this.dbx.filesUpload({
+        path: this.getPath(fileName),
+        contents: fichier,
+        mode: {
+          '.tag': 'overwrite',
+        },
+      })
+    ).pipe(
+      map(r => r.result),
+      catchError(this.serviceUtils.handleObsError)
     );
   }
 
-  downloadRaw(fileName: string): Promise<any> {
-    return DropboxService.getDbx()
-      .filesDownload({path: DropboxService.getPath(fileName)})
-      .then((response: any) => {
-        const fileReader = new FileReader();
-        return new Promise((resolve, reject) => {
-          fileReader.onerror = () => {
-            fileReader.abort();
-            reject(new DOMException('Problem parsing input file.'));
-          };
-          fileReader.onload = () => resolve(fileReader.result.toString());
-          fileReader.readAsText(response.fileBlob);
-        });
+  createFile(fichier: Object, fileName: string): Observable<void> {
+    return from(
+      this.dbx.filesUpload({path: this.getPath(fileName), contents: fichier})
+    ).pipe(
+      map(() => {}),
+      catchError(this.serviceUtils.handleObsError)
+    );
+  }
+
+  downloadFile(fileName: string): Observable<T[]> {
+    return this.downloadRaw(fileName).pipe(
+      map(content => <T[]>Utils.parseJson(content, []))
+    );
+  }
+
+  downloadRaw(fileName: string): Observable<string> {
+    return from(
+      this.dbx.filesDownload({
+        path: this.getPath(fileName),
       })
-      .catch(err => this.serviceUtils.handleError(err, this.toast));
+    ).pipe(
+      // Dropxbox doesn't provide a correct typing on this
+      switchMap((response: any) => (<File>response.result.fileBlob).text()),
+      catchError(this.serviceUtils.handleObsError)
+    );
   }
 }

@@ -11,6 +11,7 @@ import {ToastService} from '../../../service/toast.service';
 import {environment} from '../../../../environments/environment';
 import {MatDialog} from '@angular/material/dialog';
 import {faWhatsapp} from '@fortawesome/free-brands-svg-icons';
+import {from, Observable} from 'rxjs';
 import {Level} from '../../../model/model';
 import {
   faEnvelope,
@@ -22,7 +23,7 @@ import {APP_BASE_HREF} from '@angular/common';
 type App = {
   icon: IconDefinition;
   label: string;
-  prefix: string | ((x: string) => Promise<void> | string);
+  prefix: string | ((x: string) => Promise<void> | Observable<any> | string);
   label_done?: string;
 };
 
@@ -87,12 +88,14 @@ export class ShareButtonComponent implements OnInit {
 
   share(url: string): void {
     if (this.isSupported) {
-      navigator
-        .share({
+      from(
+        navigator.share({
           title: document.title.replace(/.*\|/g, ''),
           url: url,
         })
-        .catch(err => this.utils.handleError(err, this.toast));
+      ).subscribe({
+        error: err => this.utils.handleError(err),
+      });
     } else {
       const ref = this.dialog.open(this.shareDialog, {
         data: {
@@ -109,8 +112,12 @@ export class ShareButtonComponent implements OnInit {
       window.open(`${app.prefix}${url}`);
     } else {
       const res = app.prefix(url);
-      if (typeof res === 'object') {
-        res.then(() => this.toast.open(Level.success, app.label_done));
+      if (res instanceof Promise) {
+        from(res).subscribe(() =>
+          this.toast.open(Level.success, app.label_done)
+        );
+      } else if (res instanceof Observable) {
+        res.subscribe(() => this.toast.open(Level.success, app.label_done));
       } else {
         window.open(res);
       }

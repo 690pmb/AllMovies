@@ -18,7 +18,7 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import {ActivatedRoute, Router, Params} from '@angular/router';
-import {Subscription} from 'rxjs';
+import {Subscription, Observable, of} from 'rxjs';
 import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
 import {IconDefinition} from '@fortawesome/fontawesome-svg-core';
 
@@ -91,15 +91,13 @@ export class TagsComponent implements OnInit, OnDestroy {
     return this.tagForm.get('toAdd');
   }
 
-  isTagUnique(control: AbstractControl): Promise<any> {
-    return new Promise(resolve =>
-      resolve(
-        this.tableTags
-          .map(tag => tag.label.toLowerCase())
-          .find(label => label === control.value.toLowerCase())
-          ? {unique: true}
-          : undefined
-      )
+  isTagUnique(control: AbstractControl): Observable<any> {
+    return of(
+      this.tableTags
+        .map(tag => tag.label.toLowerCase())
+        .find(label => label === control.value.toLowerCase())
+        ? {unique: true}
+        : undefined
     );
   }
 

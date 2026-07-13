@@ -6,7 +6,6 @@ import {map, catchError} from 'rxjs/operators';
 import {Meta, Site} from '../../../../constant/meta';
 import {Constants} from './../../../../constant/constants';
 import {UtilsService} from '../../../../service/utils.service';
-import {ToastService} from '../../../../service/toast.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,10 +13,7 @@ import {ToastService} from '../../../../service/toast.service';
 export class MetaService {
   sites: ReplaySubject<Site[]> = new ReplaySubject<Site[]>();
 
-  constructor(
-    private serviceUtils: UtilsService,
-    private toast: ToastService
-  ) {}
+  constructor(private serviceUtils: UtilsService) {}
 
   getLinkScore(
     title: string,
@@ -86,7 +82,7 @@ export class MetaService {
 
     return this.serviceUtils.jsonpObservable(url, 'callback').pipe(
       map(response => response[3][0]),
-      catchError(err => this.serviceUtils.handlePromiseError(err, this.toast))
+      catchError(this.serviceUtils.handleObsError)
     );
   }
 }

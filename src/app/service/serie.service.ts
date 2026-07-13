@@ -12,7 +12,6 @@ import {MapSeason} from '../shared/mapSeason';
 import {Season} from '../model/season';
 import {DetailConfig} from '../model/model';
 import {Serie} from '../model/serie';
-import {ToastService} from './toast.service';
 import {UtilsService} from './utils.service';
 import {OmdbService} from './omdb.service';
 
@@ -20,23 +19,25 @@ import {OmdbService} from './omdb.service';
   providedIn: 'root',
 })
 export class SerieService {
-  constructor(
-    private omdb: OmdbService,
-    private serviceUtils: UtilsService,
-    private toast: ToastService
-  ) {}
+  constructor(private omdb: OmdbService, private serviceUtils: UtilsService) {}
 
-  getPopularSeries(language: string, page = 1): Promise<Serie[]> {
+  getPopularSeries(language: string, page = 1): Observable<Serie[]> {
     return this.serviceUtils
-      .getPromise(
+      .getObservable(
         `${Url.MOST_POPULAR_SERIE_URL}${Url.LANGUE}${language}${Url.PAGE_URL}${page}`
       )
-      .then(response => MapSerie.mapForPopularSeries(response))
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
+      .pipe(
+        map(response => MapSerie.mapForPopularSeries(response)),
+        catchError(this.serviceUtils.handleObsError)
+      );
   }
 
-  getSerie(id: number, config: DetailConfig, detail: boolean): Promise<Serie> {
-    return this.getSerie$(id, config, detail).toPromise();
+  getSerie(
+    id: number,
+    config: DetailConfig,
+    detail: boolean
+  ): Observable<Serie> {
+    return this.getSerie$(id, config, detail);
   }
 
   getSerie$(
@@ -45,22 +46,7 @@ export class SerieService {
     detail: boolean
   ): Observable<Serie> {
     return this.serviceUtils
-      .getObservable(
-        UrlBuilder.detailUrlBuilder(
-          false,
-          id,
-          config.video,
-          config.credit,
-          config.reco,
-          config.release,
-          config.keywords,
-          config.similar,
-          config.img,
-          config.titles,
-          config.external,
-          config.lang
-        )
-      )
+      .getObservable(UrlBuilder.detailUrlBuilder(false, id, config))
       .pipe(
         map(response => {
           const serie = MapSerie.mapForSerie(response);
@@ -77,18 +63,18 @@ export class SerieService {
                 !serie.original_title),
             this.getSerie$(
               id,
-              new DetailConfig(
-                false,
-                false,
-                false,
-                false,
-                config.video,
-                false,
-                false,
-                false,
-                false,
-                'en'
-              ),
+              {
+                img: false,
+                credit: false,
+                similar: false,
+                keywords: false,
+                video: config.video,
+                reco: false,
+                release: false,
+                titles: false,
+                external: false,
+                lang: 'en',
+              },
               false
             ).pipe(
               map(enSerie => {
@@ -109,7 +95,7 @@ export class SerieService {
             this.omdb.getImdbScore(serie)
           )
         ),
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+        catchError(this.serviceUtils.handleObsError)
       );
   }
 
@@ -153,7 +139,7 @@ export class SerieService {
             of(season)
           )
         ),
-        catchError(err => this.serviceUtils.handleObsError(err, this.toast))
+        catchError(this.serviceUtils.handleObsError)
       );
   }
 
@@ -165,7 +151,7 @@ export class SerieService {
       .getObservable(url, this.serviceUtils.getHeaders())
       .pipe(
         map(response => MapSerie.mapForSearchSeries(response)),
-        catchError(err => this.serviceUtils.handlePromiseError(err, this.toast))
+        catchError(this.serviceUtils.handleObsError)
       );
   }
 
@@ -176,9 +162,9 @@ export class SerieService {
     networks: number[],
     isWithoutGenre: boolean,
     isWithoutKeyword: boolean
-  ): Promise<Discover> {
+  ): Observable<Discover> {
     return this.serviceUtils
-      .getPromise(
+      .getObservable(
         UrlBuilder.discoverUrlBuilder(
           false,
           criteria,
@@ -190,11 +176,12 @@ export class SerieService {
           isWithoutKeyword
         )
       )
-      .then((response: any) => {
-        const discover = MapSerie.mapForDiscover(response);
-        // discover.movies.forEach((movie) => this.omdb.getMovie(movie.imdb_id).then(score => movie.score = score));
-        return discover;
-      })
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
+      .pipe(
+        map((response: any) => {
+          const discover = MapSerie.mapForDiscover(response);
+          return discover;
+        }),
+        catchError(this.serviceUtils.handleObsError)
+      );
   }
 }

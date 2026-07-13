@@ -46,7 +46,7 @@ export class GlobalErrorHandler implements ErrorHandler {
     console.error('url', router.url);
 
     if (environment.production) {
-      dropbox.uploadNewFile(
+      dropbox.createFile(
         [router.url, message, stackTrace, error],
         'logs/error-' +
           datePipe.transform(new Date(), 'yyyy.MM.dd-HH.mm.ss.SSS') +

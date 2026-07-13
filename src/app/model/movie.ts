@@ -2,7 +2,7 @@ import {Data} from './data';
 import {ReleaseDate, Lang} from './model';
 
 export class Movie extends Data {
-  isMovie = true;
+  override isMovie = true;
   date!: string;
   adult!: boolean;
   time!: number;
@@ -19,7 +19,7 @@ export class Movie extends Data {
     super();
   }
 
-  removeFields(key: string, value: string): string | undefined {
+  override removeFields(key: string, value: string): string | undefined {
     if (
       [
         'title',

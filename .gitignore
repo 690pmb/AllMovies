@@ -9,11 +9,6 @@
 
 # dependencies
 /node_modules
-*.class
-*.js.map
-src/app/*.js
-src/app/*/*.js
-src/app/*/*/*.js
 
 # IDEs and editors
 /.idea
@@ -39,13 +34,3 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-
-# Package Files #
-*.jar
-*.war
-*.ear
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-/target
-/.settings

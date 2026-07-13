@@ -6,7 +6,7 @@ import {Season} from './season';
 export type SerieId = {id: number; lang: string};
 
 export class Serie extends Data {
-  isMovie = false;
+  override isMovie = false;
   originLang!: string;
   originCountries: string[] = [];
   creators: Person[] = [];
@@ -28,7 +28,7 @@ export class Serie extends Data {
     super();
   }
 
-  removeFields(key: string, value: string): string | undefined {
+  override removeFields(key: string, value: string): string | undefined {
     if (
       [
         'title',

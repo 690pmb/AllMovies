@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
+import {map, mergeMap, tap, catchError} from 'rxjs/operators';
 
 import {DropboxService} from './dropbox.service';
 import {AuthService} from './auth.service';
@@ -30,188 +31,182 @@ export class MyTagsService {
     return new Blob([theJSON], {type: 'text/json'});
   }
 
-  getFileName(): Promise<string> {
-    return new Promise(resolve =>
-      resolve(
-        `${Dropbox.DROPBOX_TAG_FILE}${this.auth.user$.getValue().id}${
-          Dropbox.DROPBOX_FILE_SUFFIX
-        }`
+  getFileName(): Observable<string> {
+    return this.auth.user$.pipe(
+      map(
+        user =>
+          `${Dropbox.DROPBOX_TAG_FILE}${user.id}${Dropbox.DROPBOX_FILE_SUFFIX}`
       )
     );
   }
 
   getAll(): void {
     this.getFileName()
-      .then((fileName: string) => this.dropboxService.downloadFile(fileName))
-      .then((tags: Tag[]) => {
-        console.log('tags:', tags);
-        return this.myTags$.next(tags);
-      })
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
+      .pipe(
+        mergeMap((fileName: string) =>
+          this.dropboxService.downloadFile(fileName)
+        ),
+        tap((tags: Tag[]) => {
+          console.log('tags:', tags);
+          this.myTags$.next(tags);
+        }),
+        catchError(this.serviceUtils.handleObsError)
+      )
+      .subscribe();
   }
 
-  add(toAdd: Tag): Promise<Tag | undefined> {
+  add(toAdd: Tag): Observable<Tag | undefined> {
     let tempTagList: Tag[] = [];
     let fileName: string;
-    return this.getFileName()
-      .then((file: string) => {
-        // download file
+    return this.getFileName().pipe(
+      mergeMap((file: string) => {
         fileName = file;
         return this.dropboxService.downloadRaw(fileName);
-      })
-      .then((tagsFromFile: string) => {
-        // parse tags
+      }),
+      mergeMap((tagsFromFile: string) => {
         let tagList: Tag[] = [];
         if (tagsFromFile && tagsFromFile.trim().length > 0) {
           tagList = <Tag[]>JSON.parse(tagsFromFile);
         }
-        // add tag to list
         tagList.sort(Utils.compareObject);
         toAdd.id = tagList.length > 0 ? tagList[tagList.length - 1].id + 1 : 1;
         toAdd.label = this.capitalize.transform(toAdd.label);
         tagList.push(toAdd);
-        return tagList;
-      })
-      .then((list: Tag[]) => {
+        return of(tagList);
+      }),
+      mergeMap((list: Tag[]) => {
         if (list && list.length !== 0) {
           tempTagList = list;
-          // replace with new array tags
-          return this.dropboxService.uploadFile(
+          return this.dropboxService.overwriteFile(
             MyTagsService.tagsToBlob(list),
             fileName
           );
         } else {
-          return undefined;
+          return of(undefined);
         }
-      })
-      .then((res: any) => {
+      }),
+      map((res: any) => {
         console.log(res);
         if (res) {
-          // all good, modifies inner data
           console.log('myTags', tempTagList);
           this.myTags$.next(tempTagList);
           this.toast.open(Level.success, 'toast.tags_added');
         }
         return toAdd;
+      }),
+      catchError(err => {
+        this.serviceUtils.handleError(err);
+        return of(undefined);
       })
-      .catch(err => {
-        this.serviceUtils.handleError(err, this.toast);
-        return undefined;
-      });
+    );
   }
 
   remove(idToRemove: number[]): void {
     let tempTagList: Tag[] = [];
     let fileName: string;
     this.getFileName()
-      .then((file: string) => {
-        // download file
-        fileName = file;
-        return this.dropboxService.downloadFile(fileName);
-      })
-      .then((tagList: Tag[]) => {
-        // parse them
-        if (idToRemove.length > 0) {
-          // remove given tags
-          idToRemove.forEach(
-            (id: number) =>
-              (tagList = tagList.filter((tag: Tag) => tag.id !== id))
-          );
-          tempTagList = tagList;
-          // replace file with new tag array
-          return this.dropboxService.uploadFile(
-            MyTagsService.tagsToBlob(tagList),
-            fileName
-          );
-        } else {
-          return undefined;
-        }
-      })
-      .then((res: any) => {
-        console.log(res);
-        if (res) {
-          // if ok, emit new array and toast
-          this.myTags$.next(tempTagList);
-          this.toast.open(Level.success, 'toast.tags_removed', {
-            size: idToRemove.length,
-          });
-        }
-      })
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
+      .pipe(
+        mergeMap((file: string) => {
+          fileName = file;
+          return this.dropboxService.downloadFile(fileName);
+        }),
+        mergeMap((tagList: Tag[]) => {
+          if (idToRemove.length > 0) {
+            idToRemove.forEach(
+              (id: number) =>
+                (tagList = tagList.filter((tag: Tag) => tag.id !== id))
+            );
+            tempTagList = tagList;
+            return this.dropboxService.overwriteFile(
+              MyTagsService.tagsToBlob(tagList),
+              fileName
+            );
+          } else {
+            return of(undefined);
+          }
+        }),
+        tap((res: any) => {
+          console.log(res);
+          if (res) {
+            this.myTags$.next(tempTagList);
+            this.toast.open(Level.success, 'toast.tags_removed', {
+              size: idToRemove.length,
+            });
+          }
+        }),
+        catchError(this.serviceUtils.handleObsError)
+      )
+      .subscribe();
   }
 
-  updateTag(tag: Tag): Promise<boolean> {
+  updateTag(tag: Tag): Observable<boolean> {
     let tempTagList: Tag[] = [];
     let fileName: string;
-    return this.getFileName()
-      .then((file: string) => {
-        // download file
+    return this.getFileName().pipe(
+      mergeMap((file: string) => {
         fileName = file;
         return this.dropboxService.downloadRaw(fileName);
-      })
-      .then((tagsFromFile: string) => {
-        // parse tags
+      }),
+      mergeMap((tagsFromFile: string) => {
         let tagList: Tag[] = [];
         if (tagsFromFile && tagsFromFile.trim().length > 0) {
           tagList = <Tag[]>JSON.parse(tagsFromFile);
         }
-        // Find tag to update and replace its movies
         let toUpdate = tagList.find(t => t.id === tag.id);
         toUpdate = Tag.clone(tag);
         toUpdate.datas.sort(Utils.compareObject);
         tagList.splice(tagList.map(t => t.id).indexOf(tag.id), 1, tag);
         tempTagList = tagList;
-        return this.dropboxService.uploadFile(
+        return this.dropboxService.overwriteFile(
           MyTagsService.tagsToBlob(tagList),
           fileName
         );
-      })
-      .then((res: any) => {
+      }),
+      map((res: any) => {
         console.log(res);
         this.myTags$.next(tempTagList);
         this.toast.open(Level.success, 'toast.tags_updated');
         return true;
+      }),
+      catchError(err => {
+        this.serviceUtils.handleError(err);
+        return of(false);
       })
-      .catch(err => {
-        this.serviceUtils.handleError(err, this.toast);
-        return false;
-      });
+    );
   }
 
-  replaceTags(tagsToReplace: Tag[]): Promise<boolean> {
+  replaceTags(tagsToReplace: Tag[]): Observable<boolean> {
     let tempTagList: Tag[] = [];
     let fileName: string;
-    return this.getFileName()
-      .then((file: string) => {
-        // download file
+    return this.getFileName().pipe(
+      mergeMap((file: string) => {
         fileName = file;
         return this.dropboxService.downloadFile(fileName);
-      })
-      .then((tagList: Tag[]) => {
-        // Removes from saved list the tags to replace
+      }),
+      mergeMap((tagList: Tag[]) => {
         tagList = tagList.filter(
           (m: Tag) => !tagsToReplace.map((tag: Tag) => tag.id).includes(m.id)
         );
-        // Push in saved list new tags
         tagList.push(...tagsToReplace);
         tagList.sort(Utils.compareObject);
         tempTagList = tagList;
-        return this.dropboxService.uploadFile(
+        return this.dropboxService.overwriteFile(
           MyTagsService.tagsToBlob(tagList),
           fileName
         );
-      })
-      .then((res: any) => {
+      }),
+      map((res: any) => {
         console.log(res);
         this.myTags$.next(tempTagList);
         this.toast.open(Level.success, 'toast.tags_updated', {
           size: tagsToReplace.length,
         });
         return true;
+      }),
+      catchError(err => {
+        this.serviceUtils.handleError(err);
+        return of(false);
       })
-      .catch(err => {
-        this.serviceUtils.handleError(err, this.toast);
-        return false;
-      });
+    );
   }
 }

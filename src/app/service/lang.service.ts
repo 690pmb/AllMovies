@@ -1,8 +1,8 @@
-import {Observable, from} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {Injectable} from '@angular/core';
+import {map, catchError} from 'rxjs/operators';
 
 import {SearchService} from './search.service';
-import {ToastService} from './toast.service';
 import {UtilsService} from './utils.service';
 import {LangDb} from '../model/model';
 import {Url} from '../constant/url';
@@ -16,20 +16,22 @@ type Lang = {iso_639_1: string; english_name: string};
 export class LangService implements SearchService<LangDb> {
   langs: LangDb[] = [];
 
-  constructor(
-    private serviceUtils: UtilsService,
-    private toast: ToastService
-  ) {}
+  constructor(private serviceUtils: UtilsService) {}
 
-  getAll(): Promise<LangDb[]> {
+  getAll(): Observable<LangDb[]> {
+    if (this.langs && this.langs.length > 0) {
+      return of(this.langs);
+    }
     const url = `${Url.GET_ALL_LANGS_URL}${Url.API_KEY}`;
     return this.serviceUtils
-      .getPromise(url, this.serviceUtils.getHeaders())
-      .then((response: any) => {
-        this.langs = this.mapLang(response);
-        return this.langs;
-      })
-      .catch(err => this.serviceUtils.handlePromiseError(err, this.toast));
+      .getObservable(url, this.serviceUtils.getHeaders())
+      .pipe(
+        map((response: any) => {
+          this.langs = this.mapLang(response);
+          return this.langs;
+        }),
+        catchError(this.serviceUtils.handleObsError)
+      );
   }
 
   mapLang(response: Lang[]): LangDb[] {
@@ -43,8 +45,8 @@ export class LangService implements SearchService<LangDb> {
   }
 
   search(term: string): Observable<LangDb[]> {
-    return from(
-      this.getAll().then(langs =>
+    return this.getAll().pipe(
+      map(langs =>
         langs
           .filter(l => l.name.toLowerCase().startsWith(term.toLowerCase()))
           .slice(0, 10)
@@ -53,6 +55,6 @@ export class LangService implements SearchService<LangDb> {
   }
 
   byId(id: string): Observable<LangDb> {
-    return from(this.getAll().then(langs => langs.find(l => l.id === id)));
+    return this.getAll().pipe(map(langs => langs.find(l => l.id === id)));
   }
 }

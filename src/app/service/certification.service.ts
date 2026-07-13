@@ -2,7 +2,6 @@ import {catchError, map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {Injectable} from '@angular/core';
 
-import {ToastService} from './toast.service';
 import {UtilsService} from './utils.service';
 import {Certification} from '../model/model';
 import {Url} from '../constant/url';
@@ -12,10 +11,7 @@ import {Utils} from '../shared/utils';
   providedIn: 'root',
 })
 export class CertificationService {
-  constructor(
-    private serviceUtils: UtilsService,
-    private toast: ToastService
-  ) {}
+  constructor(private serviceUtils: UtilsService) {}
 
   getAllCertification(): Observable<Certification[]> {
     const url = `${Url.GET_ALL_CERTIFICATIONS_URL}${Url.API_KEY}`;
@@ -23,7 +19,7 @@ export class CertificationService {
       .getObservable(url, this.serviceUtils.getHeaders())
       .pipe(
         map((response: any) => this.mapCertification(response)),
-        catchError(err => this.serviceUtils.handlePromiseError(err, this.toast))
+        catchError(this.serviceUtils.handleObsError)
       );
   }
 

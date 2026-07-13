@@ -85,7 +85,7 @@ export class SearchTagComponent implements OnInit {
     tag.label = item;
     tag.datas = [];
     tag.color = Utils.randomColor();
-    this.myTagsService.add(tag).then(added => {
+    this.myTagsService.add(tag).subscribe(added => {
       this.selected.emit(added);
       this.resetAutoInput(trigger, auto);
     });

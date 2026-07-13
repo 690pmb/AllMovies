@@ -1,5 +1,6 @@
 import {TranslateService} from '@ngx-translate/core';
 import {Observable, forkJoin} from 'rxjs';
+import {map} from 'rxjs/operators';
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 import {Data} from './../../../../model/data';
@@ -46,28 +47,30 @@ export class SearchDataComponent<T extends Data> implements OnInit {
     });
   }
 
-  fetchData(id: number, lang: string, isMovie: boolean): Promise<T> {
-    const config = new DetailConfig(
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      !isMovie,
-      lang
-    );
-    let result: Promise<Data>;
+  fetchData(id: number, lang: string, isMovie: boolean): Observable<T> {
+    const config: DetailConfig = {
+      img: false,
+      credit: false,
+      similar: false,
+      keywords: false,
+      video: false,
+      reco: false,
+      release: false,
+      titles: false,
+      external: !isMovie,
+      lang: 'en',
+    };
+    let result: Observable<Data>;
     if (this.isMovie) {
       result = this.movieService.getMovie(id, config, false);
     } else {
       result = this.serieService.getSerie(id, config, false);
     }
-    return result.then((d: T) => {
-      d.lang_version = lang;
-      return d;
-    });
+    return result.pipe(
+      map((d: T) => {
+        d.lang_version = lang;
+        return d;
+      })
+    );
   }
 }
